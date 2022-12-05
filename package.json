@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "rollup --config"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^10.0.1",
+    "@types/google-apps-script": "^1.0.56",
+    "@types/node": "^18.11.10",
+    "rollup": "^3.5.0",
+    "rollup-plugin-dotenv": "^0.4.1",
+    "tslib": "^2.4.1"
+  }
+}
