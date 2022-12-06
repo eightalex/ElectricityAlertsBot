@@ -7,6 +7,7 @@ import {DateHelper} from './utils/DateHelper';
 import {MessageGenerator} from './services/MessageGenerator';
 import {TimeStringGenerator} from './services/TimeStringGenerator';
 import {MonitorsStatusChecker} from './services/MonitorsStatusChecker';
+import {StringHelper} from './utils/StringHelper';
 
 const monitorsConfigGenerator = new MonitorsConfigGenerator();
 const monitorsStatusChecker = new MonitorsStatusChecker();
@@ -14,7 +15,8 @@ const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
 const telegramService = new TelegramService();
 const dateHelper = new DateHelper();
-const timeStringGenerator = new TimeStringGenerator(dateHelper);
+const stringHelper = new StringHelper();
+const timeStringGenerator = new TimeStringGenerator(dateHelper, stringHelper);
 const messageGenerator = new MessageGenerator(timeStringGenerator);
 const userProperties = PropertiesService.getUserProperties();
 const monitorsConfig = monitorsConfigGenerator.generate(process.env.UPTIME_ROBOT_MONITORS);
