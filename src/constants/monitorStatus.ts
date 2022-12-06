@@ -1,4 +1,4 @@
-export const STATUS: Record<string, UptimeRobot.MonitorStatus> = {
+export const MONITOR_STATUS: Record<string, UptimeRobot.MonitorStatus> = {
     PAUSE: 0,
     NOT_CHECKED_YET: 1,
     UP: 2,
