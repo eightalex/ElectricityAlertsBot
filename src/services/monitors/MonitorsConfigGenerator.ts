@@ -2,7 +2,7 @@ const ITEM_DIVIDER = ',';
 const PAIR_DIVIDER = ':';
 
 export interface MonitorsConfigGeneratorInterface {
-    generate(config: string): Record<string, number>
+    generate(config: string | undefined): Record<string, number>
 }
 
 export class MonitorsConfigGenerator implements MonitorsConfigGeneratorInterface {
