@@ -8,6 +8,7 @@ import {MessageGenerator} from './services/MessageGenerator';
 import {TimeStringGenerator} from './services/TimeStringGenerator';
 import {DateHelper} from './utils/DateHelper';
 import {StringHelper} from './utils/StringHelper';
+import {STATE} from './constants/state';
 
 const monitorsConfigGenerator = new MonitorsConfigGenerator();
 const monitorsStatusChecker = new MonitorsStatusChecker();
@@ -35,7 +36,7 @@ function ping() {
     }
 
     userProperties.setProperties({
-        [STORAGE_KEY.LAST_STATE]: isAvailable ? '1' : '',
+        [STORAGE_KEY.LAST_STATE]: isAvailable ? STATE.AVAILABLE : STATE.NOT_AVAILABLE,
         [STORAGE_KEY.LAST_TIME]: String(nowDate.getTime()),
     });
 
