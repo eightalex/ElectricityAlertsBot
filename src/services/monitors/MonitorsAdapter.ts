@@ -1,4 +1,4 @@
-import {PreparedMonitor} from "../../types/PreparedMonitor";
+import {PreparedMonitor} from '../../../types/PreparedMonitor';
 
 export interface MonitorsAdapterInterface {
     prepare(monitors: UptimeRobot.MonitorType[]): PreparedMonitor[]

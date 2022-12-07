@@ -1,12 +1,12 @@
 import {STORAGE_KEY} from './constants/storageKey';
-import {MonitorsConfigGenerator} from './services/MonitorsConfigGenerator';
+import {MonitorsConfigGenerator} from './services/monitors/MonitorsConfigGenerator';
+import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
+import {MonitorsFetcher} from './services/monitors/MonitorsFetcher';
+import {MonitorsStatusChecker} from './services/monitors/MonitorsStatusChecker';
 import {TelegramService} from './services/TelegramService';
-import {MonitorsAdapter} from './services/MonitorsAdapter';
-import {MonitorsFetcher} from './services/MonitorsFetcher';
-import {DateHelper} from './utils/DateHelper';
 import {MessageGenerator} from './services/MessageGenerator';
 import {TimeStringGenerator} from './services/TimeStringGenerator';
-import {MonitorsStatusChecker} from './services/MonitorsStatusChecker';
+import {DateHelper} from './utils/DateHelper';
 import {StringHelper} from './utils/StringHelper';
 
 const monitorsConfigGenerator = new MonitorsConfigGenerator();

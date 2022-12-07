@@ -1,5 +1,5 @@
-import {MONITOR_STATUS} from '../constants/monitorStatus';
-import {PreparedMonitor} from '../../types/PreparedMonitor';
+import {MONITOR_STATUS} from '../../constants/monitorStatus';
+import {PreparedMonitor} from '../../../types/PreparedMonitor';
 
 export interface MonitorsStatusCheckerInterface {
     check(monitors: PreparedMonitor[]): boolean
