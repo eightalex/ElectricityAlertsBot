@@ -1,5 +1,6 @@
 import {PLURAL_CONFIG} from '../constants/pluralConfig';
 import {STRING} from '../constants/string';
+import {TIME} from '../constants/time';
 import {StringHelperInterface} from './StringHelper';
 
 export interface DateHelperInterface {
@@ -29,7 +30,7 @@ export class DateHelper implements DateHelperInterface {
 
     getPluralizedTimeString(date: Date): string {
         const {pluralize} = this.stringHelper;
-        const hours = date.getUTCHours();
+        const hours = Math.round(date.getTime() / TIME.HOUR);
         const minutes = date.getUTCMinutes();
         const hasHours = hours > 0;
 
