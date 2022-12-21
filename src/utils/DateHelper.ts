@@ -25,7 +25,7 @@ export class DateHelper implements DateHelperInterface {
 
     getDateString(date: Date): string {
         const gap = 1;
-        return date.getDate() + '/' + (date.getMonth() + gap) + '/' + date.getFullYear();
+        return date.getDate() + STRING.SLASH + (date.getMonth() + gap) + STRING.SLASH + date.getFullYear();
     }
 
     getPluralizedTimeString(date: Date): string {
