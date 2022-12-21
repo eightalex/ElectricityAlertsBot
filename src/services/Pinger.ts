@@ -1,5 +1,5 @@
 import {STORAGE_KEY} from '../constants/storageKey';
-import {STATE} from '../constants/state';
+import {ELECTRICITY_STATE} from '../constants/electricityState';
 import {MessageGeneratorInterface} from './MessageGenerator';
 import {TelegramServiceInterface} from './TelegramService';
 import {MonitorsStatusCheckerInterface} from './monitors/MonitorsStatusChecker';
@@ -31,7 +31,7 @@ export class Pinger implements PingerInterface {
         }
 
         this.userProperties.setProperties({
-            [STORAGE_KEY.LAST_STATE]: isAvailable ? STATE.AVAILABLE : STATE.NOT_AVAILABLE,
+            [STORAGE_KEY.LAST_STATE]: isAvailable ? ELECTRICITY_STATE.AVAILABLE : ELECTRICITY_STATE.NOT_AVAILABLE,
             [STORAGE_KEY.LAST_TIME]: String(new Date().getTime()),
         });
 
