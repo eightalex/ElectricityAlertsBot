@@ -1,10 +1,9 @@
 import {MESSAGE} from '../constants/message';
-import {TimeStringGeneratorInterface} from './TimeStringGenerator';
+import {TimeDifferenceGeneratorInterface} from './TimeDifferenceGenerator';
 
 type GenerateArgumentsType = {
     isAvailable: boolean
-    lastTime: string | null
-    nowDate: Date
+    lastTime: string
 }
 
 export interface MessageGeneratorInterface {
@@ -13,13 +12,14 @@ export interface MessageGeneratorInterface {
 
 export class MessageGenerator implements MessageGeneratorInterface {
     constructor(
-        private timeStringGenerator: TimeStringGeneratorInterface,
+        private timeStringGenerator: TimeDifferenceGeneratorInterface,
     ) {}
 
-    generate({isAvailable, lastTime, nowDate}: GenerateArgumentsType): string {
+    generate({isAvailable, lastTime}: GenerateArgumentsType): string {
         const message = isAvailable ? MESSAGE.APPEARED : MESSAGE.DISAPPEARED;
+        const nowDate = new Date();
 
-        if (lastTime === null) {
+        if (lastTime === '0') {
             return message;
         }
 

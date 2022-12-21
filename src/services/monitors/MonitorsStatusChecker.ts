@@ -1,13 +1,28 @@
 import {MONITOR_STATUS} from '../../constants/monitorStatus';
-import {PreparedMonitor} from '../../../types/PreparedMonitor';
+import {MonitorsFetcherInterface} from './MonitorsFetcher';
+import {MonitorsAdapterInterface} from './MonitorsAdapter';
+import {MonitorsConfigGeneratorInterface} from './MonitorsConfigGenerator';
 
 export interface MonitorsStatusCheckerInterface {
-    check(monitors: PreparedMonitor[]): boolean
+    check(): boolean
 }
 
 export class MonitorsStatusChecker implements MonitorsStatusCheckerInterface {
-    check(monitors: PreparedMonitor[]): boolean {
-        return monitors.some(monitor => {
+    private readonly monitorsConfig: Record<string, number>;
+
+    constructor(
+        monitorsConfigGenerator: MonitorsConfigGeneratorInterface,
+        private monitorsFetcher: MonitorsFetcherInterface,
+        private monitorsAdapter: MonitorsAdapterInterface,
+    ) {
+        this.monitorsConfig = monitorsConfigGenerator.generate(process.env.UPTIME_ROBOT_MONITORS);
+    }
+
+    check(): boolean {
+        const monitors = this.monitorsFetcher.fetch(this.monitorsConfig);
+        const preparedMonitors = this.monitorsAdapter.prepare(monitors);
+
+        return preparedMonitors.some(monitor => {
             return monitor.status !== MONITOR_STATUS.SEEMS_DOWN && monitor.status !== MONITOR_STATUS.DOWN;
         });
     }

@@ -4,26 +4,47 @@ import {MonitorsFetcher} from './services/monitors/MonitorsFetcher';
 import {MonitorsStatusChecker} from './services/monitors/MonitorsStatusChecker';
 import {TelegramService} from './services/TelegramService';
 import {MessageGenerator} from './services/MessageGenerator';
-import {TimeStringGenerator} from './services/TimeStringGenerator';
+import {TimeDifferenceGenerator} from './services/TimeDifferenceGenerator';
 import {Pinger} from './services/Pinger';
 import {DateHelper} from './utils/DateHelper';
 import {StringHelper} from './utils/StringHelper';
+import {StatisticsBuilder} from './services/statistics/StatisticsBuilder';
+import {StatisticsInformer} from './services/statistics/StatisticsInformer';
+import {StatisticsMessageGenerator} from './services/statistics/StatisticsMessageGenerator';
+import {StatisticsService} from './services/statistics/StatisticsService';
 
 const monitorsConfigGenerator = new MonitorsConfigGenerator();
-const monitorsStatusChecker = new MonitorsStatusChecker();
-const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
+const monitorsAdapter = new MonitorsAdapter();
 const telegramService = new TelegramService();
-const dateHelper = new DateHelper();
 const stringHelper = new StringHelper();
-const timeStringGenerator = new TimeStringGenerator(dateHelper, stringHelper);
-const messageGenerator = new MessageGenerator(timeStringGenerator);
+const dateHelper = new DateHelper(stringHelper);
+const timeDifferenceGenerator = new TimeDifferenceGenerator(dateHelper);
+const messageGenerator = new MessageGenerator(timeDifferenceGenerator);
+const statisticsMessageGenerator = new StatisticsMessageGenerator(dateHelper);
+const statisticsBuilder = new StatisticsBuilder(dateHelper);
 
-const pinger = new Pinger(
-    PropertiesService,
+const monitorsStatusChecker = new MonitorsStatusChecker(
     monitorsConfigGenerator,
     monitorsFetcher,
     monitorsAdapter,
+);
+
+const statisticsService = new StatisticsService(
+    PropertiesService,
+    monitorsStatusChecker,
+    statisticsBuilder,
+    dateHelper,
+);
+
+const statisticsInformer = new StatisticsInformer(
+    PropertiesService,
+    statisticsMessageGenerator,
+    telegramService,
+);
+
+const pinger = new Pinger(
+    PropertiesService,
     monitorsStatusChecker,
     messageGenerator,
     telegramService,
@@ -33,4 +54,19 @@ function ping() {
     pinger.ping();
 }
 
+function inform() {
+    statisticsInformer.inform();
+}
+
+function updateStatistics() {
+    statisticsService.update();
+}
+
+function resetStatistics() {
+    statisticsService.reset();
+}
+
 ping();
+inform();
+updateStatistics();
+resetStatistics();
