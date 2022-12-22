@@ -30,7 +30,7 @@ export class DateHelper implements DateHelperInterface {
 
     getPluralizedTimeString(date: Date): string {
         const {pluralize} = this.stringHelper;
-        const hours = Math.round(date.getTime() / TIME.HOUR);
+        const hours = Math.floor(date.getTime() / TIME.HOUR);
         const minutes = date.getUTCMinutes();
         const hasHours = hours > 0;
 
