@@ -19,8 +19,11 @@ export class DateHelper implements DateHelperInterface {
         return Math.abs(dateFirst.valueOf() - dateSecond.valueOf());
     }
 
+    /**
+     * Returns string like '11:56'
+     */
     getTimeString(date: Date): string {
-        return new Date(date).toISOString().substring(11, 19);
+        return new Date(date).toISOString().substring(11, 16);
     }
 
     getDateString(date: Date): string {
