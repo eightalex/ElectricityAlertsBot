@@ -12,7 +12,7 @@ export interface MessageGeneratorInterface {
 
 export class MessageGenerator implements MessageGeneratorInterface {
     constructor(
-        private timeStringGenerator: TimeDifferenceGeneratorInterface,
+        private timeDifferenceGenerator: TimeDifferenceGeneratorInterface,
     ) {}
 
     generate({isAvailable, lastTime}: GenerateArgumentsType): string {
@@ -24,9 +24,9 @@ export class MessageGenerator implements MessageGeneratorInterface {
         }
 
         if (isAvailable) {
-            return message + MESSAGE.WAS_ABSENT + this.timeStringGenerator.generate(lastTime, nowDate);
+            return message + MESSAGE.WAS_ABSENT + this.timeDifferenceGenerator.generate(lastTime, nowDate);
         }
 
-        return message + MESSAGE.WAS_AVAILABLE + this.timeStringGenerator.generate(lastTime, nowDate);
+        return message + MESSAGE.WAS_AVAILABLE + this.timeDifferenceGenerator.generate(lastTime, nowDate);
     }
 }
