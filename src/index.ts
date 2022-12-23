@@ -53,7 +53,9 @@ const pinger = new Pinger(
 
 const app = new App(
     pinger,
-    statisticsService
+    statisticsService,
+    statisticsInformer,
+    dateHelper,
 );
 
 function ping() {

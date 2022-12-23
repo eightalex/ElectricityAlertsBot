@@ -3,4 +3,5 @@ export const STRING = {
     SPACE: ' ',
     NEWLINE: '\n',
     SLASH: '/',
+    COLON: ':',
 };
