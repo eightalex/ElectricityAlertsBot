@@ -23,7 +23,10 @@ export class DateHelper implements DateHelperInterface {
      * Returns string like '11:56'
      */
     getTimeString(date: Date): string {
-        return date.getHours() + STRING.COLON + date.getMinutes();
+        return [
+            ('0' + date.getUTCHours()).slice(-2),
+            ('0' + date.getUTCMinutes()).slice(-2),
+        ].join(STRING.COLON);
     }
 
     getDateString(date: Date): string {
