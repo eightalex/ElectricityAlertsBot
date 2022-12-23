@@ -12,6 +12,7 @@ import {StatisticsBuilder} from './services/statistics/StatisticsBuilder';
 import {StatisticsInformer} from './services/statistics/StatisticsInformer';
 import {StatisticsMessageGenerator} from './services/statistics/StatisticsMessageGenerator';
 import {StatisticsService} from './services/statistics/StatisticsService';
+import {App} from './App';
 
 const monitorsConfigGenerator = new MonitorsConfigGenerator();
 const monitorsFetcher = new MonitorsFetcher();
@@ -50,8 +51,13 @@ const pinger = new Pinger(
     telegramService,
 );
 
+const app = new App(
+    pinger,
+    statisticsService
+);
+
 function ping() {
-    pinger.ping();
+    app.ping();
 }
 
 function inform() {
