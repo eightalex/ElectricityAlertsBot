@@ -27,6 +27,6 @@ export class StatisticsInformer implements StatisticsInformerInterface {
         const statistics = JSON.parse(statisticsRaw);
         const message = this.statisticsMessageGenerator.generate(statistics);
 
-        this.telegramService.sendMessage(message);
+        this.telegramService.sendMessage(message, {silent: true});
     }
 }
