@@ -23,7 +23,7 @@ export class DateHelper implements DateHelperInterface {
      * Returns string like '11:56'
      */
     getTimeString(date: Date): string {
-        return new Date(date).toISOString().substring(11, 16);
+        return date.getHours() + STRING.COLON + date.getMinutes();
     }
 
     getDateString(date: Date): string {
