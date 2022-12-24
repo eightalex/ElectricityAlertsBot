@@ -7,12 +7,16 @@ export interface TelegramServiceInterface {
 }
 
 export class TelegramService implements TelegramServiceInterface {
+    constructor(
+        private urlFetchApp: GoogleAppsScript.URL_Fetch.UrlFetchApp,
+    ) {}
+
     sendMessage(message: string, options?: SendMessageOptionsType) {
         const {silent}: SendMessageOptionsType = options || {
             silent: false,
         };
 
-        UrlFetchApp.fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`, {
+        this.urlFetchApp.fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`, {
             method: 'post',
             payload: {
                 chat_id: process.env.TELEGRAM_CHAT,

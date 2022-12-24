@@ -17,7 +17,7 @@ import {App} from './App';
 const monitorsConfigGenerator = new MonitorsConfigGenerator();
 const monitorsFetcher = new MonitorsFetcher();
 const monitorsAdapter = new MonitorsAdapter();
-const telegramService = new TelegramService();
+const telegramService = new TelegramService(UrlFetchApp);
 const stringHelper = new StringHelper();
 const dateHelper = new DateHelper(stringHelper);
 const timeDifferenceGenerator = new TimeDifferenceGenerator(dateHelper);
