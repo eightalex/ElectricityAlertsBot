@@ -33,7 +33,6 @@ const monitorsStatusChecker = new MonitorsStatusChecker(
 
 const statisticsService = new StatisticsService(
     PropertiesService,
-    monitorsStatusChecker,
     statisticsBuilder,
     dateHelper,
 );
@@ -46,13 +45,13 @@ const statisticsInformer = new StatisticsInformer(
 
 const pinger = new Pinger(
     PropertiesService,
-    monitorsStatusChecker,
     messageGenerator,
     telegramService,
 );
 
 const app = new App(
     pinger,
+    monitorsStatusChecker,
     statisticsService,
     statisticsInformer,
     dateHelper,
@@ -66,15 +65,10 @@ function inform() {
     statisticsInformer.inform();
 }
 
-function updateStatistics() {
-    statisticsService.update();
-}
-
 function resetStatistics() {
     statisticsService.reset();
 }
 
 ping();
 inform();
-updateStatistics();
 resetStatistics();

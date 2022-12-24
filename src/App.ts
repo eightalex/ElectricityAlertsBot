@@ -2,6 +2,7 @@ import {PingerInterface} from './services/Pinger';
 import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
 import {StatisticsInformerInterface} from './services/statistics/StatisticsInformer';
 import {DateHelperInterface} from './utils/DateHelper';
+import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 
 export interface AppInterface {
     ping(): void
@@ -10,6 +11,7 @@ export interface AppInterface {
 export class App implements AppInterface {
     constructor(
         private pinger: PingerInterface,
+        private monitorsStatusChecker: MonitorsStatusCheckerInterface,
         private statisticsService: StatisticsServiceInterface,
         private statisticsInformer: StatisticsInformerInterface,
         private dateHelper: DateHelperInterface,
@@ -18,9 +20,10 @@ export class App implements AppInterface {
     ping() {
         const nowDate = new Date();
         const timeString = this.dateHelper.getTimeString(nowDate);
+        const isAvailable = this.monitorsStatusChecker.check();
 
-        this.pinger.ping();
-        this.statisticsService.update();
+        this.pinger.ping(isAvailable, nowDate);
+        this.statisticsService.update(isAvailable, nowDate);
 
         if (timeString === process.env.STATISTICS_INFORM_TIME) {
             this.statisticsInformer.inform();

@@ -2,14 +2,12 @@ import {StatisticsType} from '../../../types/StatisticsType';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsBuilderInterface} from './StatisticsBuilder';
 import {DateHelperInterface} from '../../utils/DateHelper';
-import {MonitorsStatusCheckerInterface} from '../monitors/MonitorsStatusChecker';
+import {ELECTRICITY_STATE} from '../../constants/electricityState';
 
 export interface StatisticsServiceInterface {
-    prepare(statisticsRaw: string): StatisticsType
-    prepareToStore(statistics: StatisticsType): string
     store(statistics: StatisticsType): void
     reset(): void
-    update(): void
+    update(isAvailable: boolean, nowDate: Date): void
 }
 
 export class StatisticsService implements StatisticsServiceInterface {
@@ -17,14 +15,13 @@ export class StatisticsService implements StatisticsServiceInterface {
 
     constructor(
         propertiesService: GoogleAppsScript.Properties.PropertiesService,
-        private monitorsStatusChecker: MonitorsStatusCheckerInterface,
         private statisticsBuilder: StatisticsBuilderInterface,
         private dateHelper: DateHelperInterface,
     ) {
         this.userProperties = propertiesService.getUserProperties();
     }
 
-    prepare(statisticsRaw: string): StatisticsType {
+    private prepare(statisticsRaw: string): StatisticsType {
         try {
             return JSON.parse(statisticsRaw);
         } catch (e) {
@@ -32,7 +29,7 @@ export class StatisticsService implements StatisticsServiceInterface {
         }
     }
 
-    prepareToStore(statistics: StatisticsType): string {
+    private prepareToStore(statistics: StatisticsType): string {
         try {
             return JSON.stringify(statistics);
         } catch (e) {
@@ -49,9 +46,7 @@ export class StatisticsService implements StatisticsServiceInterface {
         this.store(this.statisticsBuilder.getDefault(new Date()));
     }
 
-    update(): void {
-        const nowDate = new Date();
-        const isAvailable = this.monitorsStatusChecker.check();
+    update(isAvailable: boolean, nowDate: Date) {
         const statisticsRaw = this.userProperties.getProperty(STORAGE_KEY.STATISTICS);
         const availability = isAvailable ? 'available' : 'notAvailable';
 
@@ -63,10 +58,22 @@ export class StatisticsService implements StatisticsServiceInterface {
             statistics = this.statisticsBuilder.getDefault(nowDate);
         }
 
+        if (statistics.state === undefined) {
+            statistics.state = this.statisticsBuilder.getDefaultState();
+        }
+
         const difference = this.dateHelper.getDifference(new Date(statistics.time.previous), nowDate);
+        const isStateChanged = Boolean(statistics.previousState) !== isAvailable;
 
         statistics.time[availability] += difference;
         statistics.time.previous = nowDate.getTime();
+        statistics.previousState = isAvailable ? ELECTRICITY_STATE.AVAILABLE : ELECTRICITY_STATE.NOT_AVAILABLE;
+
+        if (isStateChanged) {
+            const {shortest, longest} = statistics.state[availability];
+            statistics.state[availability].shortest = shortest > difference ? difference : shortest;
+            statistics.state[availability].longest = longest < difference ? difference : longest;
+        }
 
         this.store(statistics);
     }
