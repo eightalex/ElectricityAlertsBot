@@ -39,25 +39,25 @@ export class StatisticsMessageGenerator implements StatisticsMessageGeneratorInt
                 time.notAvailable,
             ].join(NEWLINE),
 
-            [
-                'Найдовше включення тривало',
-                time.longestA,
-            ].join(NEWLINE),
-
-            [
-                'Найкоротше включення',
-                time.shortestA,
-            ].join(NEWLINE),
-
-            [
-                'Найдовше відключення тривало',
-                time.longestNA,
-            ].join(NEWLINE),
-
-            [
-                'Найкоротше відключення',
-                time.longestNA,
-            ].join(NEWLINE),
+            // [
+            //     'Найдовше включення тривало',
+            //     time.longestA,
+            // ].join(NEWLINE),
+            //
+            // [
+            //     'Найкоротше включення',
+            //     time.shortestA,
+            // ].join(NEWLINE),
+            //
+            // [
+            //     'Найдовше відключення тривало',
+            //     time.longestNA,
+            // ].join(NEWLINE),
+            //
+            // [
+            //     'Найкоротше відключення',
+            //     time.longestNA,
+            // ].join(NEWLINE),
         ].join(STRING.PARAGRAPH);
     }
 }
