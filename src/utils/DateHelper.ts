@@ -24,8 +24,8 @@ export class DateHelper implements DateHelperInterface {
      */
     getTimeString(date: Date): string {
         return [
-            ('0' + date.getUTCHours()).slice(-2),
-            ('0' + date.getUTCMinutes()).slice(-2),
+            ('0' + date.getHours()).slice(-2),
+            ('0' + date.getMinutes()).slice(-2),
         ].join(STRING.COLON);
     }
 

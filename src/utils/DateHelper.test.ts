@@ -24,7 +24,7 @@ describe('DateHelper', () => {
     describe('getTimeString', () => {
         it('should return the time in the format "HH:MM"', () => {
             const date = new Date('2022-01-01T00:00:00.000Z');
-            const expectedTimeString = '00:00';
+            const expectedTimeString = '02:00'; // +2 time zone
 
             const timeString = dateHelper.getTimeString(date);
 
@@ -33,7 +33,7 @@ describe('DateHelper', () => {
 
         it('should return the time in the format "HH:MM"', () => {
             const date = new Date('2022-01-01T01:01:00.000Z');
-            const expectedTimeString = '01:01';
+            const expectedTimeString = '03:01'; // +2 time zone
 
             const timeString = dateHelper.getTimeString(date);
 
@@ -42,7 +42,7 @@ describe('DateHelper', () => {
 
         it('should return the time in the format "HH:MM"', () => {
             const date = new Date('2022-01-01T23:59:41.000Z');
-            const expectedTimeString = '23:59';
+            const expectedTimeString = '01:59'; // +2 time zone
 
             const timeString = dateHelper.getTimeString(date);
 
