@@ -102,4 +102,15 @@ describe('DateHelper', () => {
             expect(timeString).toEqual(expectedTimeString);
         });
     });
+
+    describe('parseIcsDate', () => {
+        it('should return correctly parsed ics date', () => {
+            const icsString = '20221227T110000Z';
+            const expectedDate = new Date('2022-12-27T11:00:00Z');
+
+            const date = dateHelper.parseIcsDate(icsString);
+
+            expect(date).toEqual(expectedDate);
+        });
+    });
 });

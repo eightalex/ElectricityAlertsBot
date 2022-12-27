@@ -8,6 +8,7 @@ export interface DateHelperInterface {
     getTimeString(date: Date): string
     getDateString(date: Date): string
     getPluralizedTimeString(date: Date): string
+    parseIcsDate(date: string): Date
 }
 
 export class DateHelper implements DateHelperInterface {
@@ -46,5 +47,16 @@ export class DateHelper implements DateHelperInterface {
             minutes,
             pluralize(minutes, PLURAL_CONFIG.MINUTES),
         ].join(STRING.SPACE);
+    }
+
+    parseIcsDate(date: string): Date {
+        const year = date.substring(0, 4);
+        const month = date.substring(4, 6);
+        const day = date.substring(6, 8);
+        const hours = date.substring(9, 11);
+        const minutes = date.substring(11, 13);
+        const seconds = date.substring(13, 15);
+
+        return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`);
     }
 }
