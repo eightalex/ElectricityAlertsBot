@@ -1,5 +1,5 @@
 import {TIME} from '../constants/time';
-import {DateHelper} from './DateHelper';
+import {DateHelper, TimeStringNumbers} from './DateHelper';
 import {StringHelper} from './StringHelper';
 
 describe('DateHelper', () => {
@@ -58,6 +58,20 @@ describe('DateHelper', () => {
             const dateString = dateHelper.getDateString(date);
 
             expect(dateString).toEqual(expectedDateString);
+        });
+    });
+
+    describe('getTimeFromTimeString', () => {
+        it('should return object of hours and minutes', () => {
+            const timeString = '08:00';
+            const expectedObject: TimeStringNumbers = {
+                hours: 8,
+                minutes: 0,
+            };
+
+            const time = dateHelper.getTimeFromTimeString(timeString);
+
+            expect(time).toEqual(expectedObject);
         });
     });
 

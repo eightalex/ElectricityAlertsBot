@@ -3,11 +3,26 @@ import {STRING} from '../constants/string';
 import {TIME} from '../constants/time';
 import {StringHelperInterface} from './StringHelper';
 
+export type TimeStringNumbers = {
+    hours: number
+    minutes: number
+}
+
+export type GetUpdatedDateOptionsType = {
+    date?: number
+    hours?: number
+    minutes?: number
+    seconds?: number
+}
+
 export interface DateHelperInterface {
     getDifference(dateFirst: Date, dateSecond: Date): number
     getTimeString(date: Date): string
     getDateString(date: Date): string
+    getTimeFromTimeString(timeString: string): TimeStringNumbers
+    getUpdatedDate(input: Date, options: GetUpdatedDateOptionsType): Date
     getPluralizedTimeString(date: Date): string
+    addDays(date: Date, days: number): Date
     parseIcsDate(date: string): Date
 }
 
@@ -35,6 +50,31 @@ export class DateHelper implements DateHelperInterface {
         return date.getDate() + STRING.SLASH + (date.getMonth() + gap) + STRING.SLASH + date.getFullYear();
     }
 
+    getTimeFromTimeString(timeString: string): TimeStringNumbers {
+        const times = timeString.split(STRING.COLON);
+
+        return {
+            hours: times[0] ? parseInt(times[0], 10) : 0,
+            minutes: times[1] ? parseInt(times[1], 10) : 0,
+        };
+    }
+
+    getUpdatedDate(input: Date, options: GetUpdatedDateOptionsType): Date {
+        const updatedDate = new Date(input);
+
+        if (options.date !== undefined) {
+            updatedDate.setDate(options.date);
+        }
+
+        updatedDate.setHours(
+            options.hours || 0,
+            options.minutes || 0,
+            options.seconds || 0,
+        );
+
+        return updatedDate;
+    }
+
     getPluralizedTimeString(date: Date): string {
         const {pluralize} = this.stringHelper;
         const hours = Math.floor(date.getTime() / TIME.HOUR);
@@ -47,6 +87,11 @@ export class DateHelper implements DateHelperInterface {
             minutes,
             pluralize(minutes, PLURAL_CONFIG.MINUTES),
         ].join(STRING.SPACE);
+    }
+
+    addDays(date: Date, days: number): Date {
+        const ms = date.getTime() + (TIME.DAY * days);
+        return new Date(ms);
     }
 
     parseIcsDate(date: string): Date {

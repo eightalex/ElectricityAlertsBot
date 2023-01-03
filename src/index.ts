@@ -13,6 +13,10 @@ import {StatisticsInformer} from './services/statistics/StatisticsInformer';
 import {StatisticsMessageGenerator} from './services/statistics/StatisticsMessageGenerator';
 import {StatisticsService} from './services/statistics/StatisticsService';
 import {App} from './App';
+import {ScheduleInformer} from './services/ScheduleInformer';
+import {IcsFetcher} from './services/ics/IcsFetcher';
+import {IcsService} from './services/ics/IcsService';
+import {ScheduleGenerator} from './services/ScheduleGenerator';
 
 const monitorsConfigGenerator = new MonitorsConfigGenerator();
 const monitorsFetcher = new MonitorsFetcher();
@@ -24,6 +28,9 @@ const timeDifferenceGenerator = new TimeDifferenceGenerator(dateHelper);
 const messageGenerator = new MessageGenerator(timeDifferenceGenerator);
 const statisticsMessageGenerator = new StatisticsMessageGenerator(dateHelper);
 const statisticsBuilder = new StatisticsBuilder(dateHelper);
+const icsFetcher = new IcsFetcher(UrlFetchApp);
+const icsService = new IcsService(dateHelper);
+const scheduleGenerator = new ScheduleGenerator(dateHelper);
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
     monitorsConfigGenerator,
@@ -43,6 +50,13 @@ const statisticsInformer = new StatisticsInformer(
     telegramService,
 );
 
+const scheduleInformer = new ScheduleInformer(
+    icsFetcher,
+    icsService,
+    scheduleGenerator,
+    telegramService,
+);
+
 const pinger = new Pinger(
     PropertiesService,
     messageGenerator,
@@ -54,6 +68,7 @@ const app = new App(
     monitorsStatusChecker,
     statisticsService,
     statisticsInformer,
+    scheduleInformer,
     dateHelper,
 );
 
@@ -61,14 +76,19 @@ function ping() {
     app.ping();
 }
 
-function inform() {
-    statisticsInformer.inform();
-}
-
 function resetStatistics() {
     statisticsService.reset();
 }
 
+function informStatistics() {
+    statisticsInformer.inform();
+}
+
+function informSchedule() {
+    scheduleInformer.inform();
+}
+
 ping();
-inform();
 resetStatistics();
+informStatistics();
+informSchedule()
