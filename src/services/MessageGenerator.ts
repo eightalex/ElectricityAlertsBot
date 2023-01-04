@@ -1,3 +1,4 @@
+import {STRING} from '../constants/string';
 import {TimeDifferenceGeneratorInterface} from './TimeDifferenceGenerator';
 
 type GenerateArgumentsType = {
@@ -23,9 +24,21 @@ export class MessageGenerator implements MessageGeneratorInterface {
         }
 
         if (isAvailable) {
-            return message + '\n\nВідключення тривало\n' + this.timeDifferenceGenerator.generate(lastTime, nowDate);
+            return [
+                message,
+                STRING.PARAGRAPH,
+                'Відключення тривало',
+                STRING.NEWLINE,
+                this.timeDifferenceGenerator.generate(lastTime, nowDate),
+            ].join(STRING.EMPTY);
         }
 
-        return message + '\n\nЕлектропостачання було наявне\n' + this.timeDifferenceGenerator.generate(lastTime, nowDate);
+        return [
+            message,
+            STRING.PARAGRAPH,
+            'Електропостачання було наявне',
+            STRING.NEWLINE,
+            this.timeDifferenceGenerator.generate(lastTime, nowDate),
+        ].join(STRING.EMPTY);
     }
 }
