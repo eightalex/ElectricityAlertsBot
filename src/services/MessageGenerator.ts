@@ -1,4 +1,3 @@
-import {MESSAGE} from '../constants/message';
 import {TimeDifferenceGeneratorInterface} from './TimeDifferenceGenerator';
 
 type GenerateArgumentsType = {
@@ -16,7 +15,7 @@ export class MessageGenerator implements MessageGeneratorInterface {
     ) {}
 
     generate({isAvailable, lastTime}: GenerateArgumentsType): string {
-        const message = isAvailable ? MESSAGE.APPEARED : MESSAGE.DISAPPEARED;
+        const message = isAvailable ? '🟢 З\'явилось світло' : '⚫️ Зникло світло';
         const nowDate = new Date();
 
         if (lastTime === '0') {
@@ -24,9 +23,9 @@ export class MessageGenerator implements MessageGeneratorInterface {
         }
 
         if (isAvailable) {
-            return message + MESSAGE.WAS_ABSENT + this.timeDifferenceGenerator.generate(lastTime, nowDate);
+            return message + '\n\nВідключення тривало\n' + this.timeDifferenceGenerator.generate(lastTime, nowDate);
         }
 
-        return message + MESSAGE.WAS_AVAILABLE + this.timeDifferenceGenerator.generate(lastTime, nowDate);
+        return message + '\n\nЕлектропостачання було наявне\n' + this.timeDifferenceGenerator.generate(lastTime, nowDate);
     }
 }
