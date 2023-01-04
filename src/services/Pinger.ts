@@ -31,7 +31,7 @@ export class Pinger implements PingerInterface {
             [STORAGE_KEY.LAST_TIME]: String(nowDate.getTime()),
         });
 
-        const message = this.messageGenerator.generate({isAvailable, lastTime})
+        const message = this.messageGenerator.generate({isAvailable, lastTime, nowDate})
         this.telegramService.sendMessage(message);
     }
 }

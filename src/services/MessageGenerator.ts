@@ -3,6 +3,7 @@ import {TimeDifferenceGeneratorInterface} from './TimeDifferenceGenerator';
 type GenerateArgumentsType = {
     isAvailable: boolean
     lastTime: string
+    nowDate: Date
 }
 
 export interface MessageGeneratorInterface {
@@ -14,9 +15,8 @@ export class MessageGenerator implements MessageGeneratorInterface {
         private timeDifferenceGenerator: TimeDifferenceGeneratorInterface,
     ) {}
 
-    generate({isAvailable, lastTime}: GenerateArgumentsType): string {
+    generate({isAvailable, lastTime, nowDate}: GenerateArgumentsType): string {
         const message = isAvailable ? '🟢 З\'явилось світло' : '⚫️ Зникло світло';
-        const nowDate = new Date();
 
         if (lastTime === '0') {
             return message;
