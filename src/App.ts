@@ -1,3 +1,4 @@
+import {APP} from './constants/app';
 import {PingerInterface} from './services/Pinger';
 import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
 import {StatisticsInformerInterface} from './services/statistics/StatisticsInformer';
@@ -25,13 +26,16 @@ export class App implements AppInterface {
         const isAvailable = this.monitorsStatusChecker.check();
 
         this.pinger.ping(isAvailable, nowDate);
-        this.statisticsService.update(isAvailable, nowDate);
 
-        if (timeString === process.env.STATISTICS_INFORM_TIME) {
+        if (APP.STATISTICS.IS_ENABLED) {
+            this.statisticsService.update(isAvailable, nowDate);
+        }
+
+        if (APP.STATISTICS.IS_ENABLED && timeString === process.env.STATISTICS_INFORM_TIME) {
             this.statisticsInformer.inform();
         }
 
-        if (timeString === process.env.SCHEDULE_INFORM_TIME) {
+        if (APP.SCHEDULE.IS_ENABLED && timeString === process.env.SCHEDULE_INFORM_TIME) {
             this.scheduleInformer.inform();
         }
     }
