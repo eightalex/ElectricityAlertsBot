@@ -64,6 +64,7 @@ const pinger = new Pinger(
 );
 
 const app = new App(
+    PropertiesService,
     pinger,
     monitorsStatusChecker,
     statisticsService,
