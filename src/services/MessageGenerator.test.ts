@@ -40,9 +40,14 @@ describe('MessageGenerator', () => {
                 nowDate: new Date('2022-01-01T01:01:01.000Z'),
             };
 
+            const expectedResult = [
+                '⚫️ Зникло світло\n\nЕлектропостачання було наявне\n1 годину',
+                '⚫️ Зникло світло\n\nЕлектрохарчування було наявне\n1 годину',
+            ];
+
             const message = messageGenerator.generate(options);
 
-            expect(message).toEqual('⚫️ Зникло світло\n\nЕлектропостачання було наявне\n1 годину');
+            expect(expectedResult).toContain(message);
         });
 
         it('should generate the message when the power is not available and it was not available previously', () => {

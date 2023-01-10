@@ -36,9 +36,17 @@ export class MessageGenerator implements MessageGeneratorInterface {
         return [
             message,
             STRING.PARAGRAPH,
-            'Електропостачання було наявне',
+            this.easterEgg() + ' було наявне',
             STRING.NEWLINE,
             this.timeDifferenceGenerator.generate(lastTime, nowDate),
         ].join(STRING.EMPTY);
+    }
+
+    /**
+     * Post surprise word with 20% chance
+     */
+    private easterEgg(): string {
+        const randomNumber = Math.round(Math.random() * 10);
+        return randomNumber === 0 || randomNumber === 1 ? 'Електрохарчування' : 'Електропостачання';
     }
 }
