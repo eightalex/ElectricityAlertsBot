@@ -2,7 +2,6 @@ import {StatisticsType} from '../../../types/StatisticsType';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsBuilderInterface} from './StatisticsBuilder';
 import {DateHelperInterface} from '../../utils/DateHelper';
-import {ELECTRICITY_STATE} from '../../constants/electricityState';
 
 export interface StatisticsServiceInterface {
     store(statistics: StatisticsType): void
@@ -58,22 +57,10 @@ export class StatisticsService implements StatisticsServiceInterface {
             statistics = this.statisticsBuilder.getDefault(nowDate);
         }
 
-        if (statistics.state === undefined) {
-            statistics.state = this.statisticsBuilder.getDefaultState();
-        }
-
         const difference = this.dateHelper.getDifference(new Date(statistics.time.previous), nowDate);
-        const isStateChanged = Boolean(statistics.previousState) !== isAvailable;
 
         statistics.time[availability] += difference;
         statistics.time.previous = nowDate.getTime();
-        statistics.previousState = isAvailable ? ELECTRICITY_STATE.AVAILABLE : ELECTRICITY_STATE.NOT_AVAILABLE;
-
-        if (isStateChanged) {
-            const {shortest, longest} = statistics.state[availability];
-            statistics.state[availability].shortest = shortest > difference ? difference : shortest;
-            statistics.state[availability].longest = longest < difference ? difference : longest;
-        }
 
         this.store(statistics);
     }
