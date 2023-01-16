@@ -1,7 +1,8 @@
+import {APP} from '../constants/app';
 import {STORAGE_KEY} from '../constants/storageKey';
 import {ELECTRICITY_STATE} from '../constants/electricityState';
-import {MessageGeneratorInterface} from './MessageGenerator';
-import {TelegramServiceInterface} from './TelegramService';
+import {MessageGeneratorInterface} from './message/MessageGenerator';
+import {MessageSenderInterface} from './message/MessageSender';
 
 export interface PingerInterface {
     ping(isAvailable: boolean, nowDate: Date): void
@@ -13,7 +14,7 @@ export class Pinger implements PingerInterface {
     constructor(
         propertiesService: GoogleAppsScript.Properties.PropertiesService,
         private messageGenerator: MessageGeneratorInterface,
-        private telegramService: TelegramServiceInterface,
+        private messageSender: MessageSenderInterface,
     ) {
         this.userProperties = propertiesService.getUserProperties();
     }
@@ -32,6 +33,7 @@ export class Pinger implements PingerInterface {
         });
 
         const message = this.messageGenerator.generate({isAvailable, lastTime, nowDate})
-        this.telegramService.sendMessage(message);
+
+        this.messageSender.send(message, APP.MESSAGE_CONFIG);
     }
 }

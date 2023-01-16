@@ -22,17 +22,19 @@ describe('TelegramService', () => {
         it('should send a message to the configured chat', () => {
             const mockFetch = jest.spyOn(UrlFetchApp, 'fetch');
             const message = 'Hello, world!';
+            const config = {
+                chat_id: '@chat',
+            };
 
-            telegramService.sendMessage(message);
+            telegramService.sendMessage({text: message, ...config});
 
             expect(mockFetch).toHaveBeenCalledWith(
                 `https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`,
                 {
                     method: 'post',
                     payload: {
-                        chat_id: process.env.TELEGRAM_CHAT,
+                        chat_id: '@chat',
                         text: message,
-                        disable_notification: false,
                     },
                 },
             );
@@ -41,18 +43,19 @@ describe('TelegramService', () => {
         it('should send a silent message to the configured chat if specified in the options', () => {
             const mockFetch = jest.spyOn(UrlFetchApp, 'fetch');
             const message = 'Hello, world!';
-            const options = {
-                silent: true,
+            const config = {
+                chat_id: '@chat',
+                disable_notification: true,
             };
 
-            telegramService.sendMessage(message, options);
+            telegramService.sendMessage({text: message, ...config});
 
             expect(mockFetch).toHaveBeenCalledWith(
                 `https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`,
                 {
                     method: 'post',
                     payload: {
-                        chat_id: process.env.TELEGRAM_CHAT,
+                        chat_id: '@chat',
                         text: message,
                         disable_notification: true,
                     },

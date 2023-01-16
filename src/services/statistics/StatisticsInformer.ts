@@ -1,6 +1,7 @@
+import {APP} from '../../constants/app';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsMessageGeneratorInterface} from './StatisticsMessageGenerator';
-import {TelegramServiceInterface} from '../TelegramService';
+import {MessageSenderInterface} from '../message/MessageSender';
 
 export interface StatisticsInformerInterface {
     inform(): void
@@ -12,7 +13,7 @@ export class StatisticsInformer implements StatisticsInformerInterface {
     constructor(
         propertiesService: GoogleAppsScript.Properties.PropertiesService,
         private statisticsMessageGenerator: StatisticsMessageGeneratorInterface,
-        private telegramService: TelegramServiceInterface,
+        private messageSender: MessageSenderInterface,
     ) {
         this.userProperties = propertiesService.getUserProperties();
     }
@@ -27,6 +28,6 @@ export class StatisticsInformer implements StatisticsInformerInterface {
         const statistics = JSON.parse(statisticsRaw);
         const message = this.statisticsMessageGenerator.generate(statistics);
 
-        this.telegramService.sendMessage(message, {silent: true});
+        this.messageSender.send(message, APP.MESSAGE_CONFIG);
     }
 }

@@ -5,4 +5,5 @@ export const STRING = {
     PARAGRAPH: '\n\n',
     SLASH: '/',
     COLON: ':',
+    COMMA: ',',
 };

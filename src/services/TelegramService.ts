@@ -1,9 +1,12 @@
 type SendMessageOptionsType = {
-    silent: boolean,
+    text: string
+    chat_id: string
+    disable_notification?: boolean
+    message_thread_id?: number
 }
 
 export interface TelegramServiceInterface {
-    sendMessage(message: string, options?: SendMessageOptionsType): void
+    sendMessage(options: SendMessageOptionsType): void
 }
 
 export class TelegramService implements TelegramServiceInterface {
@@ -11,18 +14,10 @@ export class TelegramService implements TelegramServiceInterface {
         private urlFetchApp: GoogleAppsScript.URL_Fetch.UrlFetchApp,
     ) {}
 
-    sendMessage(message: string, options?: SendMessageOptionsType) {
-        const {silent}: SendMessageOptionsType = options || {
-            silent: false,
-        };
-
+    sendMessage(options: SendMessageOptionsType) {
         this.urlFetchApp.fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`, {
             method: 'post',
-            payload: {
-                chat_id: process.env.TELEGRAM_CHAT,
-                text: message,
-                disable_notification: silent,
-            }
+            payload: options,
         });
     }
 }

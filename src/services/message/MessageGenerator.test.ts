@@ -1,7 +1,7 @@
 import {MessageGenerator, MessageGeneratorInterface} from './MessageGenerator';
-import {TimeDifferenceGenerator} from './TimeDifferenceGenerator';
-import {DateHelper} from '../utils/DateHelper';
-import {StringHelper} from '../utils/StringHelper';
+import {TimeDifferenceGenerator} from '../TimeDifferenceGenerator';
+import {DateHelper} from '../../utils/DateHelper';
+import {StringHelper} from '../../utils/StringHelper';
 
 jest.mock('./TimeDifferenceGenerator', () => {
     return {

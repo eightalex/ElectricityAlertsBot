@@ -1,5 +1,5 @@
-import {STRING} from '../constants/string';
-import {TimeDifferenceGeneratorInterface} from './TimeDifferenceGenerator';
+import {STRING} from '../../constants/string';
+import {TimeDifferenceGeneratorInterface} from '../TimeDifferenceGenerator';
 
 type GenerateArgumentsType = {
     isAvailable: boolean

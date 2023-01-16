@@ -3,7 +3,7 @@ import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
 import {MonitorsFetcher} from './services/monitors/MonitorsFetcher';
 import {MonitorsStatusChecker} from './services/monitors/MonitorsStatusChecker';
 import {TelegramService} from './services/TelegramService';
-import {MessageGenerator} from './services/MessageGenerator';
+import {MessageGenerator} from './services/message/MessageGenerator';
 import {TimeDifferenceGenerator} from './services/TimeDifferenceGenerator';
 import {Pinger} from './services/Pinger';
 import {DateHelper} from './utils/DateHelper';
@@ -17,6 +17,7 @@ import {ScheduleInformer} from './services/ScheduleInformer';
 import {IcsFetcher} from './services/ics/IcsFetcher';
 import {IcsService} from './services/ics/IcsService';
 import {ScheduleGenerator} from './services/ScheduleGenerator';
+import {MessageSender} from './services/message/MessageSender';
 
 const monitorsConfigGenerator = new MonitorsConfigGenerator();
 const monitorsFetcher = new MonitorsFetcher();
@@ -31,6 +32,7 @@ const statisticsBuilder = new StatisticsBuilder(dateHelper);
 const icsFetcher = new IcsFetcher(UrlFetchApp);
 const icsService = new IcsService(dateHelper);
 const scheduleGenerator = new ScheduleGenerator(dateHelper);
+const messageSender = new MessageSender(telegramService);
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
     monitorsConfigGenerator,
@@ -47,20 +49,20 @@ const statisticsService = new StatisticsService(
 const statisticsInformer = new StatisticsInformer(
     PropertiesService,
     statisticsMessageGenerator,
-    telegramService,
+    messageSender,
 );
 
 const scheduleInformer = new ScheduleInformer(
     icsFetcher,
     icsService,
     scheduleGenerator,
-    telegramService,
+    messageSender,
 );
 
 const pinger = new Pinger(
     PropertiesService,
     messageGenerator,
-    telegramService,
+    messageSender,
 );
 
 const app = new App(

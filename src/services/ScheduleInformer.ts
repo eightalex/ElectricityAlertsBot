@@ -1,7 +1,8 @@
+import {APP} from '../constants/app';
 import {IcsFetcherInterface} from './ics/IcsFetcher';
 import {IcsServiceInterface} from './ics/IcsService';
 import {ScheduleGeneratorInterface} from './ScheduleGenerator';
-import {TelegramServiceInterface} from './TelegramService';
+import {MessageSenderInterface} from './message/MessageSender';
 
 export interface ScheduleInformerInterface {
     inform(): void
@@ -12,7 +13,7 @@ export class ScheduleInformer implements ScheduleInformerInterface {
         private icsFetcher: IcsFetcherInterface,
         private icsService: IcsServiceInterface,
         private scheduleGenerator: ScheduleGeneratorInterface,
-        private telegramService: TelegramServiceInterface,
+        private messageSender: MessageSenderInterface,
     ) {}
 
     inform() {
@@ -21,6 +22,6 @@ export class ScheduleInformer implements ScheduleInformerInterface {
         const filteredEvents = this.icsService.getEvents(events);
         const message = this.scheduleGenerator.generate(filteredEvents);
 
-        this.telegramService.sendMessage(message, {silent: true});
+        this.messageSender.send(message, APP.MESSAGE_CONFIG);
     }
 }
