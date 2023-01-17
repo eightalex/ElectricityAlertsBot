@@ -1,4 +1,5 @@
 import {CalendarEvent} from '../../../types/CalendarEvent';
+import {APP} from '../../constants/app';
 import {STRING} from '../../constants/string';
 import {DateHelperInterface} from '../../utils/DateHelper';
 
@@ -63,7 +64,7 @@ export class IcsService implements IcsServiceInterface {
         const currentDate = nowDate.getDate();
         const nextDate = this.dateHelper.addDays(nowDate, 1).getDate();
 
-        const time = this.dateHelper.getTimeFromTimeString(process.env.SCHEDULE_INFORM_TIME || '08:00');
+        const time = this.dateHelper.getTimeFromTimeString(APP.SCHEDULE.INFORM_TIME);
 
         const presetTime = this.dateHelper.getUpdatedDate(
             nowDate,

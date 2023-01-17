@@ -1,3 +1,4 @@
+import {APP} from '../../constants/app';
 import {MONITOR_STATUS} from '../../constants/monitorStatus';
 import {MonitorsFetcherInterface} from './MonitorsFetcher';
 import {MonitorsAdapterInterface} from './MonitorsAdapter';
@@ -15,7 +16,7 @@ export class MonitorsStatusChecker implements MonitorsStatusCheckerInterface {
         private monitorsFetcher: MonitorsFetcherInterface,
         private monitorsAdapter: MonitorsAdapterInterface,
     ) {
-        this.monitorsConfig = monitorsConfigGenerator.generate(process.env.UPTIME_ROBOT_MONITORS);
+        this.monitorsConfig = monitorsConfigGenerator.generate(APP.UPTIME_ROBOT.MONITORS);
     }
 
     check(): boolean {

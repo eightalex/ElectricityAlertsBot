@@ -1,4 +1,5 @@
 import {UrlFetchApp} from 'gasmask';
+import {APP} from '../constants/app';
 import {TelegramService} from './TelegramService';
 
 describe('TelegramService', () => {
@@ -29,7 +30,7 @@ describe('TelegramService', () => {
             telegramService.sendMessage({text: message, ...config});
 
             expect(mockFetch).toHaveBeenCalledWith(
-                `https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`,
+                `https://api.telegram.org/bot${APP.TELEGRAM.API_KEY}/sendMessage`,
                 {
                     method: 'post',
                     payload: {
@@ -51,7 +52,7 @@ describe('TelegramService', () => {
             telegramService.sendMessage({text: message, ...config});
 
             expect(mockFetch).toHaveBeenCalledWith(
-                `https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`,
+                `https://api.telegram.org/bot${APP.TELEGRAM.API_KEY}/sendMessage`,
                 {
                     method: 'post',
                     payload: {

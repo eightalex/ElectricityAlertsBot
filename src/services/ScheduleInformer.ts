@@ -22,6 +22,6 @@ export class ScheduleInformer implements ScheduleInformerInterface {
         const filteredEvents = this.icsService.getEvents(events);
         const message = this.scheduleGenerator.generate(filteredEvents);
 
-        this.messageSender.send(message, APP.MESSAGE_CONFIG);
+        this.messageSender.send(message, APP.TELEGRAM.MESSAGE_CONFIG);
     }
 }

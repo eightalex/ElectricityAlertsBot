@@ -52,7 +52,7 @@ export class App implements AppInterface {
             return;
         }
 
-        if (timeString === process.env.SCHEDULE_INFORM_TIME) {
+        if (timeString === APP.SCHEDULE.INFORM_TIME) {
             this.scheduleInformer.inform();
             this.userProperties.setProperty(STORAGE_KEY.SCHEDULE_INFORMED_DATE, dateString);
         }
@@ -67,7 +67,7 @@ export class App implements AppInterface {
             return;
         }
 
-        if (timeString === process.env.STATISTICS_INFORM_TIME) {
+        if (timeString === APP.STATISTICS.INFORM_TIME) {
             this.statisticsInformer.inform();
             this.userProperties.setProperty(STORAGE_KEY.STATISTICS_INFORMED_DATE, dateString);
         }

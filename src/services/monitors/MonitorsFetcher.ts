@@ -1,3 +1,5 @@
+import {APP} from '../../constants/app';
+
 export interface MonitorsFetcherInterface {
     fetch(monitorsConfig: Record<string, number>): UptimeRobot.MonitorType[]
 }
@@ -11,7 +13,7 @@ export class MonitorsFetcher implements MonitorsFetcherInterface {
                 'cache-control': 'no-cache',
             },
             payload: {
-                api_key: process.env.UPTIME_ROBOT_API_KEY,
+                api_key: APP.UPTIME_ROBOT.API_KEY,
                 monitors: Object.values(monitorsConfig).join('-'),
                 format: 'json',
             },

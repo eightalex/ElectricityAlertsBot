@@ -28,6 +28,6 @@ export class StatisticsInformer implements StatisticsInformerInterface {
         const statistics = JSON.parse(statisticsRaw);
         const message = this.statisticsMessageGenerator.generate(statistics);
 
-        this.messageSender.send(message, APP.MESSAGE_CONFIG);
+        this.messageSender.send(message, APP.TELEGRAM.MESSAGE_CONFIG);
     }
 }

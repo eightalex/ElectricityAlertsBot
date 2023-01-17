@@ -34,6 +34,6 @@ export class Pinger implements PingerInterface {
 
         const message = this.messageGenerator.generate({isAvailable, lastTime, nowDate})
 
-        this.messageSender.send(message, APP.MESSAGE_CONFIG);
+        this.messageSender.send(message, APP.TELEGRAM.MESSAGE_CONFIG);
     }
 }

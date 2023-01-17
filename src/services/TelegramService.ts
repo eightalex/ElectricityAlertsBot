@@ -1,3 +1,5 @@
+import {APP} from '../constants/app';
+
 type SendMessageOptionsType = {
     text: string
     chat_id: string
@@ -15,7 +17,7 @@ export class TelegramService implements TelegramServiceInterface {
     ) {}
 
     sendMessage(options: SendMessageOptionsType) {
-        this.urlFetchApp.fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`, {
+        this.urlFetchApp.fetch(`https://api.telegram.org/bot${APP.TELEGRAM.API_KEY}/sendMessage`, {
             method: 'post',
             payload: options,
         });
