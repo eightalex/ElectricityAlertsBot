@@ -1,11 +1,11 @@
 import {APP} from '../../constants/app';
 
 export interface MonitorsFetcherInterface {
-    fetch(monitorsConfig: Record<string, number>): UptimeRobot.MonitorType[]
+    fetch(): UptimeRobot.MonitorType[]
 }
 
 export class MonitorsFetcher implements MonitorsFetcherInterface {
-    fetch(monitorsConfig: Record<string, number>): UptimeRobot.MonitorType[] {
+    fetch(): UptimeRobot.MonitorType[] {
         const result = UrlFetchApp.fetch('https://api.uptimerobot.com/v2/getMonitors', {
             method: 'post',
             headers: {
@@ -14,7 +14,6 @@ export class MonitorsFetcher implements MonitorsFetcherInterface {
             },
             payload: {
                 api_key: APP.UPTIME_ROBOT.API_KEY,
-                monitors: Object.values(monitorsConfig).join('-'),
                 format: 'json',
             },
         });

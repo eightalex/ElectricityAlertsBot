@@ -1,17 +1,23 @@
-import {PreparedMonitor} from '../../../types/PreparedMonitor';
+import {PreparedCheckResultType} from '../../../types/PreparedCheckResultType';
+import {MonitorsCheckResultType} from '../../../types/MonitorsCheckResultType';
+import {AppConfigType} from '../../../types/AppConfigType';
 
 export interface MonitorsAdapterInterface {
-    prepare(monitors: UptimeRobot.MonitorType[]): PreparedMonitor[]
+    prepare(monitors: MonitorsCheckResultType[], appConfig: AppConfigType): PreparedCheckResultType[]
 }
 
 export class MonitorsAdapter implements MonitorsAdapterInterface {
-    prepare(monitors: UptimeRobot.MonitorType[]): PreparedMonitor[] {
-        return monitors.map(monitor => {
+    prepare(monitors: MonitorsCheckResultType[], appConfig: AppConfigType): PreparedCheckResultType[] {
+        return appConfig.map(config => {
+            const statuses = monitors
+                .filter(check => config.MONITORS.includes(check.id))
+                .map(check => check.status);
+
             return {
-                id: monitor.id,
-                status: monitor.status,
-                friendly_name: monitor.friendly_name,
-            };
+                id: config.ID,
+                name: config.NAME,
+                status: statuses.some(status => status),
+            }
         });
     }
 }
