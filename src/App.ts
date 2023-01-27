@@ -1,4 +1,5 @@
 import {APP} from './constants/app';
+import {APP_CONFIG} from './constants/appConfig';
 import {STORAGE_KEY} from './constants/storageKey';
 import {PingerInterface} from './services/Pinger';
 import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
@@ -6,6 +7,7 @@ import {StatisticsInformerInterface} from './services/statistics/StatisticsInfor
 import {DateHelperInterface} from './utils/DateHelper';
 import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 import {ScheduleInformerInterface} from './services/ScheduleInformer';
+import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
 
 export interface AppInterface {
     ping(): void
@@ -18,6 +20,7 @@ export class App implements AppInterface {
         propertiesService: GoogleAppsScript.Properties.PropertiesService,
         private pinger: PingerInterface,
         private monitorsStatusChecker: MonitorsStatusCheckerInterface,
+        private monitorsAdapter: MonitorsAdapterInterface,
         private statisticsService: StatisticsServiceInterface,
         private statisticsInformer: StatisticsInformerInterface,
         private scheduleInformer: ScheduleInformerInterface,
@@ -30,9 +33,10 @@ export class App implements AppInterface {
         const nowDate = new Date();
         const timeString = this.dateHelper.getTimeString(nowDate);
         const dateString = this.dateHelper.getDateString(nowDate);
-        const isAvailable = this.monitorsStatusChecker.check();
+        const checkResult = this.monitorsStatusChecker.check();
+        const preparedResult = this.monitorsAdapter.prepare(checkResult, APP_CONFIG);
 
-        this.pinger.ping(isAvailable, nowDate);
+        this.pinger.ping(preparedResult, nowDate);
 
         if (APP.STATISTICS.IS_ENABLED) {
             this.statisticsService.update(isAvailable, nowDate);
