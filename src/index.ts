@@ -73,7 +73,7 @@ const app = new App(
 );
 
 const config = {
-    ID: 0,
+    ID: 1,
     NAME: 'kombinatna25a',
     TELEGRAM_CHATS: [
         {
@@ -96,10 +96,6 @@ function ping() {
     app.ping();
 }
 
-function resetStatistics() {
-    statisticsService.reset();
-}
-
 function informStatistics() {
     statisticsInformer.inform(config);
 }
@@ -109,6 +105,5 @@ function informSchedule() {
 }
 
 ping();
-resetStatistics();
 informStatistics();
 informSchedule()

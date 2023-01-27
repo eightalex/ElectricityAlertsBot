@@ -8,10 +8,10 @@ export const APP_CONFIG: AppConfigType = [
             {
                 chat_id: '@kombinatna_test_alerts',
             },
-            {
-                chat_id: '-1001811166479',
-                message_thread_id: 567,
-            },
+            // {
+            //     chat_id: '-1001811166479',
+            //     message_thread_id: 567,
+            // },
         ],
         MONITORS: [793136583, 793214785],
         STATISTICS: {

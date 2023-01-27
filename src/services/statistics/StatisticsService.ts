@@ -2,11 +2,15 @@ import {StatisticsType} from '../../../types/StatisticsType';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsBuilderInterface} from './StatisticsBuilder';
 import {DateHelperInterface} from '../../utils/DateHelper';
+import {HouseConfigType} from '../../../types/AppConfigType';
+
+type UpdateOptions = {
+    config: HouseConfigType
+    nowDate: Date
+}
 
 export interface StatisticsServiceInterface {
-    store(statistics: StatisticsType): void
-    reset(): void
-    update(isAvailable: boolean, nowDate: Date): void
+    update(isAvailable: boolean, options: UpdateOptions): void
 }
 
 export class StatisticsService implements StatisticsServiceInterface {
@@ -36,32 +40,28 @@ export class StatisticsService implements StatisticsServiceInterface {
         }
     }
 
-    store(statistics: StatisticsType) {
+    private store(statistics: StatisticsType, id: number) {
         const statisticsPrepared = this.prepareToStore(statistics);
-        this.userProperties.setProperty(STORAGE_KEY.STATISTICS, statisticsPrepared);
+        this.userProperties.setProperty(STORAGE_KEY.STATISTICS + id, statisticsPrepared);
     }
 
-    reset() {
-        this.store(this.statisticsBuilder.getDefault(new Date()));
-    }
-
-    update(isAvailable: boolean, nowDate: Date) {
-        const statisticsRaw = this.userProperties.getProperty(STORAGE_KEY.STATISTICS);
+    update(isAvailable: boolean, options: UpdateOptions) {
+        const statisticsRaw = this.userProperties.getProperty(STORAGE_KEY.STATISTICS + options.config.ID);
         const availability = isAvailable ? 'available' : 'notAvailable';
 
         let statistics = statisticsRaw === null
-            ? this.statisticsBuilder.getDefault(nowDate)
+            ? this.statisticsBuilder.getDefault(options.nowDate)
             : this.prepare(statisticsRaw);
 
-        if (statistics.date !== this.dateHelper.getDateString(nowDate)) {
-            statistics = this.statisticsBuilder.getDefault(nowDate);
+        if (statistics.date !== this.dateHelper.getDateString(options.nowDate)) {
+            statistics = this.statisticsBuilder.getDefault(options.nowDate);
         }
 
-        const difference = this.dateHelper.getDifference(new Date(statistics.time.previous), nowDate);
+        const difference = this.dateHelper.getDifference(new Date(statistics.time.previous), options.nowDate);
 
         statistics.time[availability] += difference;
-        statistics.time.previous = nowDate.getTime();
+        statistics.time.previous = options.nowDate.getTime();
 
-        this.store(statistics);
+        this.store(statistics, options.config.ID);
     }
 }

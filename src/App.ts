@@ -49,7 +49,7 @@ export class App implements AppInterface {
             this.pinger.ping(result.status, {config, nowDate});
 
             if (config.STATISTICS.IS_ENABLED) {
-                this.statisticsService.update(result.status, nowDate);
+                this.statisticsService.update(result.status, {config, nowDate});
                 this.inform('STATISTICS', {config, timeString, dateString})
             }
 
@@ -69,11 +69,20 @@ export class App implements AppInterface {
             return;
         }
 
-        if (options.timeString === options.config[type].INFORM_TIME) {
-            const informer = type === 'STATISTICS' ? this.statisticsInformer : this.scheduleInformer;
-            informer.inform(options.config);
-            this.userProperties.setProperty(storageKey, options.dateString);
+        if (options.timeString !== options.config[type].INFORM_TIME) {
+            return;
         }
+
+        switch (type) {
+            case 'STATISTICS':
+                this.statisticsInformer.inform(options.config);
+                break;
+            case 'SCHEDULE':
+                this.scheduleInformer.inform(options.config);
+                break;
+        }
+
+        this.userProperties.setProperty(storageKey, options.dateString);
     }
 
     private reset(dateString: string, id: number) {
