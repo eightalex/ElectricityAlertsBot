@@ -1,4 +1,4 @@
-import {APP_CONFIG} from './constants/appConfig';
+import {MONITORS_CONFIG} from './constants/monitorsConfig';
 import {STORAGE_KEY} from './constants/storageKey';
 import {PingerInterface} from './services/Pinger';
 import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
@@ -7,7 +7,7 @@ import {DateHelperInterface} from './utils/DateHelper';
 import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 import {ScheduleInformerInterface} from './services/ScheduleInformer';
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
-import {HouseConfigType} from '../types/AppConfigType';
+import {HouseConfigType} from '../types/MonitorsConfigType';
 import {ConfigHelper} from './utils/ConfigHelper';
 
 type InformOptions = {
@@ -41,10 +41,10 @@ export class App implements AppInterface {
         const timeString = this.dateHelper.getTimeString(nowDate);
         const dateString = this.dateHelper.getDateString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
-        const preparedResult = this.monitorsAdapter.prepare(checkResult, APP_CONFIG);
+        const preparedResult = this.monitorsAdapter.prepare(checkResult, MONITORS_CONFIG);
 
         preparedResult.forEach(result => {
-            const config = ConfigHelper.getConfig(result.id);
+            const config = ConfigHelper.getConfig(result.id, MONITORS_CONFIG);
 
             this.pinger.ping(result.status, {config, nowDate});
 

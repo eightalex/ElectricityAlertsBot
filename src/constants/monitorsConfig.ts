@@ -1,6 +1,6 @@
-import {AppConfigType} from '../../types/AppConfigType';
+import {MonitorsConfigType} from '../../types/MonitorsConfigType';
 
-export const APP_CONFIG: AppConfigType = [
+export const MONITORS_CONFIG: MonitorsConfigType = [
     {
         ID: 1,
         NAME: 'kombinatna25a',

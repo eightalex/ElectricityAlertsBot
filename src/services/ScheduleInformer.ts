@@ -2,7 +2,7 @@ import {IcsFetcherInterface} from './ics/IcsFetcher';
 import {IcsServiceInterface} from './ics/IcsService';
 import {ScheduleGeneratorInterface} from './ScheduleGenerator';
 import {MessageSenderInterface} from './message/MessageSender';
-import {HouseConfigType} from '../../types/AppConfigType';
+import {HouseConfigType} from '../../types/MonitorsConfigType';
 
 export interface ScheduleInformerInterface {
     inform(config: HouseConfigType): void

@@ -2,7 +2,7 @@ import {STORAGE_KEY} from '../constants/storageKey';
 import {ELECTRICITY_STATE} from '../constants/electricityState';
 import {MessageGeneratorInterface} from './message/MessageGenerator';
 import {MessageSenderInterface} from './message/MessageSender';
-import {HouseConfigType} from '../../types/AppConfigType';
+import {HouseConfigType} from '../../types/MonitorsConfigType';
 
 type PingOptions = {
     config: HouseConfigType

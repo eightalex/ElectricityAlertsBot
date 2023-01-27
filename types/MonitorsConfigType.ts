@@ -1,6 +1,6 @@
 import {TelegramChatsType} from './TelegramChatsType';
 
-export type AppConfigType = HouseConfigType[];
+export type MonitorsConfigType = HouseConfigType[];
 
 export type HouseConfigType = {
     ID: number

@@ -2,7 +2,7 @@ import {StatisticsType} from '../../../types/StatisticsType';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsBuilderInterface} from './StatisticsBuilder';
 import {DateHelperInterface} from '../../utils/DateHelper';
-import {HouseConfigType} from '../../../types/AppConfigType';
+import {HouseConfigType} from '../../../types/MonitorsConfigType';
 
 type UpdateOptions = {
     config: HouseConfigType

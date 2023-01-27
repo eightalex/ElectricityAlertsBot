@@ -1,7 +1,7 @@
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsMessageGeneratorInterface} from './StatisticsMessageGenerator';
 import {MessageSenderInterface} from '../message/MessageSender';
-import {HouseConfigType} from '../../../types/AppConfigType';
+import {HouseConfigType} from '../../../types/MonitorsConfigType';
 
 export interface StatisticsInformerInterface {
     inform(config: HouseConfigType): void
