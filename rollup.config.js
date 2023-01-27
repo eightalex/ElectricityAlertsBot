@@ -6,6 +6,7 @@ export default {
     output: {
         dir: 'output',
         format: 'cjs',
+        strict: false,
     },
     plugins: [
         dotenv.default(),

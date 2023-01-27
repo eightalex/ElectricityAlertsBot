@@ -92,18 +92,14 @@ const config = {
     },
 };
 
-function ping() {
+export function ping() {
     app.ping();
 }
 
-function informStatistics() {
+export function informStatistics() {
     statisticsInformer.inform(config);
 }
 
-function informSchedule() {
+export function informSchedule() {
     scheduleInformer.inform(config);
 }
-
-ping();
-informStatistics();
-informSchedule()
