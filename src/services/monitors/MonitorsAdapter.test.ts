@@ -34,7 +34,11 @@ describe('MonitorsAdapter', () => {
                 {
                     ID: 1,
                     NAME: 'Test Config',
-                    TELEGRAM_CHAT: '@chat',
+                    TELEGRAM_CHATS: [
+                        {
+                            chat_id: '@chat',
+                        }
+                    ],
                     MONITORS: [793359540, 793359541],
                     STATISTICS: {
                         IS_ENABLED: true,

@@ -1,10 +1,10 @@
-import {APP} from '../../constants/app';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsMessageGeneratorInterface} from './StatisticsMessageGenerator';
 import {MessageSenderInterface} from '../message/MessageSender';
+import {HouseConfigType} from '../../../types/AppConfigType';
 
 export interface StatisticsInformerInterface {
-    inform(): void
+    inform(config: HouseConfigType): void
 }
 
 export class StatisticsInformer implements StatisticsInformerInterface {
@@ -18,8 +18,8 @@ export class StatisticsInformer implements StatisticsInformerInterface {
         this.userProperties = propertiesService.getUserProperties();
     }
 
-    inform() {
-        const statisticsRaw = this.userProperties.getProperty(STORAGE_KEY.STATISTICS);
+    inform(config: HouseConfigType) {
+        const statisticsRaw = this.userProperties.getProperty(STORAGE_KEY.STATISTICS + config.ID);
 
         if (statisticsRaw === null) {
             return;
@@ -28,6 +28,6 @@ export class StatisticsInformer implements StatisticsInformerInterface {
         const statistics = JSON.parse(statisticsRaw);
         const message = this.statisticsMessageGenerator.generate(statistics);
 
-        this.messageSender.send(message, APP.TELEGRAM.MESSAGE_CONFIG);
+        this.messageSender.send(message, config.TELEGRAM_CHATS);
     }
 }

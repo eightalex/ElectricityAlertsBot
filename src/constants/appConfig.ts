@@ -4,8 +4,16 @@ export const APP_CONFIG: AppConfigType = [
     {
         ID: 1,
         NAME: 'kombinatna25a',
-        TELEGRAM_CHAT: '@kombinatna_test_alerts',
-        MONITORS: [793106398, 793136583, 793140117, 793214785],
+        TELEGRAM_CHATS: [
+            {
+                chat_id: '@kombinatna_test_alerts',
+            },
+            {
+                chat_id: '-1001811166479',
+                message_thread_id: 567,
+            },
+        ],
+        MONITORS: [793136583, 793214785],
         STATISTICS: {
             IS_ENABLED: true,
             INFORM_TIME: '23:58',
@@ -19,7 +27,11 @@ export const APP_CONFIG: AppConfigType = [
     {
         ID: 2,
         NAME: 'drahomanova31',
-        TELEGRAM_CHAT: '@drahomanova_alerts',
+        TELEGRAM_CHATS: [
+            {
+                chat_id: '@drahomanova_test_alerts',
+            },
+        ],
         MONITORS: [793359543],
         STATISTICS: {
             IS_ENABLED: true,
@@ -33,9 +45,13 @@ export const APP_CONFIG: AppConfigType = [
     },
     {
         ID: 3,
-        NAME: 'brest_lytovskiy',
-        TELEGRAM_CHAT: '@brest_lytovskiy_alerts',
-        MONITORS: [793361189],
+        NAME: 'yaroslava_mudroho',
+        TELEGRAM_CHATS: [
+            {
+                chat_id: '@yaroslava_mudroho_test_alerts',
+            },
+        ],
+        MONITORS: [793494529],
         STATISTICS: {
             IS_ENABLED: true,
             INFORM_TIME: '23:58',

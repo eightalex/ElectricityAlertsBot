@@ -1,5 +1,3 @@
-import {MonitorsConfigGenerator} from './services/monitors/MonitorsConfigGenerator';
-import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
 import {MonitorsFetcher} from './services/monitors/MonitorsFetcher';
 import {MonitorsStatusChecker} from './services/monitors/MonitorsStatusChecker';
 import {TelegramService} from './services/TelegramService';
@@ -18,10 +16,10 @@ import {IcsFetcher} from './services/ics/IcsFetcher';
 import {IcsService} from './services/ics/IcsService';
 import {ScheduleGenerator} from './services/ScheduleGenerator';
 import {MessageSender} from './services/message/MessageSender';
+import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
 
-const monitorsConfigGenerator = new MonitorsConfigGenerator();
-const monitorsFetcher = new MonitorsFetcher();
 const monitorsAdapter = new MonitorsAdapter();
+const monitorsFetcher = new MonitorsFetcher();
 const telegramService = new TelegramService(UrlFetchApp);
 const stringHelper = new StringHelper();
 const dateHelper = new DateHelper(stringHelper);
@@ -35,9 +33,7 @@ const scheduleGenerator = new ScheduleGenerator(dateHelper);
 const messageSender = new MessageSender(telegramService);
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
-    monitorsConfigGenerator,
     monitorsFetcher,
-    monitorsAdapter,
 );
 
 const statisticsService = new StatisticsService(
@@ -69,11 +65,32 @@ const app = new App(
     PropertiesService,
     pinger,
     monitorsStatusChecker,
+    monitorsAdapter,
     statisticsService,
     statisticsInformer,
     scheduleInformer,
     dateHelper,
 );
+
+const config = {
+    ID: 0,
+    NAME: 'kombinatna25a',
+    TELEGRAM_CHATS: [
+        {
+            chat_id: '@kombinatna_test_alerts',
+        },
+    ],
+    MONITORS: [793136583, 793214785], // UNDERNET UNDERNET2
+    STATISTICS: {
+        IS_ENABLED: true,
+        INFORM_TIME: '23:58',
+    },
+    SCHEDULE: {
+        IS_ENABLED: true,
+        INFORM_TIME: '08:00',
+        CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
+    },
+};
 
 function ping() {
     app.ping();
@@ -84,11 +101,11 @@ function resetStatistics() {
 }
 
 function informStatistics() {
-    statisticsInformer.inform();
+    statisticsInformer.inform(config);
 }
 
 function informSchedule() {
-    scheduleInformer.inform();
+    scheduleInformer.inform(config);
 }
 
 ping();

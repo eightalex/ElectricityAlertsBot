@@ -1,4 +1,3 @@
-import {APP} from './constants/app';
 import {APP_CONFIG} from './constants/appConfig';
 import {STORAGE_KEY} from './constants/storageKey';
 import {PingerInterface} from './services/Pinger';
@@ -8,6 +7,14 @@ import {DateHelperInterface} from './utils/DateHelper';
 import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 import {ScheduleInformerInterface} from './services/ScheduleInformer';
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
+import {HouseConfigType} from '../types/AppConfigType';
+import {ConfigHelper} from './utils/ConfigHelper';
+
+type InformOptions = {
+    config: HouseConfigType
+    timeString: string
+    dateString: string
+}
 
 export interface AppInterface {
     ping(): void
@@ -36,55 +43,47 @@ export class App implements AppInterface {
         const checkResult = this.monitorsStatusChecker.check();
         const preparedResult = this.monitorsAdapter.prepare(checkResult, APP_CONFIG);
 
-        this.pinger.ping(preparedResult, nowDate);
+        preparedResult.forEach(result => {
+            const config = ConfigHelper.getConfig(result.id);
 
-        if (APP.STATISTICS.IS_ENABLED) {
-            this.statisticsService.update(isAvailable, nowDate);
-        }
+            this.pinger.ping(result.status, {config, nowDate});
 
-        this.informSchedule(timeString, dateString);
-        this.informStatistics(timeString, dateString);
-        this.reset(dateString);
+            if (config.STATISTICS.IS_ENABLED) {
+                this.statisticsService.update(result.status, nowDate);
+                this.inform('STATISTICS', {config, timeString, dateString})
+            }
+
+            if (config.SCHEDULE.IS_ENABLED) {
+                this.inform('SCHEDULE', {config, timeString, dateString})
+            }
+
+            this.reset(dateString, result.id);
+        });
     }
 
-    private informSchedule(timeString: string, dateString: string) {
-        if (!APP.SCHEDULE.IS_ENABLED) {
+    private inform(type: 'STATISTICS' | 'SCHEDULE', options: InformOptions): void {
+        // @ts-ignore
+        const storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.id;
+
+        if (options.dateString === this.userProperties.getProperty(storageKey)) {
             return;
         }
 
-        if (dateString === this.userProperties.getProperty(STORAGE_KEY.SCHEDULE_INFORMED_DATE)) {
-            return;
-        }
-
-        if (timeString === APP.SCHEDULE.INFORM_TIME) {
-            this.scheduleInformer.inform();
-            this.userProperties.setProperty(STORAGE_KEY.SCHEDULE_INFORMED_DATE, dateString);
-        }
-    }
-
-    private informStatistics(timeString: string, dateString: string) {
-        if (!APP.STATISTICS.IS_ENABLED) {
-            return;
-        }
-
-        if (dateString === this.userProperties.getProperty(STORAGE_KEY.STATISTICS_INFORMED_DATE)) {
-            return;
-        }
-
-        if (timeString === APP.STATISTICS.INFORM_TIME) {
-            this.statisticsInformer.inform();
-            this.userProperties.setProperty(STORAGE_KEY.STATISTICS_INFORMED_DATE, dateString);
+        if (options.timeString === options.config[type].INFORM_TIME) {
+            const informer = type === 'STATISTICS' ? this.statisticsInformer : this.scheduleInformer;
+            informer.inform(options.config);
+            this.userProperties.setProperty(storageKey, options.dateString);
         }
     }
 
-    private reset(dateString: string) {
-        const isInformedSchedule = this.userProperties.getProperty(STORAGE_KEY.SCHEDULE_INFORMED_DATE);
-        const isInformedStatistics = this.userProperties.getProperty(STORAGE_KEY.STATISTICS_INFORMED_DATE);
+    private reset(dateString: string, id: number) {
+        const isInformedSchedule = this.userProperties.getProperty(STORAGE_KEY.SCHEDULE_INFORMED_DATE + id);
+        const isInformedStatistics = this.userProperties.getProperty(STORAGE_KEY.STATISTICS_INFORMED_DATE + id);
 
         if (isInformedSchedule !== dateString || isInformedStatistics !== dateString) {
             this.userProperties.setProperties({
-                [STORAGE_KEY.SCHEDULE_INFORMED_DATE]: '',
-                [STORAGE_KEY.STATISTICS_INFORMED_DATE]: '',
+                [STORAGE_KEY.SCHEDULE_INFORMED_DATE + id]: '',
+                [STORAGE_KEY.STATISTICS_INFORMED_DATE + id]: '',
             });
         }
     }

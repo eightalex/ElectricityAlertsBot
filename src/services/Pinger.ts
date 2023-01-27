@@ -1,12 +1,16 @@
-import {APP} from '../constants/app';
 import {STORAGE_KEY} from '../constants/storageKey';
 import {ELECTRICITY_STATE} from '../constants/electricityState';
 import {MessageGeneratorInterface} from './message/MessageGenerator';
 import {MessageSenderInterface} from './message/MessageSender';
-import {PreparedCheckResultType} from '../../types/PreparedCheckResultType';
+import {HouseConfigType} from '../../types/AppConfigType';
+
+type PingOptions = {
+    config: HouseConfigType
+    nowDate: Date
+}
 
 export interface PingerInterface {
-    ping(checkResult: PreparedCheckResultType[], nowDate: Date): void
+    ping(isAvailable: boolean, options: PingOptions): void
 }
 
 export class Pinger implements PingerInterface {
@@ -20,27 +24,25 @@ export class Pinger implements PingerInterface {
         this.userProperties = propertiesService.getUserProperties();
     }
 
-    ping(checkResult: PreparedCheckResultType[], nowDate: Date): void {
-        checkResult.forEach(check => {
-            const key = {
-                lastState: STORAGE_KEY.LAST_STATE + '_' + check.id,
-                lastTime: STORAGE_KEY.LAST_TIME + '_' + check.id,
-            };
-            const lastState = this.userProperties.getProperty(key.lastState);
-            const lastTime = this.userProperties.getProperty(key.lastTime) || '0';
+    ping(isAvailable: boolean, options: PingOptions): void {
+        const key = {
+            lastState: STORAGE_KEY.LAST_STATE + options.config.ID,
+            lastTime: STORAGE_KEY.LAST_TIME + options.config.ID,
+        };
+        const lastState = this.userProperties.getProperty(key.lastState);
+        const lastTime = this.userProperties.getProperty(key.lastTime) || '0';
 
-            if (Boolean(lastState) === check.status) {
-                return;
-            }
+        if (Boolean(lastState) === isAvailable) {
+            return;
+        }
 
-            this.userProperties.setProperties({
-                [key.lastState]: check.status ? ELECTRICITY_STATE.AVAILABLE : ELECTRICITY_STATE.NOT_AVAILABLE,
-                [key.lastTime]: String(nowDate.getTime()),
-            });
-
-            const message = this.messageGenerator.generate({isAvailable: check.status, lastTime, nowDate})
-
-            this.messageSender.send(message, APP.TELEGRAM.MESSAGE_CONFIG);
+        this.userProperties.setProperties({
+            [key.lastState]: isAvailable ? ELECTRICITY_STATE.AVAILABLE : ELECTRICITY_STATE.NOT_AVAILABLE,
+            [key.lastTime]: String(options.nowDate.getTime()),
         });
+
+        const message = this.messageGenerator.generate({isAvailable, lastTime, nowDate: options.nowDate})
+
+        this.messageSender.send(message, options.config.TELEGRAM_CHATS);
     }
 }

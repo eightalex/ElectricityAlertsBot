@@ -1,7 +1,5 @@
-import {APP} from '../../constants/app';
-
 export interface IcsFetcherInterface {
-    fetch(): string
+    fetch(url: string): string
 }
 
 export class IcsFetcher implements IcsFetcherInterface {
@@ -9,8 +7,8 @@ export class IcsFetcher implements IcsFetcherInterface {
         private urlFetchApp: GoogleAppsScript.URL_Fetch.UrlFetchApp,
     ) {}
 
-    fetch(): string {
-        const result = this.urlFetchApp.fetch(APP.SCHEDULE.CALENDAR_URL, {
+    fetch(url: string): string {
+        const result = this.urlFetchApp.fetch(url, {
             method: 'get',
         });
 

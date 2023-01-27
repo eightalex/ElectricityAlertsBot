@@ -54,7 +54,7 @@ describe('IcsService', () => {
 
     describe('getEvents', () => {
         it('should return events from SCHEDULE_INFORM_TIME to tomorrow', () => {
-            const todayEvents = icsService.getEvents(parsedIcs);
+            const todayEvents = icsService.getEvents(parsedIcs, '08:00');
 
             expect(todayEvents).toEqual(filteredEvents);
         });

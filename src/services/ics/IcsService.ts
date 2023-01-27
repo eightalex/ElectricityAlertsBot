@@ -1,11 +1,10 @@
 import {CalendarEvent} from '../../../types/CalendarEvent';
-import {APP} from '../../constants/app';
 import {STRING} from '../../constants/string';
 import {DateHelperInterface} from '../../utils/DateHelper';
 
 export interface IcsServiceInterface {
     parse(ics: string): CalendarEvent[]
-    getEvents(events: CalendarEvent[]): CalendarEvent[]
+    getEvents(events: CalendarEvent[], informTime: string): CalendarEvent[]
 }
 
 export class IcsService implements IcsServiceInterface {
@@ -59,12 +58,12 @@ export class IcsService implements IcsServiceInterface {
         return events;
     }
 
-    getEvents(events: CalendarEvent[]): CalendarEvent[] {
+    getEvents(events: CalendarEvent[], informTime: string): CalendarEvent[] {
         const nowDate = new Date();
         const currentDate = nowDate.getDate();
         const nextDate = this.dateHelper.addDays(nowDate, 1).getDate();
 
-        const time = this.dateHelper.getTimeFromTimeString(APP.SCHEDULE.INFORM_TIME);
+        const time = this.dateHelper.getTimeFromTimeString(informTime);
 
         const presetTime = this.dateHelper.getUpdatedDate(
             nowDate,

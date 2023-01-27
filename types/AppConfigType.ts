@@ -1,9 +1,11 @@
+import {TelegramChatsType} from './TelegramChatsType';
+
 export type AppConfigType = HouseConfigType[];
 
 export type HouseConfigType = {
     ID: number
     NAME: string
-    TELEGRAM_CHAT: string
+    TELEGRAM_CHATS: TelegramChatsType[]
     STATISTICS: {
         IS_ENABLED: boolean
         INFORM_TIME: string
