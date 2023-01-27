@@ -1,8 +1,8 @@
 import {TelegramServiceInterface} from '../TelegramService';
-import {TelegramChatsType} from '../../../types/TelegramChatsType';
+import {TelegramChatType} from '../../../types/TelegramChatType';
 
 export interface MessageSenderInterface {
-    send(message: string, config: TelegramChatsType[]): void
+    send(message: string, config: TelegramChatType[]): void
 }
 
 export class MessageSender implements MessageSenderInterface {
@@ -10,7 +10,7 @@ export class MessageSender implements MessageSenderInterface {
         private telegramService: TelegramServiceInterface,
     ) {}
 
-    send(message: string, config: TelegramChatsType[]) {
+    send(message: string, config: TelegramChatType[]) {
         config.forEach(config => {
             this.telegramService.sendMessage({text: message, ...config});
         });
