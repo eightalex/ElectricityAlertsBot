@@ -17,7 +17,7 @@ export class MonitorsStatusChecker implements MonitorsStatusCheckerInterface {
         return monitors.map(monitor => ({
             id: monitor.id,
             name: monitor.friendly_name,
-            status: monitor.status !== MONITOR_STATUS.SEEMS_DOWN && monitor.status !== MONITOR_STATUS.DOWN,
+            status: monitor.status === MONITOR_STATUS.UP,
         }));
     }
 }
