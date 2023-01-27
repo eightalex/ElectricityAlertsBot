@@ -1,4 +1,4 @@
-import {CalendarEvent} from '../../../../types/CalendarEvent';
+import {CalendarEventType} from '../../../../types/CalendarEventType';
 
 export const exampleIcs =
 `BEGIN:VCALENDAR
@@ -68,7 +68,7 @@ URL;VALUE=URI:https://www.dtek-kem.com.ua/ua/shutdowns
 LAST-MODIFIED:20230103T094924Z
 END:VEVENT`;
 
-export const parsedIcs: CalendarEvent[] = [
+export const parsedIcs: CalendarEventType[] = [
     {
         start: new Date('2023-01-03 07:00 Z'),
         end: new Date('2023-01-03 11:00 Z'),

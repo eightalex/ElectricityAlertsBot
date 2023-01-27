@@ -1,4 +1,4 @@
-import {CalendarEvent} from '../../types/CalendarEvent';
+import {CalendarEventType} from '../../types/CalendarEventType';
 import {ScheduleGenerator} from './ScheduleGenerator';
 import {DateHelper} from '../utils/DateHelper';
 import {StringHelper} from '../utils/StringHelper';
@@ -34,7 +34,7 @@ describe('ScheduleGenerator', () => {
         });
 
         it('should return an empty string if there are no events', () => {
-            const events: CalendarEvent[] = [];
+            const events: CalendarEventType[] = [];
             const schedule = scheduleGenerator.generate(events);
 
             expect(schedule).toEqual('');

@@ -2,9 +2,9 @@ import {IcsService, IcsServiceInterface} from './IcsService';
 import {DateHelper} from '../../utils/DateHelper';
 import {StringHelper} from '../../utils/StringHelper';
 import {exampleIcs, parsedIcs} from './testData/exampleIcs';
-import {CalendarEvent} from '../../../types/CalendarEvent';
+import {CalendarEventType} from '../../../types/CalendarEventType';
 
-export const filteredEvents: CalendarEvent[] = [
+export const filteredEvents: CalendarEventType[] = [
     {
         start: new Date('2023-01-03 07:00 Z'),
         end: new Date('2023-01-03 11:00 Z'),

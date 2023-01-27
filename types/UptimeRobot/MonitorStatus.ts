@@ -1,3 +1,3 @@
 namespace UptimeRobot {
-    export type MonitorStatus = 0 | 1 | 2 | 8 | 9;
+    export type MonitorStatusType = 0 | 1 | 2 | 8 | 9;
 }

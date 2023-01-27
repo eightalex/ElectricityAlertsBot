@@ -1,9 +1,9 @@
-import {CalendarEvent} from '../../types/CalendarEvent';
+import {CalendarEventType} from '../../types/CalendarEventType';
 import {STRING} from '../constants/string';
 import {DateHelperInterface} from '../utils/DateHelper';
 
 export interface ScheduleGeneratorInterface {
-    generate(events: CalendarEvent[]): string
+    generate(events: CalendarEventType[]): string
 }
 
 export class ScheduleGenerator implements ScheduleGeneratorInterface {
@@ -11,7 +11,7 @@ export class ScheduleGenerator implements ScheduleGeneratorInterface {
         private dateHelper: DateHelperInterface,
     ) {}
 
-    generate(events: CalendarEvent[]): string {
+    generate(events: CalendarEventType[]): string {
         let divider = false;
 
         if (events.length === 0) {

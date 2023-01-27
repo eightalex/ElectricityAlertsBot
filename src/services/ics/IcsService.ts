@@ -1,10 +1,10 @@
-import {CalendarEvent} from '../../../types/CalendarEvent';
+import {CalendarEventType} from '../../../types/CalendarEventType';
 import {STRING} from '../../constants/string';
 import {DateHelperInterface} from '../../utils/DateHelper';
 
 export interface IcsServiceInterface {
-    parse(ics: string): CalendarEvent[]
-    getEvents(events: CalendarEvent[], informTime: string): CalendarEvent[]
+    parse(ics: string): CalendarEventType[]
+    getEvents(events: CalendarEventType[], informTime: string): CalendarEventType[]
 }
 
 export class IcsService implements IcsServiceInterface {
@@ -12,10 +12,10 @@ export class IcsService implements IcsServiceInterface {
         private dateHelper: DateHelperInterface,
     ) {}
 
-    parse(ics: string): CalendarEvent[] {
+    parse(ics: string): CalendarEventType[] {
         const lines = ics.split(STRING.NEWLINE);
-        const events: CalendarEvent[] = [];
-        let currentEvent: CalendarEvent | null = null;
+        const events: CalendarEventType[] = [];
+        let currentEvent: CalendarEventType | null = null;
 
         for (const line of lines) {
             if (line.startsWith('BEGIN:VEVENT')) {
@@ -58,7 +58,7 @@ export class IcsService implements IcsServiceInterface {
         return events;
     }
 
-    getEvents(events: CalendarEvent[], informTime: string): CalendarEvent[] {
+    getEvents(events: CalendarEventType[], informTime: string): CalendarEventType[] {
         const nowDate = new Date();
         const currentDate = nowDate.getDate();
         const nextDate = this.dateHelper.addDays(nowDate, 1).getDate();
