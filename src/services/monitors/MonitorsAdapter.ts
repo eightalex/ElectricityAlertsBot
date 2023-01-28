@@ -10,7 +10,7 @@ export class MonitorsAdapter implements MonitorsAdapterInterface {
     prepare(monitors: MonitorsCheckResultType[], appConfig: MonitorsConfigType): PreparedCheckResultType[] {
         return appConfig.map(config => {
             const statuses = monitors
-                .filter(check => config.MONITORS.includes(check.id))
+                .filter(check => config.MONITORS !== undefined && config.MONITORS.includes(check.id))
                 .map(check => check.status);
 
             return {

@@ -96,6 +96,10 @@ export function ping() {
     app.ping();
 }
 
+export function doPost(event: GoogleAppsScript.Events.DoPost) {
+    app.webhookUpdate(event.postData.contents);
+}
+
 export function informStatistics() {
     statisticsInformer.inform(config);
 }

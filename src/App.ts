@@ -9,6 +9,7 @@ import {ScheduleInformerInterface} from './services/ScheduleInformer';
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
 import {HouseConfigType} from '../types/MonitorsConfigType';
 import {ConfigHelper} from './utils/ConfigHelper';
+import {WebhookType} from '../types/WebhookType';
 
 type InformOptions = {
     config: HouseConfigType
@@ -18,6 +19,7 @@ type InformOptions = {
 
 export interface AppInterface {
     ping(): void
+    webhookUpdate(contents: string): void
 }
 
 export class App implements AppInterface {
@@ -59,6 +61,13 @@ export class App implements AppInterface {
 
             this.reset(dateString, result.id);
         });
+    }
+
+    webhookUpdate(contents: string) {
+        const data: WebhookType = JSON.parse(contents);
+        const config = ConfigHelper.getConfig(data.id, MONITORS_CONFIG);
+
+        this.pinger.ping(data.status, {config, nowDate: new Date()});
     }
 
     private inform(type: 'STATISTICS' | 'SCHEDULE', options: InformOptions): void {

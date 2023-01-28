@@ -15,5 +15,5 @@ export type HouseConfigType = {
         INFORM_TIME?: string
         CALENDAR_URL?: string
     }
-    MONITORS: number[]
+    MONITORS?: number[]
 };

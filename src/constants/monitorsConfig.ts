@@ -60,4 +60,20 @@ export const MONITORS_CONFIG: MonitorsConfigType = [
             IS_ENABLED: false,
         },
     },
+    {
+        ID: 4,
+        NAME: 'brest_lytovskiy',
+        TELEGRAM_CHATS: [
+            {
+                chat_id: '@brest_lytovskiy_test_alerts',
+            },
+        ],
+        STATISTICS: {
+            IS_ENABLED: true,
+            INFORM_TIME: '23:58',
+        },
+        SCHEDULE: {
+            IS_ENABLED: false,
+        },
+    },
 ];
