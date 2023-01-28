@@ -50,6 +50,24 @@ describe('MonitorsAdapter', () => {
                         CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
                     },
                 },
+                {
+                    ID: 2,
+                    NAME: 'Test Config 2',
+                    TELEGRAM_CHATS: [
+                        {
+                            chat_id: '@chat2',
+                        }
+                    ],
+                    STATISTICS: {
+                        IS_ENABLED: true,
+                        INFORM_TIME: '23:58',
+                    },
+                    SCHEDULE: {
+                        IS_ENABLED: true,
+                        INFORM_TIME: '08:00',
+                        CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
+                    },
+                },
             ];
 
             const expectedResult: PreparedCheckResultType[] = [
