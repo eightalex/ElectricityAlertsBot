@@ -1,4 +1,5 @@
-import {MONITORS_CONFIG} from './constants/monitorsConfig';
+import {APP} from './constants/app';
+import {MONITORS_CONFIG, MONITORS_CONFIG_DEV} from './constants/monitorsConfig';
 import {STORAGE_KEY} from './constants/storageKey';
 import {PingerInterface} from './services/Pinger';
 import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
@@ -7,7 +8,7 @@ import {DateHelperInterface} from './utils/DateHelper';
 import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 import {ScheduleInformerInterface} from './services/ScheduleInformer';
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
-import {HouseConfigType} from '../types/MonitorsConfigType';
+import {HouseConfigType, MonitorsConfigType} from '../types/MonitorsConfigType';
 import {ConfigHelper} from './utils/ConfigHelper';
 import {WebhookType} from '../types/WebhookType';
 
@@ -24,6 +25,7 @@ export interface AppInterface {
 
 export class App implements AppInterface {
     private readonly userProperties: GoogleAppsScript.Properties.Properties;
+    private readonly monitorsConfig: MonitorsConfigType;
 
     constructor(
         propertiesService: GoogleAppsScript.Properties.PropertiesService,
@@ -36,6 +38,7 @@ export class App implements AppInterface {
         private dateHelper: DateHelperInterface,
     ) {
         this.userProperties = propertiesService.getUserProperties();
+        this.monitorsConfig = APP.MODE === 'production' ? MONITORS_CONFIG : MONITORS_CONFIG_DEV;
     }
 
     ping() {
@@ -43,10 +46,10 @@ export class App implements AppInterface {
         const timeString = this.dateHelper.getTimeString(nowDate);
         const dateString = this.dateHelper.getDateString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
-        const preparedResult = this.monitorsAdapter.prepare(checkResult, MONITORS_CONFIG);
+        const preparedResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
 
         preparedResult.forEach(result => {
-            const config = ConfigHelper.getConfig(result.id, MONITORS_CONFIG);
+            const config = ConfigHelper.getConfig(result.id, this.monitorsConfig);
 
             this.pinger.ping(result.status, {config, nowDate});
 
@@ -65,7 +68,7 @@ export class App implements AppInterface {
 
     webhookUpdate(contents: string) {
         const data: WebhookType = JSON.parse(contents);
-        const config = ConfigHelper.getConfig(data.id, MONITORS_CONFIG);
+        const config = ConfigHelper.getConfig(data.id, this.monitorsConfig);
 
         this.pinger.ping(data.status, {config, nowDate: new Date()});
     }
