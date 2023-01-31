@@ -5,6 +5,7 @@ import {DateHelperInterface} from '../../utils/DateHelper';
 export interface IcsServiceInterface {
     parse(ics: string): CalendarEventType[]
     getEvents(events: CalendarEventType[], informTime: string): CalendarEventType[]
+    getFilteredEvents(ics: string, informTime: string): CalendarEventType[]
 }
 
 export class IcsService implements IcsServiceInterface {
@@ -45,11 +46,11 @@ export class IcsService implements IcsServiceInterface {
 
         events.sort((a, b) => {
             if (a.start.getDate() < b.start.getDate()) {
-                return -1;
+                return 1;
             }
 
             if (a.start.getDate() > b.start.getDate()) {
-                return 1;
+                return -1;
             }
 
             return 0;
@@ -98,5 +99,10 @@ export class IcsService implements IcsServiceInterface {
         }
 
         return filteredEvents;
+    }
+
+    getFilteredEvents(ics: string, informTime: string): CalendarEventType[] {
+        const events: CalendarEventType[] = this.parse(ics);
+        return this.getEvents(events, informTime);
     }
 }

@@ -22,8 +22,7 @@ export class ScheduleInformer implements ScheduleInformerInterface {
         }
 
         const ics = this.icsFetcher.fetch(config.SCHEDULE.CALENDAR_URL);
-        const events = this.icsService.parse(ics);
-        const filteredEvents = this.icsService.getEvents(events, config.SCHEDULE.INFORM_TIME);
+        const filteredEvents = this.icsService.getFilteredEvents(ics, config.SCHEDULE.INFORM_TIME);
         const message = this.scheduleGenerator.generate(filteredEvents);
 
         this.messageSender.send(message, config.TELEGRAM_CHATS);

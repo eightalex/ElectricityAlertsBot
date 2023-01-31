@@ -2,7 +2,7 @@ import {CalendarEventType} from '../../types/CalendarEventType';
 import {ScheduleGenerator} from './ScheduleGenerator';
 import {DateHelper} from '../utils/DateHelper';
 import {StringHelper} from '../utils/StringHelper';
-import {filteredEvents} from './ics/IcsService.test';
+import {filteredEvents, filteredEvents2} from './ics/IcsService.test';
 
 const expectedSchedule =
 `🗓️ Відключення сьогодні
@@ -38,6 +38,16 @@ describe('ScheduleGenerator', () => {
             const schedule = scheduleGenerator.generate(events);
 
             expect(schedule).toEqual('');
+        });
+
+        it('should return correct schedule between two months', () => {
+            jest
+                .useFakeTimers()
+                .setSystemTime(new Date('2023-01-31 08:00 Z'));
+
+            const schedule = scheduleGenerator.generate(filteredEvents2);
+
+            expect(schedule).toEqual(expectedSchedule);
         });
     });
 });

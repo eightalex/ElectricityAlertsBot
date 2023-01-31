@@ -2,6 +2,7 @@ import {IcsService, IcsServiceInterface} from './IcsService';
 import {DateHelper} from '../../utils/DateHelper';
 import {StringHelper} from '../../utils/StringHelper';
 import {exampleIcs, parsedIcs} from './testData/exampleIcs';
+import {bugIcs} from './testData/bugIcs';
 import {CalendarEventType} from '../../../types/CalendarEventType';
 
 export const filteredEvents: CalendarEventType[] = [
@@ -24,6 +25,29 @@ export const filteredEvents: CalendarEventType[] = [
     {
         start: new Date('2023-01-04 19:00 Z'),
         end: new Date('2023-01-04 22:00 Z'),
+    },
+];
+
+export const filteredEvents2: CalendarEventType[] = [
+    {
+        start: new Date('2023-01-31 07:00 Z'),
+        end: new Date('2023-01-31 11:00 Z'),
+    },
+    {
+        start: new Date('2023-01-31 16:00 Z'),
+        end: new Date('2023-01-31 20:00 Z'),
+    },
+    {
+        start: new Date('2023-02-01 01:00 Z'),
+        end: new Date('2023-02-01 05:00 Z'),
+    },
+    {
+        start: new Date('2023-02-01 10:00 Z'),
+        end: new Date('2023-02-01 14:00 Z'),
+    },
+    {
+        start: new Date('2023-02-01 19:00 Z'),
+        end: new Date('2023-02-01 22:00 Z'),
     },
 ];
 
@@ -57,6 +81,18 @@ describe('IcsService', () => {
             const todayEvents = icsService.getEvents(parsedIcs, '08:00');
 
             expect(todayEvents).toEqual(filteredEvents);
+        });
+    });
+
+    describe('getFilteredEvents', () => {
+        it('should return events from SCHEDULE_INFORM_TIME to tomorrow', () => {
+            jest
+                .useFakeTimers()
+                .setSystemTime(new Date('2023-01-31 08:00 Z'));
+
+            const todayEvents = icsService.getFilteredEvents(bugIcs, '08:00');
+
+            expect(todayEvents).toEqual(filteredEvents2);
         });
     });
 });
