@@ -2,7 +2,7 @@ import {IcsService, IcsServiceInterface} from './IcsService';
 import {DateHelper} from '../../utils/DateHelper';
 import {StringHelper} from '../../utils/StringHelper';
 import {exampleIcs, parsedIcs} from './testData/exampleIcs';
-import {bugIcs} from './testData/bugIcs';
+import {exampleIcs2} from './testData/exampleIcs2';
 import {CalendarEventType} from '../../../types/CalendarEventType';
 
 export const filteredEvents: CalendarEventType[] = [
@@ -90,7 +90,7 @@ describe('IcsService', () => {
                 .useFakeTimers()
                 .setSystemTime(new Date('2023-01-31 08:00 Z'));
 
-            const todayEvents = icsService.getFilteredEvents(bugIcs, '08:00');
+            const todayEvents = icsService.getFilteredEvents(exampleIcs2, '08:00');
 
             expect(todayEvents).toEqual(filteredEvents2);
         });
