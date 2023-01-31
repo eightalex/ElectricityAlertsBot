@@ -45,12 +45,12 @@ export class IcsService implements IcsServiceInterface {
         }
 
         events.sort((a, b) => {
-            if (a.start.getDate() < b.start.getDate()) {
-                return 1;
+            if (a.start.getTime() < b.start.getTime()) {
+                return -1;
             }
 
-            if (a.start.getDate() > b.start.getDate()) {
-                return -1;
+            if (a.start.getTime() > b.start.getTime()) {
+                return 1;
             }
 
             return 0;
@@ -60,14 +60,13 @@ export class IcsService implements IcsServiceInterface {
     }
 
     getEvents(events: CalendarEventType[], informTime: string): CalendarEventType[] {
-        const nowDate = new Date();
-        const currentDate = nowDate.getDate();
-        const nextDate = this.dateHelper.addDays(nowDate, 1).getDate();
+        const now = new Date();
+        const currentDate = now.getDate();
 
         const time = this.dateHelper.getTimeFromTimeString(informTime);
 
         const presetTime = this.dateHelper.getUpdatedDate(
-            nowDate,
+            now,
             {
                 hours: time.hours,
                 minutes: time.minutes
@@ -75,7 +74,11 @@ export class IcsService implements IcsServiceInterface {
         ).getTime();
 
         const filteredEvents = events.filter(event => {
-            return [currentDate, nextDate].includes(event.start.getDate());
+            return [
+                currentDate,
+                this.dateHelper.addDays(now, 1).getDate(),
+                this.dateHelper.addDays(now, 2).getDate(),
+            ].includes(event.start.getDate());
         });
 
         for (let i = 0; i < filteredEvents.length - 1; i++) {
@@ -86,15 +89,19 @@ export class IcsService implements IcsServiceInterface {
                 continue;
             }
 
+            if (currentEvent.start.getDate() === currentDate && currentEvent.end.getTime() < presetTime) {
+                filteredEvents.splice(i, 1);
+                i--;
+            }
+
             if (currentEvent.end.getTime() === nextEvent.start.getTime()) {
                 currentEvent.end = nextEvent.end;
                 filteredEvents.splice(i + 1, 1);
                 i--;
             }
 
-            if (currentEvent.start.getDate() === currentDate && currentEvent.end.getTime() < presetTime) {
-                filteredEvents.splice(i, 1);
-                i--;
+            if (currentEvent.start.getDate() === this.dateHelper.addDays(now, 2).getDate()) {
+                filteredEvents.splice(i);
             }
         }
 

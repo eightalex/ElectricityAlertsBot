@@ -76,4 +76,23 @@ export const MONITORS_CONFIG: MonitorsConfigType = [
             IS_ENABLED: false,
         },
     },
+    {
+        ID: 5,
+        NAME: 'parkovi_ozera',
+        TELEGRAM_CHATS: [
+            {
+                chat_id: '@parkovi_ozera_alerts',
+            },
+        ],
+        MONITORS: [793597038],
+        STATISTICS: {
+            IS_ENABLED: true,
+            INFORM_TIME: '23:58',
+        },
+        SCHEDULE: {
+            IS_ENABLED: true,
+            INFORM_TIME: '08:00',
+            CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
+        },
+    },
 ];

@@ -24,7 +24,7 @@ export const filteredEvents: CalendarEventType[] = [
     },
     {
         start: new Date('2023-01-04 19:00 Z'),
-        end: new Date('2023-01-04 22:00 Z'),
+        end: new Date('2023-01-04 23:00 Z'),
     },
 ];
 
@@ -47,7 +47,7 @@ export const filteredEvents2: CalendarEventType[] = [
     },
     {
         start: new Date('2023-02-01 19:00 Z'),
-        end: new Date('2023-02-01 22:00 Z'),
+        end: new Date('2023-02-01 23:00 Z'),
     },
 ];
 
