@@ -72,7 +72,7 @@ export class App implements AppInterface {
 
     private inform(type: 'STATISTICS' | 'SCHEDULE', options: InformOptions): void {
         // @ts-ignore
-        const storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.id;
+        let storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.config.ID;
 
         if (options.dateString === this.userProperties.getProperty(storageKey)) {
             return;
