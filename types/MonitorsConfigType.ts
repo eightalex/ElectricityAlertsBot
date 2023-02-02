@@ -5,6 +5,8 @@ export type MonitorsConfigType = HouseConfigType[];
 export type HouseConfigType = {
     ID: number
     NAME: string
+    DEPENDENCY_ID?: number
+    MONITORS?: number[]
     TELEGRAM_CHATS: TelegramChatType[]
     STATISTICS: {
         IS_ENABLED: boolean
@@ -15,5 +17,4 @@ export type HouseConfigType = {
         INFORM_TIME?: string
         CALENDAR_URL?: string
     }
-    MONITORS?: number[]
 };

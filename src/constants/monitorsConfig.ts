@@ -4,10 +4,11 @@ export const MONITORS_CONFIG: MonitorsConfigType = [
     {
         ID: 1,
         NAME: 'kombinatna25a',
+        DEPENDENCY_ID: 2,
         MONITORS: [793136583, 793214785],
         TELEGRAM_CHATS: [
             {chat_id: '@kombinatna_alerts'},
-            {chat_id: '-1001811166479', message_thread_id: 567}
+            {chat_id: '-1001811166479', message_thread_id: 567},
         ],
         STATISTICS: {
             IS_ENABLED: true,
@@ -22,6 +23,7 @@ export const MONITORS_CONFIG: MonitorsConfigType = [
     {
         ID: 2,
         NAME: 'drahomanova31',
+        DEPENDENCY_ID: 1,
         MONITORS: [793359543],
         TELEGRAM_CHATS: [{chat_id: '@drahomanova_alerts'}],
         STATISTICS: {
@@ -96,6 +98,7 @@ export const MONITORS_CONFIG_DEV: MonitorsConfigType = [
     {
         ID: 1,
         NAME: 'kombinatna25a',
+        DEPENDENCY_ID: 2,
         MONITORS: [793136583, 793214785],
         TELEGRAM_CHATS: [{chat_id: '@kombinatna_test_alerts'}],
         STATISTICS: {
@@ -111,6 +114,7 @@ export const MONITORS_CONFIG_DEV: MonitorsConfigType = [
     {
         ID: 2,
         NAME: 'drahomanova31',
+        DEPENDENCY_ID: 1,
         MONITORS: [793359543],
         TELEGRAM_CHATS: [{chat_id: '@drahomanova_test_alerts'}],
         STATISTICS: {

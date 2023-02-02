@@ -1,4 +1,4 @@
-export const ELECTRICITY_STATE = {
-    AVAILABLE: '1',
-    NOT_AVAILABLE: '',
+export const STORAGE_STATE = {
+    TRUE: '1',
+    FALSE: '',
 };

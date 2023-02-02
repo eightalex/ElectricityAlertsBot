@@ -17,6 +17,7 @@ import {IcsService} from './services/ics/IcsService';
 import {ScheduleGenerator} from './services/ScheduleGenerator';
 import {MessageSender} from './services/message/MessageSender';
 import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
+import {ForecastGenerator} from './services/message/ForecastGenerator';
 
 const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
@@ -31,6 +32,7 @@ const icsFetcher = new IcsFetcher(UrlFetchApp);
 const icsService = new IcsService(dateHelper);
 const scheduleGenerator = new ScheduleGenerator(dateHelper);
 const messageSender = new MessageSender(telegramService);
+const forecastGenerator = new ForecastGenerator();
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
     monitorsFetcher,
@@ -59,6 +61,7 @@ const pinger = new Pinger(
     PropertiesService,
     messageGenerator,
     messageSender,
+    forecastGenerator,
 );
 
 const app = new App(

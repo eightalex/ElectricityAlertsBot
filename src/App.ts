@@ -11,6 +11,8 @@ import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
 import {HouseConfigType, MonitorsConfigType} from '../types/MonitorsConfigType';
 import {ConfigHelper} from './utils/ConfigHelper';
 import {WebhookType} from '../types/WebhookType';
+import {MonitorsHelper} from './utils/MonitorsHelper';
+import {PreparedCheckResultType} from '../types/PreparedCheckResultType';
 
 type InformOptions = {
     config: HouseConfigType
@@ -50,8 +52,13 @@ export class App implements AppInterface {
 
         preparedResult.forEach(result => {
             const config = ConfigHelper.getConfig(result.id, this.monitorsConfig);
+            let dependencyCheckResult: PreparedCheckResultType | null = null;
 
-            this.pinger.ping(result.status, {config, nowDate});
+            if (config.DEPENDENCY_ID !== undefined) {
+                dependencyCheckResult = MonitorsHelper.getCheckResult(config.DEPENDENCY_ID, preparedResult);
+            }
+
+            this.pinger.ping(result.status, {config, nowDate, dependencyCheckResult});
 
             if (config.STATISTICS.IS_ENABLED) {
                 this.statisticsService.update(result.status, {config, nowDate});
@@ -63,6 +70,11 @@ export class App implements AppInterface {
             }
 
             this.reset(dateString, result.id);
+        });
+
+        preparedResult.forEach(result => {
+            const config = ConfigHelper.getConfig(result.id, this.monitorsConfig);
+            this.pinger.updateLastState(result.status, config);
         });
     }
 
