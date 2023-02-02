@@ -153,7 +153,7 @@ export const MONITORS_CONFIG_DEV: MonitorsConfigType = [
         ID: 5,
         NAME: 'parkovi_ozera',
         MONITORS: [793597038],
-        TELEGRAM_CHATS: [{chat_id: '@parkovi_ozera_alerts'}],
+        TELEGRAM_CHATS: [{chat_id: '@parkovi_ozera_test_alerts'}],
         STATISTICS: {
             IS_ENABLED: true,
             INFORM_TIME: '23:58',
