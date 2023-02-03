@@ -65,6 +65,7 @@ export const MONITORS_CONFIG: MonitorsConfigType = [
     {
         ID: 5,
         NAME: 'parkovi_ozera',
+        DEPENDENCY_ID: 6,
         MONITORS: [793597038],
         TELEGRAM_CHATS: [{chat_id: '@parkovi_ozera_alerts'}],
         STATISTICS: {
@@ -156,6 +157,7 @@ export const MONITORS_CONFIG_DEV: MonitorsConfigType = [
     {
         ID: 5,
         NAME: 'parkovi_ozera',
+        DEPENDENCY_ID: 6,
         MONITORS: [793597038],
         TELEGRAM_CHATS: [{chat_id: '@parkovi_ozera_test_alerts'}],
         STATISTICS: {
