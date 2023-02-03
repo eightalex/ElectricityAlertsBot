@@ -1,6 +1,6 @@
 import {MonitorsAdapter, MonitorsAdapterInterface} from './MonitorsAdapter';
 import {MonitorsCheckResultType} from '../../../types/MonitorsCheckResultType';
-import {MonitorsConfigType} from '../../../types/MonitorsConfigType';
+import {BotConfigType} from '../../../types/BotConfigType';
 import {PreparedCheckResultType} from '../../../types/PreparedCheckResultType';
 
 describe('MonitorsAdapter', () => {
@@ -30,7 +30,7 @@ describe('MonitorsAdapter', () => {
                 },
             ];
 
-            const appConfig: MonitorsConfigType = [
+            const appConfig: BotConfigType[] = [
                 {
                     ID: 1,
                     NAME: 'Test Config',

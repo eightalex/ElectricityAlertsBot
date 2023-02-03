@@ -1,10 +1,10 @@
 import {STORAGE_KEY} from '../constants/storageKey';
-import {HouseConfigType} from '../../types/MonitorsConfigType';
+import {BotConfigType} from '../../types/BotConfigType';
 import {StatisticsInformerInterface} from './statistics/StatisticsInformer';
 import {ScheduleInformerInterface} from './ScheduleInformer';
 
 type InformOptions = {
-    config: HouseConfigType
+    config: BotConfigType
     timeString: string
     dateString: string
 }

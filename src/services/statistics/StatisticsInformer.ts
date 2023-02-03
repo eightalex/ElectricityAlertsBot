@@ -1,10 +1,10 @@
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsMessageGeneratorInterface} from './StatisticsMessageGenerator';
 import {MessageSenderInterface} from '../message/MessageSender';
-import {HouseConfigType} from '../../../types/MonitorsConfigType';
+import {BotConfigType} from '../../../types/BotConfigType';
 
 export interface StatisticsInformerInterface {
-    inform(config: HouseConfigType): void
+    inform(config: BotConfigType): void
 }
 
 export class StatisticsInformer implements StatisticsInformerInterface {
@@ -18,7 +18,7 @@ export class StatisticsInformer implements StatisticsInformerInterface {
         this.userProperties = propertiesService.getUserProperties();
     }
 
-    inform(config: HouseConfigType) {
+    inform(config: BotConfigType) {
         const statisticsRaw = this.userProperties.getProperty(STORAGE_KEY.STATISTICS + config.ID);
 
         if (statisticsRaw === null) {

@@ -2,10 +2,10 @@ import {StatisticsType} from '../../../types/StatisticsType';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsBuilderInterface} from './StatisticsBuilder';
 import {DateHelper} from '../../utils/DateHelper';
-import {HouseConfigType} from '../../../types/MonitorsConfigType';
+import {BotConfigType} from '../../../types/BotConfigType';
 
 type UpdateOptions = {
-    config: HouseConfigType
+    config: BotConfigType
     nowDate: Date
 }
 

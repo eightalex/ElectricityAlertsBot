@@ -1,7 +1,7 @@
 import {MessageGenerator, MessageGeneratorInterface} from './MessageGenerator';
 import {TimeDifferenceGenerator} from '../TimeDifferenceGenerator';
 
-jest.mock('./TimeDifferenceGenerator', () => {
+jest.mock('../TimeDifferenceGenerator', () => {
     return {
         TimeDifferenceGenerator: jest.fn().mockImplementation(() => {
             return {

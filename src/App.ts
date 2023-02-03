@@ -5,7 +5,7 @@ import {StatisticsServiceInterface} from './services/statistics/StatisticsServic
 import {DateHelper} from './utils/DateHelper';
 import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
-import {MonitorsConfigType} from '../types/MonitorsConfigType';
+import {BotConfigType} from '../types/BotConfigType';
 import {ConfigHelper} from './utils/ConfigHelper';
 import {WebhookType} from '../types/WebhookType';
 import {MonitorsHelper} from './utils/MonitorsHelper';
@@ -18,7 +18,7 @@ export interface AppInterface {
 }
 
 export class App implements AppInterface {
-    private readonly monitorsConfig: MonitorsConfigType;
+    private readonly monitorsConfig: BotConfigType[];
 
     constructor(
         private pinger: PingerInterface,

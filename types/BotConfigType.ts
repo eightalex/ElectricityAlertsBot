@@ -1,8 +1,6 @@
 import {TelegramChatType} from './TelegramChatType';
 
-export type MonitorsConfigType = HouseConfigType[];
-
-export type HouseConfigType = {
+export type BotConfigType = {
     ID: number
     NAME: string
     DEPENDENCY_ID?: number

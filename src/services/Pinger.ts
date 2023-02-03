@@ -2,19 +2,19 @@ import {STORAGE_KEY} from '../constants/storageKey';
 import {STORAGE_STATE} from '../constants/electricityState';
 import {MessageGeneratorInterface} from './message/MessageGenerator';
 import {MessageSenderInterface} from './message/MessageSender';
-import {HouseConfigType} from '../../types/MonitorsConfigType';
+import {BotConfigType} from '../../types/BotConfigType';
 import {PreparedCheckResultType} from '../../types/PreparedCheckResultType';
 import {ForecastGeneratorInterface} from './message/ForecastGenerator';
 
 type PingOptions = {
-    config: HouseConfigType
+    config: BotConfigType
     nowDate: Date
     dependencyCheckResult?: PreparedCheckResultType | null
 }
 
 export interface PingerInterface {
     ping(isAvailable: boolean, options: PingOptions): void
-    updateLastState(isAvailable: boolean, config: HouseConfigType): void
+    updateLastState(isAvailable: boolean, config: BotConfigType): void
 }
 
 export class Pinger implements PingerInterface {
@@ -68,7 +68,7 @@ export class Pinger implements PingerInterface {
         });
     }
 
-    updateLastState(isAvailable: boolean, config: HouseConfigType): void {
+    updateLastState(isAvailable: boolean, config: BotConfigType): void {
         if (!this.isStateChanged(isAvailable, config.ID)) {
             return;
         }

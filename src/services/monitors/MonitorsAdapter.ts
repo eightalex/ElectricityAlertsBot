@@ -1,13 +1,13 @@
 import {PreparedCheckResultType} from '../../../types/PreparedCheckResultType';
 import {MonitorsCheckResultType} from '../../../types/MonitorsCheckResultType';
-import {MonitorsConfigType} from '../../../types/MonitorsConfigType';
+import {BotConfigType} from '../../../types/BotConfigType';
 
 export interface MonitorsAdapterInterface {
-    prepare(monitors: MonitorsCheckResultType[], appConfig: MonitorsConfigType): PreparedCheckResultType[]
+    prepare(monitors: MonitorsCheckResultType[], appConfig: BotConfigType[]): PreparedCheckResultType[]
 }
 
 export class MonitorsAdapter implements MonitorsAdapterInterface {
-    prepare(monitors: MonitorsCheckResultType[], appConfig: MonitorsConfigType): PreparedCheckResultType[] {
+    prepare(monitors: MonitorsCheckResultType[], appConfig: BotConfigType[]): PreparedCheckResultType[] {
         return appConfig
             .filter(config => config.MONITORS !== undefined)
             .map(config => {

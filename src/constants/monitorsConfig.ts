@@ -1,6 +1,6 @@
-import {MonitorsConfigType} from '../../types/MonitorsConfigType';
+import {BotConfigType} from '../../types/BotConfigType';
 
-export const MONITORS_CONFIG: MonitorsConfigType = [
+export const MONITORS_CONFIG: BotConfigType[] = [
     {
         ID: 1,
         NAME: 'kombinatna25a',
@@ -95,7 +95,7 @@ export const MONITORS_CONFIG: MonitorsConfigType = [
     },
 ];
 
-export const MONITORS_CONFIG_DEV: MonitorsConfigType = [
+export const MONITORS_CONFIG_DEV: BotConfigType[] = [
     {
         ID: 1,
         NAME: 'kombinatna25a',
