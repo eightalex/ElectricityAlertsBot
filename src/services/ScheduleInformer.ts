@@ -1,8 +1,8 @@
 import {IcsFetcherInterface} from './ics/IcsFetcher';
 import {IcsServiceInterface} from './ics/IcsService';
 import {ScheduleGeneratorInterface} from './ScheduleGenerator';
-import {MessageSenderInterface} from './message/MessageSender';
 import {BotConfigType} from '../../types/BotConfigType';
+import {TelegramServiceInterface} from './TelegramService';
 
 export interface ScheduleInformerInterface {
     inform(config: BotConfigType): void
@@ -13,7 +13,7 @@ export class ScheduleInformer implements ScheduleInformerInterface {
         private icsFetcher: IcsFetcherInterface,
         private icsService: IcsServiceInterface,
         private scheduleGenerator: ScheduleGeneratorInterface,
-        private messageSender: MessageSenderInterface,
+        private telegramService: TelegramServiceInterface,
     ) {}
 
     inform(config: BotConfigType) {
@@ -25,6 +25,6 @@ export class ScheduleInformer implements ScheduleInformerInterface {
         const filteredEvents = this.icsService.getFilteredEvents(ics, config.SCHEDULE.INFORM_TIME);
         const message = this.scheduleGenerator.generate(filteredEvents);
 
-        this.messageSender.send(message, config.TELEGRAM_CHATS);
+        this.telegramService.sendMessages(message, config.TELEGRAM_CHATS);
     }
 }

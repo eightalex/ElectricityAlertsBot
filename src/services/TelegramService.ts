@@ -1,4 +1,5 @@
 import {APP} from '../constants/app';
+import {TelegramChatType} from '../../types/TelegramChatType';
 
 type SendMessageOptionsType = {
     text: string
@@ -9,6 +10,7 @@ type SendMessageOptionsType = {
 
 export interface TelegramServiceInterface {
     sendMessage(options: SendMessageOptionsType): void
+    sendMessages(message: string, config: TelegramChatType[]): void
 }
 
 export class TelegramService implements TelegramServiceInterface {
@@ -20,6 +22,12 @@ export class TelegramService implements TelegramServiceInterface {
         this.urlFetchApp.fetch(`https://api.telegram.org/bot${APP.TELEGRAM.API_KEY}/sendMessage`, {
             method: 'post',
             payload: options,
+        });
+    }
+
+    sendMessages(message: string, config: TelegramChatType[]) {
+        config.forEach(config => {
+            this.sendMessage({text: message, ...config});
         });
     }
 }

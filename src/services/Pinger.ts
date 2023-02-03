@@ -1,10 +1,10 @@
 import {STORAGE_KEY} from '../constants/storageKey';
 import {STORAGE_STATE} from '../constants/electricityState';
 import {MessageGeneratorInterface} from './message/MessageGenerator';
-import {MessageSenderInterface} from './message/MessageSender';
 import {BotConfigType} from '../../types/BotConfigType';
 import {PreparedCheckResultType} from '../../types/PreparedCheckResultType';
 import {ForecastGeneratorInterface} from './message/ForecastGenerator';
+import {TelegramServiceInterface} from './TelegramService';
 
 type PingOptions = {
     config: BotConfigType
@@ -23,7 +23,7 @@ export class Pinger implements PingerInterface {
     constructor(
         propertiesService: GoogleAppsScript.Properties.PropertiesService,
         private messageGenerator: MessageGeneratorInterface,
-        private messageSender: MessageSenderInterface,
+        private telegramService: TelegramServiceInterface,
         private forecastGenerator: ForecastGeneratorInterface,
     ) {
         this.userProperties = propertiesService.getUserProperties();
@@ -48,7 +48,7 @@ export class Pinger implements PingerInterface {
             const forecastMessage = this.forecastGenerator.generate(isAvailable, status);
 
             if (isStateChanged && !isForecastSent && forecastMessage !== null) {
-                this.messageSender.send(forecastMessage, options.config.TELEGRAM_CHATS);
+                this.telegramService.sendMessages(forecastMessage, options.config.TELEGRAM_CHATS);
                 this.userProperties.setProperty(key.isForecastSent, STORAGE_STATE.TRUE);
             }
         }
@@ -60,7 +60,7 @@ export class Pinger implements PingerInterface {
         const lastTime = this.userProperties.getProperty(key.lastTime) || '0';
         const message = this.messageGenerator.generate({isAvailable, lastTime, nowDate: options.nowDate})
 
-        this.messageSender.send(message, options.config.TELEGRAM_CHATS);
+        this.telegramService.sendMessages(message, options.config.TELEGRAM_CHATS);
 
         this.userProperties.setProperties({
             [key.lastTime]: String(options.nowDate.getTime()),
