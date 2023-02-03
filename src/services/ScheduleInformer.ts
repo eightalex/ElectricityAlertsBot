@@ -17,7 +17,7 @@ export class ScheduleInformer implements ScheduleInformerInterface {
     ) {}
 
     inform(config: BotConfigType) {
-        if (config.SCHEDULE.CALENDAR_URL === undefined || config.SCHEDULE.INFORM_TIME === undefined) {
+        if (config.SCHEDULE === undefined) {
             return;
         }
 

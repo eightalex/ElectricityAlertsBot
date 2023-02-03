@@ -41,11 +41,9 @@ describe('MonitorsAdapter', () => {
                     ],
                     MONITORS: [793359540, 793359541],
                     STATISTICS: {
-                        IS_ENABLED: true,
                         INFORM_TIME: '23:58',
                     },
                     SCHEDULE: {
-                        IS_ENABLED: true,
                         INFORM_TIME: '08:00',
                         CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
                     },
@@ -59,11 +57,9 @@ describe('MonitorsAdapter', () => {
                         }
                     ],
                     STATISTICS: {
-                        IS_ENABLED: true,
                         INFORM_TIME: '23:58',
                     },
                     SCHEDULE: {
-                        IS_ENABLED: true,
                         INFORM_TIME: '08:00',
                         CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
                     },

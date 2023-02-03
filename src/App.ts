@@ -47,12 +47,12 @@ export class App implements AppInterface {
 
             this.pinger.ping(result.status, {config, nowDate, dependencyCheckResult});
 
-            if (config.STATISTICS.IS_ENABLED) {
+            if (config.STATISTICS !== undefined) {
                 this.statisticsService.update(result.status, {config, nowDate});
                 this.informer.inform('STATISTICS', {config, timeString, dateString})
             }
 
-            if (config.SCHEDULE.IS_ENABLED) {
+            if (config.SCHEDULE !== undefined) {
                 this.informer.inform('SCHEDULE', {config, timeString, dateString})
             }
 

@@ -6,13 +6,11 @@ export type BotConfigType = {
     DEPENDENCY_ID?: number
     MONITORS?: number[]
     TELEGRAM_CHATS: TelegramChatType[]
-    STATISTICS: {
-        IS_ENABLED: boolean
+    STATISTICS?: {
         INFORM_TIME: string
     }
-    SCHEDULE: {
-        IS_ENABLED: boolean
-        INFORM_TIME?: string
-        CALENDAR_URL?: string
+    SCHEDULE?: {
+        INFORM_TIME: string
+        CALENDAR_URL: string
     }
 };

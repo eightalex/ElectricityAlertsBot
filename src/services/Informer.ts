@@ -26,10 +26,15 @@ export class Informer implements InformerInterface {
         // @ts-ignore
         let storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.config.ID;
 
+        if (!options.config[type]) {
+            throw new Error('Undefined config')
+        }
+
         if (options.dateString === this.userProperties.getProperty(storageKey)) {
             return;
         }
 
+        // @ts-ignore
         if (options.timeString !== options.config[type].INFORM_TIME) {
             return;
         }

@@ -11,11 +11,9 @@ export const MONITORS_CONFIG: BotConfigType[] = [
             {chat_id: '-1001811166479', message_thread_id: 567},
         ],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
         },
@@ -27,11 +25,9 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         MONITORS: [793359543],
         TELEGRAM_CHATS: [{chat_id: '@drahomanova_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
         },
@@ -42,11 +38,7 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         MONITORS: [793494529],
         TELEGRAM_CHATS: [{chat_id: '@yaroslava_mudroho_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
-        },
-        SCHEDULE: {
-            IS_ENABLED: false,
         },
     },
     {
@@ -55,11 +47,7 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         MONITORS: [793361189],
         TELEGRAM_CHATS: [{chat_id: '@brest_lytovskiy_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
-        },
-        SCHEDULE: {
-            IS_ENABLED: false,
         },
     },
     {
@@ -69,11 +57,9 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         MONITORS: [793597038],
         TELEGRAM_CHATS: [{chat_id: '@parkovi_ozera_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
         },
@@ -84,11 +70,9 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         MONITORS: [793469661],
         TELEGRAM_CHATS: [{chat_id: '@rusanivski_sady_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
         },
@@ -103,11 +87,9 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         MONITORS: [793136583, 793214785],
         TELEGRAM_CHATS: [{chat_id: '@kombinatna_test_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
         },
@@ -119,11 +101,9 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         MONITORS: [793359543],
         TELEGRAM_CHATS: [{chat_id: '@drahomanova_test_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
         },
@@ -134,11 +114,7 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         MONITORS: [793494529],
         TELEGRAM_CHATS: [{chat_id: '@yaroslava_mudroho_test_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
-        },
-        SCHEDULE: {
-            IS_ENABLED: false,
         },
     },
     {
@@ -147,11 +123,7 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         MONITORS: [793361189],
         TELEGRAM_CHATS: [{chat_id: '@brest_lytovskiy_test_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
-        },
-        SCHEDULE: {
-            IS_ENABLED: false,
         },
     },
     {
@@ -161,11 +133,9 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         MONITORS: [793597038],
         TELEGRAM_CHATS: [{chat_id: '@parkovi_ozera_test_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
         },
@@ -176,11 +146,9 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         MONITORS: [793469661],
         TELEGRAM_CHATS: [{chat_id: '@rusanivski_sady_test_alerts'}],
         STATISTICS: {
-            IS_ENABLED: true,
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            IS_ENABLED: true,
             INFORM_TIME: '08:00',
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
         },
