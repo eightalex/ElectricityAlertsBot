@@ -4,8 +4,6 @@ import {TelegramService} from './services/TelegramService';
 import {MessageGenerator} from './services/message/MessageGenerator';
 import {TimeDifferenceGenerator} from './services/TimeDifferenceGenerator';
 import {Pinger} from './services/Pinger';
-import {DateHelper} from './utils/DateHelper';
-import {StringHelper} from './utils/StringHelper';
 import {StatisticsBuilder} from './services/statistics/StatisticsBuilder';
 import {StatisticsInformer} from './services/statistics/StatisticsInformer';
 import {StatisticsMessageGenerator} from './services/statistics/StatisticsMessageGenerator';
@@ -23,15 +21,13 @@ import {Informer} from './services/Informer';
 const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
 const telegramService = new TelegramService(UrlFetchApp);
-const stringHelper = new StringHelper();
-const dateHelper = new DateHelper(stringHelper);
-const timeDifferenceGenerator = new TimeDifferenceGenerator(dateHelper);
+const timeDifferenceGenerator = new TimeDifferenceGenerator();
 const messageGenerator = new MessageGenerator(timeDifferenceGenerator);
-const statisticsMessageGenerator = new StatisticsMessageGenerator(dateHelper);
-const statisticsBuilder = new StatisticsBuilder(dateHelper);
+const statisticsMessageGenerator = new StatisticsMessageGenerator();
+const statisticsBuilder = new StatisticsBuilder();
 const icsFetcher = new IcsFetcher(UrlFetchApp);
-const icsService = new IcsService(dateHelper);
-const scheduleGenerator = new ScheduleGenerator(dateHelper);
+const icsService = new IcsService();
+const scheduleGenerator = new ScheduleGenerator();
 const messageSender = new MessageSender(telegramService);
 const forecastGenerator = new ForecastGenerator();
 
@@ -42,7 +38,6 @@ const monitorsStatusChecker = new MonitorsStatusChecker(
 const statisticsService = new StatisticsService(
     PropertiesService,
     statisticsBuilder,
-    dateHelper,
 );
 
 const statisticsInformer = new StatisticsInformer(
@@ -75,7 +70,6 @@ const app = new App(
     monitorsStatusChecker,
     monitorsAdapter,
     statisticsService,
-    dateHelper,
     informer,
 );
 

@@ -1,9 +1,5 @@
-export interface StringHelperInterface {
-    pluralize(number: number, titles: string[]): string
-}
-
-export class StringHelper implements StringHelperInterface {
-    pluralize(number: number, titles: string[]): string {
+export class StringHelper {
+    static pluralize(number: number, titles: string[]): string {
         const cases = [2, 0, 1, 1, 1, 2];
         // @ts-ignore need to investigate
         return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];

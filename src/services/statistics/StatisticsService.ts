@@ -1,7 +1,7 @@
 import {StatisticsType} from '../../../types/StatisticsType';
 import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsBuilderInterface} from './StatisticsBuilder';
-import {DateHelperInterface} from '../../utils/DateHelper';
+import {DateHelper} from '../../utils/DateHelper';
 import {HouseConfigType} from '../../../types/MonitorsConfigType';
 
 type UpdateOptions = {
@@ -19,7 +19,6 @@ export class StatisticsService implements StatisticsServiceInterface {
     constructor(
         propertiesService: GoogleAppsScript.Properties.PropertiesService,
         private statisticsBuilder: StatisticsBuilderInterface,
-        private dateHelper: DateHelperInterface,
     ) {
         this.userProperties = propertiesService.getUserProperties();
     }
@@ -53,11 +52,11 @@ export class StatisticsService implements StatisticsServiceInterface {
             ? this.statisticsBuilder.getDefault(options.nowDate)
             : this.prepare(statisticsRaw);
 
-        if (statistics.date !== this.dateHelper.getDateString(options.nowDate)) {
+        if (statistics.date !== DateHelper.getDateString(options.nowDate)) {
             statistics = this.statisticsBuilder.getDefault(options.nowDate);
         }
 
-        const difference = this.dateHelper.getDifference(new Date(statistics.time.previous), options.nowDate);
+        const difference = DateHelper.getDifference(new Date(statistics.time.previous), options.nowDate);
 
         statistics.time[availability] += difference;
         statistics.time.previous = options.nowDate.getTime();

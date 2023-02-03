@@ -1,7 +1,5 @@
 import {MessageGenerator, MessageGeneratorInterface} from './MessageGenerator';
 import {TimeDifferenceGenerator} from '../TimeDifferenceGenerator';
-import {DateHelper} from '../../utils/DateHelper';
-import {StringHelper} from '../../utils/StringHelper';
 
 jest.mock('./TimeDifferenceGenerator', () => {
     return {
@@ -17,7 +15,7 @@ describe('MessageGenerator', () => {
     let messageGenerator: MessageGeneratorInterface;
 
     beforeEach(() => {
-        messageGenerator = new MessageGenerator(new TimeDifferenceGenerator(new DateHelper(new StringHelper())));
+        messageGenerator = new MessageGenerator(new TimeDifferenceGenerator());
     });
 
     describe('generate', () => {

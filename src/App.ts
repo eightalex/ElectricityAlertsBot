@@ -2,7 +2,7 @@ import {APP} from './constants/app';
 import {MONITORS_CONFIG, MONITORS_CONFIG_DEV} from './constants/monitorsConfig';
 import {PingerInterface} from './services/Pinger';
 import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
-import {DateHelperInterface} from './utils/DateHelper';
+import {DateHelper} from './utils/DateHelper';
 import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
 import {MonitorsConfigType} from '../types/MonitorsConfigType';
@@ -25,7 +25,6 @@ export class App implements AppInterface {
         private monitorsStatusChecker: MonitorsStatusCheckerInterface,
         private monitorsAdapter: MonitorsAdapterInterface,
         private statisticsService: StatisticsServiceInterface,
-        private dateHelper: DateHelperInterface,
         private informer: InformerInterface,
     ) {
         this.monitorsConfig = APP.MODE === 'production' ? MONITORS_CONFIG : MONITORS_CONFIG_DEV;
@@ -33,8 +32,8 @@ export class App implements AppInterface {
 
     ping() {
         const nowDate = new Date();
-        const timeString = this.dateHelper.getTimeString(nowDate);
-        const dateString = this.dateHelper.getDateString(nowDate);
+        const timeString = DateHelper.getTimeString(nowDate);
+        const dateString = DateHelper.getDateString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
         const preparedResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
 

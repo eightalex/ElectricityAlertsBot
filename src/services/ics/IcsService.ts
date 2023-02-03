@@ -1,6 +1,6 @@
 import {CalendarEventType} from '../../../types/CalendarEventType';
 import {STRING} from '../../constants/string';
-import {DateHelperInterface} from '../../utils/DateHelper';
+import {DateHelper} from '../../utils/DateHelper';
 
 export interface IcsServiceInterface {
     parse(ics: string): CalendarEventType[]
@@ -9,10 +9,6 @@ export interface IcsServiceInterface {
 }
 
 export class IcsService implements IcsServiceInterface {
-    constructor(
-        private dateHelper: DateHelperInterface,
-    ) {}
-
     parse(ics: string): CalendarEventType[] {
         const lines = ics.split(STRING.NEWLINE);
         const events: CalendarEventType[] = [];
@@ -31,11 +27,11 @@ export class IcsService implements IcsServiceInterface {
             }
 
             if (line.startsWith('DTSTART:')) {
-                currentEvent.start = this.dateHelper.parseIcsDate(line.substring(8));
+                currentEvent.start = DateHelper.parseIcsDate(line.substring(8));
             }
 
             if (line.startsWith('DTEND:')) {
-                currentEvent.end = this.dateHelper.parseIcsDate(line.substring(6));
+                currentEvent.end = DateHelper.parseIcsDate(line.substring(6));
             }
 
             if (line.startsWith('END:VEVENT')) {
@@ -62,10 +58,9 @@ export class IcsService implements IcsServiceInterface {
     getEvents(events: CalendarEventType[], informTime: string): CalendarEventType[] {
         const now = new Date();
         const currentDate = now.getDate();
+        const time = DateHelper.getTimeFromTimeString(informTime);
 
-        const time = this.dateHelper.getTimeFromTimeString(informTime);
-
-        const presetTime = this.dateHelper.getUpdatedDate(
+        const presetTime = DateHelper.getUpdatedDate(
             now,
             {
                 hours: time.hours,
@@ -76,8 +71,8 @@ export class IcsService implements IcsServiceInterface {
         const filteredEvents = events.filter(event => {
             return [
                 currentDate,
-                this.dateHelper.addDays(now, 1).getDate(),
-                this.dateHelper.addDays(now, 2).getDate(),
+                DateHelper.addDays(now, 1).getDate(),
+                DateHelper.addDays(now, 2).getDate(),
             ].includes(event.start.getDate());
         });
 
@@ -100,7 +95,7 @@ export class IcsService implements IcsServiceInterface {
                 i--;
             }
 
-            if (currentEvent.start.getDate() === this.dateHelper.addDays(now, 2).getDate()) {
+            if (currentEvent.start.getDate() === DateHelper.addDays(now, 2).getDate()) {
                 filteredEvents.splice(i);
             }
         }

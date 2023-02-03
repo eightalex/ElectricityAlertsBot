@@ -1,16 +1,11 @@
 import {StatisticsType} from '../../../types/StatisticsType';
-import {StringHelper} from '../../utils/StringHelper';
-import {DateHelper, DateHelperInterface} from '../../utils/DateHelper';
 import {StatisticsBuilder, StatisticsBuilderInterface} from './StatisticsBuilder';
 
 describe('StatisticsBuilder', () => {
     let statisticsBuilder: StatisticsBuilderInterface;
-    let dateHelper: DateHelperInterface;
 
     beforeEach(() => {
-        const stringHelper = new StringHelper();
-        dateHelper = new DateHelper(stringHelper);
-        statisticsBuilder = new StatisticsBuilder(dateHelper);
+        statisticsBuilder = new StatisticsBuilder();
     });
 
     describe('getDefault', () => {

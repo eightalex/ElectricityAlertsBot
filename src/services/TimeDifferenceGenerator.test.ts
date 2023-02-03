@@ -1,16 +1,10 @@
-import {StringHelper, StringHelperInterface} from '../utils/StringHelper';
-import {DateHelper, DateHelperInterface} from '../utils/DateHelper';
 import {TimeDifferenceGenerator, TimeDifferenceGeneratorInterface} from './TimeDifferenceGenerator';
 
 describe('TimeDifferenceGenerator', () => {
-    let stringHelper: StringHelperInterface;
-    let dateHelper: DateHelperInterface;
     let timeDifferenceGenerator: TimeDifferenceGeneratorInterface;
 
     beforeEach(() => {
-        stringHelper = new StringHelper();
-        dateHelper = new DateHelper(stringHelper);
-        timeDifferenceGenerator = new TimeDifferenceGenerator(dateHelper);
+        timeDifferenceGenerator = new TimeDifferenceGenerator();
     });
 
     describe('generate', () => {

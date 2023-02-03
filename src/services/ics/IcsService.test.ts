@@ -1,6 +1,4 @@
 import {IcsService, IcsServiceInterface} from './IcsService';
-import {DateHelper} from '../../utils/DateHelper';
-import {StringHelper} from '../../utils/StringHelper';
 import {exampleIcs, parsedIcs} from './testData/exampleIcs';
 import {exampleIcs2} from './testData/exampleIcs2';
 import {CalendarEventType} from '../../../types/CalendarEventType';
@@ -55,7 +53,7 @@ describe('IcsService', () => {
     let icsService: IcsServiceInterface;
 
     beforeEach(() => {
-        icsService = new IcsService(new DateHelper(new StringHelper));
+        icsService = new IcsService();
         jest
             .useFakeTimers()
             .setSystemTime(new Date('2023-01-03 08:00 Z'));

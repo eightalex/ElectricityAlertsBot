@@ -1,16 +1,12 @@
 import {CalendarEventType} from '../../types/CalendarEventType';
 import {STRING} from '../constants/string';
-import {DateHelperInterface} from '../utils/DateHelper';
+import {DateHelper} from '../utils/DateHelper';
 
 export interface ScheduleGeneratorInterface {
     generate(events: CalendarEventType[]): string
 }
 
 export class ScheduleGenerator implements ScheduleGeneratorInterface {
-    constructor(
-        private dateHelper: DateHelperInterface,
-    ) {}
-
     generate(events: CalendarEventType[]): string {
         let divider = false;
 
@@ -19,9 +15,9 @@ export class ScheduleGenerator implements ScheduleGeneratorInterface {
         }
 
         const preparedEvents = events.map(event => {
-            let intervalString = this.dateHelper.getTimeString(event.start) + ' – ' + this.dateHelper.getTimeString(event.end);
+            let intervalString = DateHelper.getTimeString(event.start) + ' – ' + DateHelper.getTimeString(event.end);
 
-            if (!divider && event.start.getDate() === this.dateHelper.addDays(new Date(), 1).getDate()) {
+            if (!divider && event.start.getDate() === DateHelper.addDays(new Date(), 1).getDate()) {
                 intervalString = STRING.NEWLINE + 'Та завтра' + STRING.NEWLINE + intervalString;
                 divider = true;
             }

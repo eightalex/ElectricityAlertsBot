@@ -1,7 +1,7 @@
 import {PLURAL_CONFIG} from '../constants/pluralConfig';
 import {STRING} from '../constants/string';
 import {TIME} from '../constants/time';
-import {StringHelperInterface} from './StringHelper';
+import {StringHelper} from './StringHelper';
 
 export type TimeStringNumbers = {
     hours: number
@@ -15,42 +15,27 @@ export type GetUpdatedDateOptionsType = {
     seconds?: number
 }
 
-export interface DateHelperInterface {
-    getDifference(dateFirst: Date, dateSecond: Date): number
-    getTimeString(date: Date): string
-    getDateString(date: Date): string
-    getTimeFromTimeString(timeString: string): TimeStringNumbers
-    getUpdatedDate(input: Date, options: GetUpdatedDateOptionsType): Date
-    getPluralizedTimeString(date: Date): string
-    addDays(date: Date, days: number): Date
-    parseIcsDate(date: string): Date
-}
-
-export class DateHelper implements DateHelperInterface {
-    constructor(
-        private stringHelper: StringHelperInterface,
-    ) {}
-
-    getDifference(dateFirst: Date, dateSecond: Date): number {
+export class DateHelper {
+    static getDifference(dateFirst: Date, dateSecond: Date): number {
         return Math.abs(dateFirst.valueOf() - dateSecond.valueOf());
     }
 
     /**
      * Returns string like '11:56'
      */
-    getTimeString(date: Date): string {
+    static getTimeString(date: Date): string {
         return [
             ('0' + date.getHours()).slice(-2),
             ('0' + date.getMinutes()).slice(-2),
         ].join(STRING.COLON);
     }
 
-    getDateString(date: Date): string {
+    static getDateString(date: Date): string {
         const gap = 1;
         return date.getDate() + STRING.SLASH + (date.getMonth() + gap) + STRING.SLASH + date.getFullYear();
     }
 
-    getTimeFromTimeString(timeString: string): TimeStringNumbers {
+    static getTimeFromTimeString(timeString: string): TimeStringNumbers {
         const times = timeString.split(STRING.COLON);
 
         return {
@@ -59,7 +44,7 @@ export class DateHelper implements DateHelperInterface {
         };
     }
 
-    getUpdatedDate(input: Date, options: GetUpdatedDateOptionsType): Date {
+    static getUpdatedDate(input: Date, options: GetUpdatedDateOptionsType): Date {
         const updatedDate = new Date(input);
 
         if (options.date !== undefined) {
@@ -75,26 +60,25 @@ export class DateHelper implements DateHelperInterface {
         return updatedDate;
     }
 
-    getPluralizedTimeString(date: Date): string {
-        const {pluralize} = this.stringHelper;
+    static getPluralizedTimeString(date: Date): string {
         const hours = Math.floor(date.getTime() / TIME.HOUR);
         const minutes = date.getUTCMinutes();
         const hasHours = hours > 0;
 
         return [
             ...hasHours ? [hours] : [],
-            ...hasHours ? [pluralize(hours, PLURAL_CONFIG.HOURS)] : [],
+            ...hasHours ? [StringHelper.pluralize(hours, PLURAL_CONFIG.HOURS)] : [],
             minutes,
-            pluralize(minutes, PLURAL_CONFIG.MINUTES),
+            StringHelper.pluralize(minutes, PLURAL_CONFIG.MINUTES),
         ].join(STRING.SPACE);
     }
 
-    addDays(date: Date, days: number): Date {
+    static addDays(date: Date, days: number): Date {
         const ms = date.getTime() + (TIME.DAY * days);
         return new Date(ms);
     }
 
-    parseIcsDate(date: string): Date {
+    static parseIcsDate(date: string): Date {
         const year = date.substring(0, 4);
         const month = date.substring(4, 6);
         const day = date.substring(6, 8);

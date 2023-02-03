@@ -1,7 +1,5 @@
 import {CalendarEventType} from '../../types/CalendarEventType';
 import {ScheduleGenerator} from './ScheduleGenerator';
-import {DateHelper} from '../utils/DateHelper';
-import {StringHelper} from '../utils/StringHelper';
 import {filteredEvents, filteredEvents2} from './ics/IcsService.test';
 
 const expectedSchedule =
@@ -21,7 +19,7 @@ describe('ScheduleGenerator', () => {
     let scheduleGenerator: ScheduleGenerator;
 
     beforeEach(() => {
-        scheduleGenerator = new ScheduleGenerator(new DateHelper(new StringHelper()));
+        scheduleGenerator = new ScheduleGenerator();
         jest
             .useFakeTimers()
             .setSystemTime(new Date('2023-01-03 08:00 Z'));
