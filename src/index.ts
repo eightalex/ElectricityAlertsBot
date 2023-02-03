@@ -18,6 +18,7 @@ import {ScheduleGenerator} from './services/ScheduleGenerator';
 import {MessageSender} from './services/message/MessageSender';
 import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
 import {ForecastGenerator} from './services/message/ForecastGenerator';
+import {Informer} from './services/Informer';
 
 const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
@@ -64,15 +65,18 @@ const pinger = new Pinger(
     forecastGenerator,
 );
 
+const informer = new Informer(
+    statisticsInformer,
+    scheduleInformer,
+);
+
 const app = new App(
-    PropertiesService,
     pinger,
     monitorsStatusChecker,
     monitorsAdapter,
     statisticsService,
-    statisticsInformer,
-    scheduleInformer,
     dateHelper,
+    informer,
 );
 
 const config = {
