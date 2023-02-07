@@ -31,6 +31,11 @@ export class Pinger implements PingerInterface {
 
     private isStateChanged(isAvailable: boolean, id: number): boolean {
         const lastState = this.userProperties.getProperty(STORAGE_KEY.LAST_STATE + id);
+
+        if (lastState === null) {
+            return true; // for first iteration send message to check is bot working
+        }
+
         return Boolean(lastState) !== isAvailable;
     }
 
@@ -69,10 +74,6 @@ export class Pinger implements PingerInterface {
     }
 
     updateLastState(isAvailable: boolean, config: BotConfigType): void {
-        if (!this.isStateChanged(isAvailable, config.ID)) {
-            return;
-        }
-
         this.userProperties.setProperty(
             STORAGE_KEY.LAST_STATE + config.ID,
             isAvailable ? STORAGE_STATE.TRUE : STORAGE_STATE.FALSE,
