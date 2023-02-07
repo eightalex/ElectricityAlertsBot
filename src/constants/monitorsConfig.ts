@@ -77,6 +77,41 @@ export const MONITORS_CONFIG: BotConfigType[] = [
             CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
         },
     },
+    {
+        ID: 7,
+        NAME: 'shchaslyvyi',
+        MONITORS: [793643936],
+        TELEGRAM_CHATS: [{chat_id: '@shchaslyvyi_alerts'}],
+        STATISTICS: {
+            INFORM_TIME: '23:58',
+        },
+    },
+    {
+        ID: 8,
+        NAME: 'krasnova17',
+        MONITORS: [793653580],
+        TELEGRAM_CHATS: [{chat_id: '@krasnova17_alerts'}],
+        STATISTICS: {
+            INFORM_TIME: '23:58',
+        },
+        SCHEDULE: {
+            INFORM_TIME: '08:00',
+            CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
+        },
+    },
+    {
+        ID: 9,
+        NAME: 'zdanovskoi',
+        MONITORS: [793658208],
+        TELEGRAM_CHATS: [{chat_id: '@zdanovskoi_alerts'}],
+        STATISTICS: {
+            INFORM_TIME: '23:58',
+        },
+        SCHEDULE: {
+            INFORM_TIME: '08:00',
+            CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/1.ics',
+        },
+    },
 ];
 
 export const MONITORS_CONFIG_DEV: BotConfigType[] = [
@@ -109,48 +144,12 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         },
     },
     {
-        ID: 3,
-        NAME: 'yaroslava_mudroho',
-        MONITORS: [793494529],
-        TELEGRAM_CHATS: [{chat_id: '@yaroslava_mudroho_test_alerts'}],
-        STATISTICS: {
-            INFORM_TIME: '23:58',
-        },
-    },
-    {
         ID: 4,
         NAME: 'brest_lytovskiy',
         MONITORS: [793361189],
         TELEGRAM_CHATS: [{chat_id: '@brest_lytovskiy_test_alerts'}],
         STATISTICS: {
             INFORM_TIME: '23:58',
-        },
-    },
-    {
-        ID: 5,
-        NAME: 'parkovi_ozera',
-        DEPENDENCY_ID: 6,
-        MONITORS: [793597038],
-        TELEGRAM_CHATS: [{chat_id: '@parkovi_ozera_test_alerts'}],
-        STATISTICS: {
-            INFORM_TIME: '23:58',
-        },
-        SCHEDULE: {
-            INFORM_TIME: '08:00',
-            CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
-        },
-    },
-    {
-        ID: 6,
-        NAME: 'rusanivski_sady',
-        MONITORS: [793469661],
-        TELEGRAM_CHATS: [{chat_id: '@rusanivski_sady_test_alerts'}],
-        STATISTICS: {
-            INFORM_TIME: '23:58',
-        },
-        SCHEDULE: {
-            INFORM_TIME: '08:00',
-            CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/2.ics',
         },
     },
 ];
