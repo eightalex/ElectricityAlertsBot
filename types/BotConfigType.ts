@@ -4,6 +4,7 @@ export type BotConfigType = {
     ID: number
     NAME: string
     DEPENDENCY_ID?: number
+    HEARTBEAT?: boolean
     MONITORS?: number[]
     TELEGRAM_CHATS: TelegramChatType[]
     STATISTICS?: {

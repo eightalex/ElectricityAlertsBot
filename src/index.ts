@@ -16,6 +16,7 @@ import {ScheduleGenerator} from './services/ScheduleGenerator';
 import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
 import {ForecastGenerator} from './services/message/ForecastGenerator';
 import {Informer} from './services/Informer';
+import {HeartbeatService} from './services/HeartbeatService';
 
 const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
@@ -28,6 +29,7 @@ const icsFetcher = new IcsFetcher(UrlFetchApp);
 const icsService = new IcsService();
 const scheduleGenerator = new ScheduleGenerator();
 const forecastGenerator = new ForecastGenerator();
+const heartbeatService = new HeartbeatService(PropertiesService);
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
     monitorsFetcher,
@@ -69,6 +71,7 @@ const app = new App(
     monitorsAdapter,
     statisticsService,
     informer,
+    heartbeatService,
 );
 
 const config = {
@@ -96,7 +99,7 @@ export function ping() {
 }
 
 export function doPost(event: GoogleAppsScript.Events.DoPost) {
-    app.webhookUpdate(event.postData.contents);
+    app.webhookHeartbeat(event.postData.contents);
 }
 
 export function informStatistics() {

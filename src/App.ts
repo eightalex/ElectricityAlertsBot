@@ -11,10 +11,12 @@ import {WebhookType} from '../types/WebhookType';
 import {MonitorsHelper} from './utils/MonitorsHelper';
 import {PreparedCheckResultType} from '../types/PreparedCheckResultType';
 import {InformerInterface} from './services/Informer';
+import {HeartbeatServiceInterface} from './services/HeartbeatService';
 
 export interface AppInterface {
     ping(): void
     webhookUpdate(contents: string): void
+    webhookHeartbeat(contents: string): void
 }
 
 export class App implements AppInterface {
@@ -26,6 +28,7 @@ export class App implements AppInterface {
         private monitorsAdapter: MonitorsAdapterInterface,
         private statisticsService: StatisticsServiceInterface,
         private informer: InformerInterface,
+        private heartbeatService: HeartbeatServiceInterface,
     ) {
         this.monitorsConfig = APP.MODE === 'production' ? MONITORS_CONFIG : MONITORS_CONFIG_DEV;
     }
@@ -35,14 +38,16 @@ export class App implements AppInterface {
         const timeString = DateHelper.getTimeString(nowDate);
         const dateString = DateHelper.getDateString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
-        const preparedResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
+        const monitorsResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
+        const heartbeatResults = this.heartbeatService.checkIsAlive(this.monitorsConfig, nowDate);
+        const overallResult = monitorsResult.concat(heartbeatResults);
 
-        preparedResult.forEach(result => {
+        overallResult.forEach(result => {
             const config = ConfigHelper.getConfig(result.id, this.monitorsConfig);
             let dependencyCheckResult: PreparedCheckResultType | null = null;
 
             if (config.DEPENDENCY_ID !== undefined) {
-                dependencyCheckResult = MonitorsHelper.getCheckResult(config.DEPENDENCY_ID, preparedResult);
+                dependencyCheckResult = MonitorsHelper.getCheckResult(config.DEPENDENCY_ID, overallResult);
             }
 
             this.pinger.ping(result.status, {config, nowDate, dependencyCheckResult});
@@ -59,7 +64,7 @@ export class App implements AppInterface {
             this.informer.reset(dateString, result.id);
         });
 
-        preparedResult.forEach(result => {
+        overallResult.forEach(result => {
             const config = ConfigHelper.getConfig(result.id, this.monitorsConfig);
             this.pinger.updateLastState(result.status, config);
         });
@@ -70,5 +75,12 @@ export class App implements AppInterface {
         const config = ConfigHelper.getConfig(data.id, this.monitorsConfig);
 
         this.pinger.ping(data.status, {config, nowDate: new Date()});
+    }
+
+    webhookHeartbeat(contents: string) {
+        const data: WebhookType = JSON.parse(contents);
+        const config = ConfigHelper.getConfig(data.id, this.monitorsConfig);
+
+        this.heartbeatService.update(config);
     }
 }
