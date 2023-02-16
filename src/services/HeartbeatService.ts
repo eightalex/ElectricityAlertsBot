@@ -29,7 +29,7 @@ export class HeartbeatService implements HeartbeatServiceInterface {
         return heartbeatConfigs.map(config => {
             const lastHeartbeat = this.getLastHeartbeat(config.ID);
             const timeDifference = DateHelper.getDifference(nowDate, new Date(lastHeartbeat));
-            const isAvailable = timeDifference < (TIME.MINUTE * 2);
+            const isAvailable = timeDifference < TIME.MINUTE;
 
             return {
                 id: config.ID,
