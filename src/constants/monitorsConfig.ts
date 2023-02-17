@@ -43,8 +43,8 @@ export const MONITORS_CONFIG: BotConfigType[] = [
     {
         ID: 4,
         NAME: 'brest_lytovskiy',
-        MONITORS: [793361189],
-        TELEGRAM_CHATS: [{chat_id: '@brest_lytovskiy_alerts'}],
+        HEARTBEAT: true,
+        TELEGRAM_CHATS: [{chat_id: '@brest_lytovskiy_test_alerts'}],
         STATISTICS: {
             INFORM_TIME: '23:58',
         },
@@ -185,7 +185,6 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
     {
         ID: 4,
         NAME: 'brest_lytovskiy',
-        // MONITORS: [793361189],
         HEARTBEAT: true,
         TELEGRAM_CHATS: [{chat_id: '@brest_lytovskiy_test_alerts'}],
         STATISTICS: {
