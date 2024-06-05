@@ -14,4 +14,8 @@ export type BotConfigType = {
         INFORM_TIME: string
         CALENDAR_URL: string
     }
+    MESSAGE?: {
+        AVAILABLE?: string
+        UNAVAILABLE?: string
+    }
 };

@@ -6,7 +6,7 @@ import {PreparedCheckResultType} from '../../types/PreparedCheckResultType';
 import {ForecastGeneratorInterface} from './message/ForecastGenerator';
 import {TelegramServiceInterface} from './TelegramService';
 
-type PingOptions = {
+export type PingOptions = {
     config: BotConfigType
     nowDate: Date
     dependencyCheckResult?: PreparedCheckResultType | null
@@ -63,7 +63,7 @@ export class Pinger implements PingerInterface {
         }
 
         const lastTime = this.userProperties.getProperty(key.lastTime) || '0';
-        const message = this.messageGenerator.generate({isAvailable, lastTime, nowDate: options.nowDate})
+        const message = this.messageGenerator.generate({isAvailable, lastTime, pingOptions: options});
 
         this.telegramService.sendMessages(message, options.config.TELEGRAM_CHATS);
 

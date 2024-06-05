@@ -23,7 +23,15 @@ describe('MessageGenerator', () => {
             const options = {
                 isAvailable: true,
                 lastTime: '1623141563000',
-                nowDate: new Date('2022-01-01T01:01:01.000Z'),
+                pingOptions: {
+                    config: {
+                        ID: 1,
+                        NAME: 'Test Config',
+                        TELEGRAM_CHATS: [{chat_id: '@chat',}],
+                        MONITORS: [793359540, 793359541],
+                    },
+                    nowDate: new Date('2022-01-01T01:01:01.000Z'),
+                },
             };
 
             const message = messageGenerator.generate(options);
@@ -35,7 +43,15 @@ describe('MessageGenerator', () => {
             const options = {
                 isAvailable: false,
                 lastTime: '1623141563000',
-                nowDate: new Date('2022-01-01T01:01:01.000Z'),
+                pingOptions: {
+                    config: {
+                        ID: 1,
+                        NAME: 'Test Config',
+                        TELEGRAM_CHATS: [{chat_id: '@chat',}],
+                        MONITORS: [793359540, 793359541],
+                    },
+                    nowDate: new Date('2022-01-01T01:01:01.000Z'),
+                },
             };
 
             const expectedResult = [
@@ -52,12 +68,44 @@ describe('MessageGenerator', () => {
             const options = {
                 isAvailable: false,
                 lastTime: '0',
-                nowDate: new Date('2022-01-01T01:01:01.000Z'),
+                pingOptions: {
+                    config: {
+                        ID: 1,
+                        NAME: 'Test Config',
+                        TELEGRAM_CHATS: [{chat_id: '@chat',}],
+                        MONITORS: [793359540, 793359541],
+                    },
+                    nowDate: new Date('2022-01-01T01:01:01.000Z'),
+                },
             };
 
             const message = messageGenerator.generate(options);
 
             expect(message).toEqual('⚫️ Зникло світло');
+        });
+
+        it('should generate the message when the power is available and the message is set in the config', () => {
+            const options = {
+                isAvailable: true,
+                lastTime: '0',
+                pingOptions: {
+                    config: {
+                        ID: 1,
+                        NAME: 'Test Config',
+                        TELEGRAM_CHATS: [{chat_id: '@chat',}],
+                        MONITORS: [793359540, 793359541],
+                        MESSAGE: {
+                            AVAILABLE: 'Test message available',
+                            UNAVAILABLE: 'Test message unavailable',
+                        },
+                    },
+                    nowDate: new Date('2022-01-01T01:01:01.000Z'),
+                },
+            };
+
+            const message = messageGenerator.generate(options);
+
+            expect(message).toEqual('Test message available');
         });
     });
 });
