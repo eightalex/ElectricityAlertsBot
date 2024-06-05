@@ -27,7 +27,7 @@ export class Informer implements InformerInterface {
         let storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.config.ID;
 
         if (!options.config[type]) {
-            throw new Error('Undefined config')
+            throw new Error('Informer: Undefined config')
         }
 
         if (options.dateString === this.userProperties.getProperty(storageKey)) {
