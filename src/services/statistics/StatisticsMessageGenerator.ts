@@ -10,6 +10,14 @@ export class StatisticsMessageGenerator implements StatisticsMessageGeneratorInt
     generate(statistics: StatisticsType): string {
         const {available, notAvailable} = statistics.time;
 
+        if (available === 0) {
+            return '🕯Сьогодні світло було відсутнє цілий день';
+        }
+
+        if (notAvailable === 0) {
+            return '💡Сьогодні світло було наявне цілий день';
+        }
+
         const time = {
             available: DateHelper.getPluralizedTimeString(new Date(available)),
             notAvailable: DateHelper.getPluralizedTimeString(new Date(notAvailable)),
