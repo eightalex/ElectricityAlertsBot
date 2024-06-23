@@ -13,13 +13,13 @@ export class OutageInformer implements OutageInformerInterface {
     ) {}
 
     inform(config: BotConfigType): void {
-        if (config.FUTURE_OUTAGE === undefined) {
-            return;
+        if (config.FUTURE_OUTAGE === undefined || config.REGION === undefined || config.GROUP === undefined) {
+            throw new Error('OutageInformer: Undefined config');
         }
 
         const outages = this.yasno.checkFutureOutage({
-            region: config.FUTURE_OUTAGE.REGION,
-            group: config.FUTURE_OUTAGE.GROUP,
+            region: config.REGION,
+            group: config.GROUP,
             minutes: config.FUTURE_OUTAGE.MINUTES,
         });
 

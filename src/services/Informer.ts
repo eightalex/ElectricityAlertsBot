@@ -9,12 +9,11 @@ export type InfoTypes = 'STATISTICS' | 'SCHEDULE' | 'FUTURE_OUTAGE';
 type InformOptions = {
     config: BotConfigType
     timeString: string
-    dateString: string
 }
 
 export interface InformerInterface {
     inform(type: InfoTypes, options: InformOptions): void
-    reset(dateString: string, id: number): void
+    reset(timeString: string, id: number): void
 }
 
 export class Informer implements InformerInterface {
@@ -34,7 +33,10 @@ export class Informer implements InformerInterface {
             throw new Error('Informer: Undefined config')
         }
 
-        if (options.dateString === this.userProperties.getProperty(storageKey)) {
+        /**
+         * Prevent multiple notifications
+         */
+        if (options.timeString === this.userProperties.getProperty(storageKey)) {
             return;
         }
 
@@ -50,17 +52,19 @@ export class Informer implements InformerInterface {
                 break;
         }
 
-        this.userProperties.setProperty(storageKey, options.dateString);
+        this.userProperties.setProperty(storageKey, options.timeString);
     }
 
-    reset(dateString: string, id: number) {
+    reset(timeString: string, id: number) {
         const isInformedSchedule = this.userProperties.getProperty(STORAGE_KEY.SCHEDULE_INFORMED_DATE + id);
         const isInformedStatistics = this.userProperties.getProperty(STORAGE_KEY.STATISTICS_INFORMED_DATE + id);
+        const isInformedOutage = this.userProperties.getProperty(STORAGE_KEY.OUTAGE_INFORMED_DATE + id);
 
-        if (isInformedSchedule !== dateString || isInformedStatistics !== dateString) {
+        if (isInformedSchedule !== timeString || isInformedStatistics !== timeString || isInformedOutage !== timeString) {
             this.userProperties.setProperties({
                 [STORAGE_KEY.SCHEDULE_INFORMED_DATE + id]: '',
                 [STORAGE_KEY.STATISTICS_INFORMED_DATE + id]: '',
+                [STORAGE_KEY.OUTAGE_INFORMED_DATE + id]: '',
             });
         }
     }

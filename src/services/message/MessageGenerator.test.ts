@@ -1,5 +1,6 @@
 import {MessageGenerator, MessageGeneratorInterface} from './MessageGenerator';
 import {TimeDifferenceGenerator} from '../TimeDifferenceGenerator';
+import {Yasno} from '../Yasno';
 
 jest.mock('../TimeDifferenceGenerator', () => {
     return {
@@ -15,7 +16,7 @@ describe('MessageGenerator', () => {
     let messageGenerator: MessageGeneratorInterface;
 
     beforeEach(() => {
-        messageGenerator = new MessageGenerator(new TimeDifferenceGenerator());
+        messageGenerator = new MessageGenerator(new TimeDifferenceGenerator(), new Yasno());
     });
 
     describe('generate', () => {

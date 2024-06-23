@@ -34,6 +34,8 @@ describe('MonitorsAdapter', () => {
                 {
                     ID: 1,
                     NAME: 'Test Config',
+                    GROUP: 5,
+                    REGION: 'kiev',
                     TELEGRAM_CHATS: [
                         {
                             chat_id: '@chat',
@@ -45,13 +47,13 @@ describe('MonitorsAdapter', () => {
                     },
                     SCHEDULE: {
                         INFORM_TIME: '08:00',
-                        GROUP: 5,
-                        REGION: 'kiev',
                     },
                 },
                 {
                     ID: 2,
                     NAME: 'Test Config 2',
+                    GROUP: 5,
+                    REGION: 'kiev',
                     TELEGRAM_CHATS: [
                         {
                             chat_id: '@chat2',
@@ -62,8 +64,6 @@ describe('MonitorsAdapter', () => {
                     },
                     SCHEDULE: {
                         INFORM_TIME: '08:00',
-                        GROUP: 5,
-                        REGION: 'kiev',
                     },
                 },
             ];

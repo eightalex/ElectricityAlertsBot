@@ -11,6 +11,8 @@ export const MONITORS_CONFIG: BotConfigType[] = [
     {
         ID: 1,
         NAME: 'kombinatna25a',
+        REGION: REGION.KYIV,
+        GROUP: 5,
         MONITORS: [
             MONITORS_MAP.UNDERNET_25A_2_SECTION,
             MONITORS_MAP.BOILER_SOCKET_4_SECTION,
@@ -24,12 +26,8 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         },
         SCHEDULE: {
             INFORM_TIME: '21:00',
-            REGION: REGION.KYIV,
-            GROUP: 5,
         },
         FUTURE_OUTAGE: {
-            REGION: REGION.KYIV,
-            GROUP: 5,
             MINUTES: 30,
         },
     },
@@ -50,6 +48,8 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
     {
         ID: 1,
         NAME: 'kombinatna25a',
+        REGION: REGION.KYIV,
+        GROUP: 5,
         MONITORS: [
             MONITORS_MAP.UNDERNET_25A_2_SECTION,
             MONITORS_MAP.BOILER_SOCKET_4_SECTION,
@@ -62,12 +62,8 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         },
         SCHEDULE: {
             INFORM_TIME: '21:00',
-            REGION: REGION.KYIV,
-            GROUP: 5,
         },
         FUTURE_OUTAGE: {
-            REGION: REGION.KYIV,
-            GROUP: 5,
             MINUTES: 30,
         },
     },

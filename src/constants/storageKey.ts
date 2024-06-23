@@ -6,4 +6,5 @@ export const STORAGE_KEY = {
     STATISTICS: 'statistics',
     STATISTICS_INFORMED_DATE: 'statistics_informed_date',
     SCHEDULE_INFORMED_DATE: 'schedule_informed_date',
+    OUTAGE_INFORMED_DATE: 'outage_informed_date',
 };

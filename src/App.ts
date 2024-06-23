@@ -36,7 +36,6 @@ export class App implements AppInterface {
     ping() {
         const nowDate = new Date();
         const timeString = DateHelper.getTimeString(nowDate);
-        const dateString = DateHelper.getDateString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
         const monitorsResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
         const heartbeatResults = this.heartbeatService.checkIsAlive(this.monitorsConfig, nowDate);
@@ -54,18 +53,18 @@ export class App implements AppInterface {
 
             if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
                 this.statisticsService.update(result.status, {config, nowDate});
-                this.informer.inform('STATISTICS', {config, timeString, dateString})
+                this.informer.inform('STATISTICS', {config, timeString})
             }
 
             if (config.SCHEDULE !== undefined && config.SCHEDULE.INFORM_TIME === timeString) {
-                this.informer.inform('SCHEDULE', {config, timeString, dateString})
+                this.informer.inform('SCHEDULE', {config, timeString})
             }
 
             if (config.FUTURE_OUTAGE !== undefined) {
-                this.informer.inform('FUTURE_OUTAGE', {config, timeString, dateString})
+                this.informer.inform('FUTURE_OUTAGE', {config, timeString})
             }
 
-            this.informer.reset(dateString, result.id);
+            this.informer.reset(timeString, result.id);
         });
 
         overallResult.forEach(result => {

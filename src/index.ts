@@ -20,17 +20,17 @@ import {Yasno} from './services/Yasno';
 import {BotConfigType} from '../types/BotConfigType';
 import {OutageInformer} from './services/OutageInformer';
 
+const yasno = new Yasno();
 const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
 const telegramService = new TelegramService(UrlFetchApp);
 const timeDifferenceGenerator = new TimeDifferenceGenerator();
-const messageGenerator = new MessageGenerator(timeDifferenceGenerator);
+const messageGenerator = new MessageGenerator(timeDifferenceGenerator, yasno);
 const statisticsMessageGenerator = new StatisticsMessageGenerator();
 const statisticsBuilder = new StatisticsBuilder();
 const scheduleGenerator = new ScheduleGenerator();
 const forecastGenerator = new ForecastGenerator();
 const heartbeatService = new HeartbeatService(PropertiesService);
-const yasno = new Yasno();
 
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
@@ -84,6 +84,8 @@ const app = new App(
 const config: BotConfigType = {
     ID: 1,
     NAME: 'kombinatna25a',
+    GROUP: 5,
+    REGION: 'kiev',
     TELEGRAM_CHATS: [
         {
             chat_id: '@kombinatna_test_alerts',
@@ -98,12 +100,8 @@ const config: BotConfigType = {
     },
     SCHEDULE: {
         INFORM_TIME: '08:00',
-        GROUP: 5,
-        REGION: 'kiev',
     },
     FUTURE_OUTAGE: {
-        REGION: 'kiev',
-        GROUP: 5,
         MINUTES: 30,
     },
 };

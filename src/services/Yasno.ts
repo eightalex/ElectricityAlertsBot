@@ -14,9 +14,14 @@ type checkFutureOutageOptions = baseOptions & {
     minutes: number
 }
 
+type getNextOutageOptions = baseOptions & {
+    type: 'start' | 'end'
+}
+
 export interface YasnoInterface {
     getSchedule(options: getScheduleOptions): Outage[] | null
     checkFutureOutage({region, group, minutes}: checkFutureOutageOptions): boolean
+    getNextOutage({region, group, type}: getNextOutageOptions): Outage | null
 }
 
 const templateName = {
@@ -79,7 +84,7 @@ export class Yasno implements YasnoInterface {
         const now = new Date();
         const nowHour = now.getHours();
         const nowMinute = now.getMinutes();
-        const nowDay = now.getDay() - 1 === -1 ? 6 : now.getDay() - 1;
+        const nowDay = (now.getDay() + 6) % 7;
         const schedule = this.getSchedule({region, group, day: nowDay});
         const hours = nowHour + 1 > 23 ? 0 : nowHour + 1;
 
@@ -88,9 +93,18 @@ export class Yasno implements YasnoInterface {
         }
 
         const outage = schedule.find(outage => {
-            return outage.start === hours && nowMinute === minutes;
+            return outage.type === 'DEFINITE_OUTAGE' && outage.start === hours && nowMinute === minutes;
         });
 
         return outage !== undefined;
+    }
+
+    getNextOutage({region, group, type}: getNextOutageOptions): Outage | null {
+        const now = new Date();
+        const nowHour = now.getHours();
+        const nowDay = (now.getDay() + 6) % 7;
+        const schedule = this.getSchedule({region, group, day: nowDay});
+
+        return schedule?.find(outage => outage.type === 'DEFINITE_OUTAGE' && nowHour < outage[type]) || null;
     }
 }

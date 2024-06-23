@@ -15,8 +15,8 @@ export class ScheduleInformer implements ScheduleInformerInterface {
     ) {}
 
     inform(config: BotConfigType) {
-        if (config.SCHEDULE === undefined) {
-            return;
+        if (config.REGION === undefined || config.GROUP === undefined) {
+            throw new Error('ScheduleInformer: Undefined config');
         }
 
         const date = new Date();
@@ -26,8 +26,8 @@ export class ScheduleInformer implements ScheduleInformerInterface {
          */
         const dayOfWeek = date.getDay();
         const schedule = this.yasno.getSchedule({
-            region: config.SCHEDULE.REGION,
-            group: config.SCHEDULE.GROUP,
+            region: config.REGION,
+            group: config.GROUP,
             day: dayOfWeek,
         });
 

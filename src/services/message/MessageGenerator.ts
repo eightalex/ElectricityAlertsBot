@@ -1,6 +1,8 @@
 import {STRING} from '../../constants/string';
 import {TimeDifferenceGeneratorInterface} from '../TimeDifferenceGenerator';
 import {PingOptions} from '../Pinger';
+import {YasnoInterface} from '../Yasno';
+import {BotConfigType} from '../../../types/BotConfigType';
 
 type GenerateArgumentsType = {
     isAvailable: boolean
@@ -15,6 +17,7 @@ export interface MessageGeneratorInterface {
 export class MessageGenerator implements MessageGeneratorInterface {
     constructor(
         private timeDifferenceGenerator: TimeDifferenceGeneratorInterface,
+        private yasno: YasnoInterface,
     ) {}
 
     generate({isAvailable, lastTime, pingOptions}: GenerateArgumentsType): string {
@@ -31,6 +34,7 @@ export class MessageGenerator implements MessageGeneratorInterface {
                 'Відключення тривало',
                 STRING.NEWLINE,
                 this.timeDifferenceGenerator.generate(lastTime, pingOptions.nowDate),
+                this.getNextOutageMessage(pingOptions.config, 'end'),
             ].join(STRING.EMPTY);
         }
 
@@ -40,6 +44,7 @@ export class MessageGenerator implements MessageGeneratorInterface {
             this.easterEgg() + ' було наявне',
             STRING.NEWLINE,
             this.timeDifferenceGenerator.generate(lastTime, pingOptions.nowDate),
+            this.getNextOutageMessage(pingOptions.config, 'start'),
         ].join(STRING.EMPTY);
     }
 
@@ -65,5 +70,31 @@ export class MessageGenerator implements MessageGeneratorInterface {
         }
 
         return '⚫️ Зникло світло';
+    }
+
+    private getNextOutageMessage(config: BotConfigType, type: 'start' | 'end'): string {
+        if (config === undefined) {
+            return '';
+        }
+
+        if (config.REGION === undefined || config.GROUP === undefined) {
+            return '';
+        }
+
+        let result = STRING.PARAGRAPH;
+
+        if (type === 'start') {
+            result += 'Наступне відключення о ';
+        } else {
+            result += 'Має бути відновлено о ';
+        }
+
+        result += this.yasno.getNextOutage({
+            region: config.REGION,
+            group: config.GROUP,
+            type: type,
+        });
+
+        return result;
     }
 }

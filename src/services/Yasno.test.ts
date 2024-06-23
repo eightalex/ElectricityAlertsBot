@@ -1,4 +1,5 @@
 import {Yasno} from './Yasno';
+import {OutageType} from '../../types/YasnoType';
 
 const defaultFetchMethods = {
     getAllHeaders: jest.fn(),
@@ -91,6 +92,44 @@ describe('Yasno', () => {
             jest.spyOn(Date.prototype, 'getMinutes').mockReturnValue(30);
             const result = yasno.checkFutureOutage({region: 'kiev', group: 1, minutes: 30});
             expect(result).toBe(true);
+        });
+    });
+
+    describe('getNextOutage', () => {
+        it('should return null if there is no schedule', () => {
+            jest.spyOn(Yasno.prototype, 'getSchedule').mockReturnValue(null);
+            const result = yasno.getNextOutage({region: 'kiev', group: 1, type: 'start'});
+            expect(result).toBeNull();
+        });
+
+        it('should return the next outage start if it exists', () => {
+            const expectedOutage = {start: 2, end: 3, type: 'DEFINITE_OUTAGE' as OutageType};
+            jest.spyOn(Yasno.prototype, 'getSchedule').mockReturnValue([{start: 1, end: 2, type: 'DEFINITE_OUTAGE'}, expectedOutage]);
+            jest.spyOn(Date.prototype, 'getHours').mockReturnValue(1);
+            const result = yasno.getNextOutage({region: 'kiev', group: 1, type: 'start'});
+            expect(result).toEqual(expectedOutage);
+        });
+
+        it('should return the next outage end if it exists', () => {
+            const expectedOutage = {start: 1, end: 3, type: 'DEFINITE_OUTAGE' as OutageType};
+            jest.spyOn(Yasno.prototype, 'getSchedule').mockReturnValue([{start: 1, end: 2, type: 'DEFINITE_OUTAGE'}, expectedOutage]);
+            jest.spyOn(Date.prototype, 'getHours').mockReturnValue(2);
+            const result = yasno.getNextOutage({region: 'kiev', group: 1, type: 'end'});
+            expect(result).toEqual(expectedOutage);
+        });
+
+        it('should return null if there is no next outage', () => {
+            jest.spyOn(Yasno.prototype, 'getSchedule').mockReturnValue([{start: 1, end: 2, type: 'DEFINITE_OUTAGE'}]);
+            jest.spyOn(Date.prototype, 'getHours').mockReturnValue(3);
+            const result = yasno.getNextOutage({region: 'kiev', group: 1, type: 'start'});
+            expect(result).toBeNull();
+        });
+
+        it('should return null if there is no next outage', () => {
+            jest.spyOn(Yasno.prototype, 'getSchedule').mockReturnValue([{start: 1, end: 2, type: 'POSSIBLE_OUTAGE'}]);
+            jest.spyOn(Date.prototype, 'getHours').mockReturnValue(1);
+            const result = yasno.getNextOutage({region: 'kiev', group: 1, type: 'start'});
+            expect(result).toBeNull();
         });
     });
 });
