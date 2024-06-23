@@ -1,3 +1,4 @@
+import {MONITORS_MAP} from './constants/monitorsConfig';
 import {MonitorsFetcher} from './services/monitors/MonitorsFetcher';
 import {MonitorsStatusChecker} from './services/monitors/MonitorsStatusChecker';
 import {TelegramService} from './services/TelegramService';
@@ -10,13 +11,14 @@ import {StatisticsMessageGenerator} from './services/statistics/StatisticsMessag
 import {StatisticsService} from './services/statistics/StatisticsService';
 import {App} from './App';
 import {ScheduleInformer} from './services/ScheduleInformer';
-import {IcsFetcher} from './services/ics/IcsFetcher';
-import {IcsService} from './services/ics/IcsService';
-import {ScheduleGenerator} from './services/ScheduleGenerator';
+import {ScheduleGenerator} from './services/message/ScheduleGenerator';
 import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
 import {ForecastGenerator} from './services/message/ForecastGenerator';
 import {Informer} from './services/Informer';
 import {HeartbeatService} from './services/HeartbeatService';
+import {Yasno} from './services/Yasno';
+import {BotConfigType} from '../types/BotConfigType';
+import {OutageInformer} from './services/OutageInformer';
 
 const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
@@ -25,11 +27,11 @@ const timeDifferenceGenerator = new TimeDifferenceGenerator();
 const messageGenerator = new MessageGenerator(timeDifferenceGenerator);
 const statisticsMessageGenerator = new StatisticsMessageGenerator();
 const statisticsBuilder = new StatisticsBuilder();
-const icsFetcher = new IcsFetcher(UrlFetchApp);
-const icsService = new IcsService();
 const scheduleGenerator = new ScheduleGenerator();
 const forecastGenerator = new ForecastGenerator();
 const heartbeatService = new HeartbeatService(PropertiesService);
+const yasno = new Yasno();
+
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
     monitorsFetcher,
@@ -47,10 +49,14 @@ const statisticsInformer = new StatisticsInformer(
 );
 
 const scheduleInformer = new ScheduleInformer(
-    icsFetcher,
-    icsService,
     scheduleGenerator,
     telegramService,
+    yasno,
+);
+
+const outageInformer = new OutageInformer(
+    telegramService,
+    yasno,
 );
 
 const pinger = new Pinger(
@@ -63,6 +69,7 @@ const pinger = new Pinger(
 const informer = new Informer(
     statisticsInformer,
     scheduleInformer,
+    outageInformer,
 );
 
 const app = new App(
@@ -74,7 +81,7 @@ const app = new App(
     heartbeatService,
 );
 
-const config = {
+const config: BotConfigType = {
     ID: 1,
     NAME: 'kombinatna25a',
     TELEGRAM_CHATS: [
@@ -82,15 +89,22 @@ const config = {
             chat_id: '@kombinatna_test_alerts',
         },
     ],
-    MONITORS: [793136583, 793214785], // UNDERNET UNDERNET2
+    MONITORS: [
+        MONITORS_MAP.UNDERNET_25A_2_SECTION,
+        MONITORS_MAP.BOILER_SOCKET_4_SECTION,
+    ],
     STATISTICS: {
-        IS_ENABLED: true,
         INFORM_TIME: '23:58',
     },
     SCHEDULE: {
-        IS_ENABLED: true,
         INFORM_TIME: '08:00',
-        CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
+        GROUP: 5,
+        REGION: 'kiev',
+    },
+    FUTURE_OUTAGE: {
+        REGION: 'kiev',
+        GROUP: 5,
+        MINUTES: 30,
     },
 };
 
@@ -108,4 +122,8 @@ export function informStatistics() {
 
 export function informSchedule() {
     scheduleInformer.inform(config);
+}
+
+export function informOutage() {
+    outageInformer.inform(config);
 }

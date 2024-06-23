@@ -1,4 +1,5 @@
 import {TelegramChatType} from './TelegramChatType';
+import {RegionType} from './YasnoType';
 
 export type BotConfigType = {
     ID: number
@@ -12,7 +13,13 @@ export type BotConfigType = {
     }
     SCHEDULE?: {
         INFORM_TIME: string
-        CALENDAR_URL: string
+        GROUP: number
+        REGION: RegionType
+    }
+    FUTURE_OUTAGE?: {
+        MINUTES: number
+        GROUP: number
+        REGION: RegionType
     }
     MESSAGE?: {
         AVAILABLE?: string

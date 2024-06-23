@@ -52,13 +52,17 @@ export class App implements AppInterface {
 
             this.pinger.ping(result.status, {config, nowDate, dependencyCheckResult});
 
-            if (config.STATISTICS !== undefined) {
+            if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
                 this.statisticsService.update(result.status, {config, nowDate});
                 this.informer.inform('STATISTICS', {config, timeString, dateString})
             }
 
-            if (config.SCHEDULE !== undefined) {
+            if (config.SCHEDULE !== undefined && config.SCHEDULE.INFORM_TIME === timeString) {
                 this.informer.inform('SCHEDULE', {config, timeString, dateString})
+            }
+
+            if (config.FUTURE_OUTAGE !== undefined) {
+                this.informer.inform('FUTURE_OUTAGE', {config, timeString, dateString})
             }
 
             this.informer.reset(dateString, result.id);

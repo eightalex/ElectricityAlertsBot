@@ -45,7 +45,8 @@ describe('MonitorsAdapter', () => {
                     },
                     SCHEDULE: {
                         INFORM_TIME: '08:00',
-                        CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
+                        GROUP: 5,
+                        REGION: 'kiev',
                     },
                 },
                 {
@@ -61,7 +62,8 @@ describe('MonitorsAdapter', () => {
                     },
                     SCHEDULE: {
                         INFORM_TIME: '08:00',
-                        CALENDAR_URL: 'https://shutdown-calendar.fly.dev/calendar/3.ics',
+                        GROUP: 5,
+                        REGION: 'kiev',
                     },
                 },
             ];

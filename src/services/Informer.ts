@@ -2,6 +2,9 @@ import {STORAGE_KEY} from '../constants/storageKey';
 import {BotConfigType} from '../../types/BotConfigType';
 import {StatisticsInformerInterface} from './statistics/StatisticsInformer';
 import {ScheduleInformerInterface} from './ScheduleInformer';
+import {OutageInformerInterface} from './OutageInformer';
+
+export type InfoTypes = 'STATISTICS' | 'SCHEDULE' | 'FUTURE_OUTAGE';
 
 type InformOptions = {
     config: BotConfigType
@@ -10,7 +13,7 @@ type InformOptions = {
 }
 
 export interface InformerInterface {
-    inform(type: 'STATISTICS' | 'SCHEDULE', options: InformOptions): void
+    inform(type: InfoTypes, options: InformOptions): void
     reset(dateString: string, id: number): void
 }
 
@@ -20,9 +23,10 @@ export class Informer implements InformerInterface {
     constructor(
         private statisticsInformer: StatisticsInformerInterface,
         private scheduleInformer: ScheduleInformerInterface,
+        private outageInformer: OutageInformerInterface,
     ) {}
 
-    inform(type: 'STATISTICS' | 'SCHEDULE', options: InformOptions) {
+    inform(type: InfoTypes, options: InformOptions) {
         // @ts-ignore
         let storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.config.ID;
 
@@ -34,17 +38,15 @@ export class Informer implements InformerInterface {
             return;
         }
 
-        // @ts-ignore
-        if (options.timeString !== options.config[type].INFORM_TIME) {
-            return;
-        }
-
         switch (type) {
             case 'STATISTICS':
                 this.statisticsInformer.inform(options.config);
                 break;
             case 'SCHEDULE':
                 this.scheduleInformer.inform(options.config);
+                break;
+            case 'FUTURE_OUTAGE':
+                this.outageInformer.inform(options.config);
                 break;
         }
 

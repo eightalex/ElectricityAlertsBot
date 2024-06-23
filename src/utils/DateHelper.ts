@@ -77,15 +77,4 @@ export class DateHelper {
         const ms = date.getTime() + (TIME.DAY * days);
         return new Date(ms);
     }
-
-    static parseIcsDate(date: string): Date {
-        const year = date.substring(0, 4);
-        const month = date.substring(4, 6);
-        const day = date.substring(6, 8);
-        const hours = date.substring(9, 11);
-        const minutes = date.substring(11, 13);
-        const seconds = date.substring(13, 15);
-
-        return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`);
-    }
 }

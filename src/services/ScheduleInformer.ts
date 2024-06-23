@@ -1,8 +1,7 @@
-import {IcsFetcherInterface} from './ics/IcsFetcher';
-import {IcsServiceInterface} from './ics/IcsService';
-import {ScheduleGeneratorInterface} from './ScheduleGenerator';
+import {ScheduleGeneratorInterface} from './message/ScheduleGenerator';
 import {BotConfigType} from '../../types/BotConfigType';
 import {TelegramServiceInterface} from './TelegramService';
+import {YasnoInterface} from './Yasno';
 
 export interface ScheduleInformerInterface {
     inform(config: BotConfigType): void
@@ -10,10 +9,9 @@ export interface ScheduleInformerInterface {
 
 export class ScheduleInformer implements ScheduleInformerInterface {
     constructor(
-        private icsFetcher: IcsFetcherInterface,
-        private icsService: IcsServiceInterface,
         private scheduleGenerator: ScheduleGeneratorInterface,
         private telegramService: TelegramServiceInterface,
+        private yasno: YasnoInterface,
     ) {}
 
     inform(config: BotConfigType) {
@@ -21,9 +19,23 @@ export class ScheduleInformer implements ScheduleInformerInterface {
             return;
         }
 
-        const ics = this.icsFetcher.fetch(config.SCHEDULE.CALENDAR_URL);
-        const filteredEvents = this.icsService.getFilteredEvents(ics, config.SCHEDULE.INFORM_TIME);
-        const message = this.scheduleGenerator.generate(filteredEvents);
+        const date = new Date();
+        /**
+         * We receive 1 for Monday, 2 for Tuesday, etc. And 0 for Sunday
+         * It's correct, because we need to get the schedule for the next da
+         */
+        const dayOfWeek = date.getDay();
+        const schedule = this.yasno.getSchedule({
+            region: config.SCHEDULE.REGION,
+            group: config.SCHEDULE.GROUP,
+            day: dayOfWeek,
+        });
+
+        if (schedule === null) {
+            return;
+        }
+
+        const message = this.scheduleGenerator.generate(schedule);
 
         this.telegramService.sendMessages(message, config.TELEGRAM_CHATS);
     }

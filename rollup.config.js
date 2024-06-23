@@ -1,15 +1,24 @@
+import terser from '@rollup/plugin-terser';
 import dotenv from 'rollup-plugin-dotenv';
 import typescript from '@rollup/plugin-typescript';
 
 export default {
     input: 'src/index.ts',
-    output: {
-        dir: 'output',
-        format: 'cjs',
-        strict: false,
-    },
+    output: [
+        {
+            file: 'output/bundle.js',
+            format: 'cjs',
+            strict: false,
+        },
+        {
+            file: 'output/bundle.min.js',
+            format: 'cjs',
+            strict: false,
+            plugins: [terser()]
+        },
+    ],
     plugins: [
-        dotenv.default(),
+        dotenv(),
         typescript(),
     ],
 };
