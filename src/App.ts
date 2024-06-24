@@ -1,4 +1,5 @@
 import {APP} from './constants/app';
+import {TIME} from './constants/time';
 import {MONITORS_CONFIG, MONITORS_CONFIG_DEV} from './constants/monitorsConfig';
 import {PingerInterface} from './services/Pinger';
 import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
@@ -14,6 +15,7 @@ import {InformerInterface} from './services/Informer';
 import {HeartbeatServiceInterface} from './services/HeartbeatService';
 
 export interface AppInterface {
+    multiplyPing(): void
     ping(): void
     webhookUpdate(contents: string): void
     webhookHeartbeat(contents: string): void
@@ -31,6 +33,13 @@ export class App implements AppInterface {
         private heartbeatService: HeartbeatServiceInterface,
     ) {
         this.monitorsConfig = APP.MODE === 'production' ? MONITORS_CONFIG : MONITORS_CONFIG_DEV;
+    }
+
+    multiplyPing() {
+        for (let i = 0; i < 4; i++) {
+            this.ping();
+            Utilities.sleep(TIME.SECOND * 15); // sleep for 15 seconds
+        }
     }
 
     ping() {

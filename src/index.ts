@@ -110,6 +110,10 @@ export function ping() {
     app.ping();
 }
 
+export function multiplyPing() {
+    app.multiplyPing();
+}
+
 export function doPost(event: GoogleAppsScript.Events.DoPost) {
     app.webhookHeartbeat(event.postData.contents);
 }
