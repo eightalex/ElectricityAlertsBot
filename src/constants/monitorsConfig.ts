@@ -86,8 +86,8 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
             {chat_id: '@kombinatna_test_alerts'},
         ],
         MESSAGE: {
-            AVAILABLE: '🟢 З\'явилось світло в 2 секції',
-            UNAVAILABLE: '⚫️ Зникло світло в 2 секції',
+            AVAILABLE: '🟢 З\'явилось світло в секціях: 1, 2, 3',
+            UNAVAILABLE: '⚫️ Зникло світло в секціях: 1, 2, 3',
         },
     },
     {
@@ -98,8 +98,8 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
             {chat_id: '@kombinatna_test_alerts'},
         ],
         MESSAGE: {
-            AVAILABLE: '🟢 З\'явилось світло в 4 секції',
-            UNAVAILABLE: '⚫️ Зникло світло в 4 секції',
+            AVAILABLE: '🟢 З\'явилось світло в секціях: 4, 5',
+            UNAVAILABLE: '⚫️ Зникло світло в секціях: 4, 5',
         },
     },
 ];
