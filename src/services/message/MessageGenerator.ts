@@ -34,7 +34,7 @@ export class MessageGenerator implements MessageGeneratorInterface {
                 'Відключення тривало',
                 STRING.NEWLINE,
                 this.timeDifferenceGenerator.generate(lastTime, pingOptions.nowDate),
-                this.getNextOutageMessage(pingOptions.config, 'end'),
+                this.getNextOutageMessage(pingOptions.config, 'start'),
             ].join(STRING.EMPTY);
         }
 
@@ -44,7 +44,7 @@ export class MessageGenerator implements MessageGeneratorInterface {
             this.easterEgg() + ' було наявне',
             STRING.NEWLINE,
             this.timeDifferenceGenerator.generate(lastTime, pingOptions.nowDate),
-            this.getNextOutageMessage(pingOptions.config, 'start'),
+            this.getNextOutageMessage(pingOptions.config, 'end'),
         ].join(STRING.EMPTY);
     }
 
@@ -89,12 +89,18 @@ export class MessageGenerator implements MessageGeneratorInterface {
             result += 'Має бути відновлено о ';
         }
 
-        result += this.yasno.getNextOutage({
+        const outage = this.yasno.getNextOutage({
             region: config.REGION,
             group: config.GROUP,
             type: type,
         });
 
-        return result;
+        if (outage === null) {
+            return '';
+        }
+
+        const hours = outage[type].toString().padStart(2, '0');
+
+        return result + `${hours}:00`;
     }
 }
