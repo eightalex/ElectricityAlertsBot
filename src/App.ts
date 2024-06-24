@@ -35,36 +35,37 @@ export class App implements AppInterface {
 
     ping() {
         const nowDate = new Date();
+        const dateString = DateHelper.getDateString(nowDate);
         const timeString = DateHelper.getTimeString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
         const monitorsResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
         const heartbeatResults = this.heartbeatService.checkIsAlive(this.monitorsConfig, nowDate);
         const overallResult = monitorsResult.concat(heartbeatResults);
 
-        overallResult.forEach(result => {
-            const config = ConfigHelper.getConfig(result.id, this.monitorsConfig);
+        overallResult.forEach(monitor => {
+            const config = ConfigHelper.getConfig(monitor.id, this.monitorsConfig);
             let dependencyCheckResult: PreparedCheckResultType | null = null;
 
             if (config.DEPENDENCY_ID !== undefined) {
                 dependencyCheckResult = MonitorsHelper.getCheckResult(config.DEPENDENCY_ID, overallResult);
             }
 
-            this.pinger.ping(result.status, {config, nowDate, dependencyCheckResult});
+            this.pinger.ping(monitor.status, {config, nowDate, dependencyCheckResult});
 
             if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
-                this.statisticsService.update(result.status, {config, nowDate});
-                this.informer.inform('STATISTICS', {config, timeString})
+                this.statisticsService.update(monitor.status, {config, nowDate});
+                this.informer.inform('STATISTICS', {config, dateString, timeString})
             }
 
             if (config.SCHEDULE !== undefined && config.SCHEDULE.INFORM_TIME === timeString) {
-                this.informer.inform('SCHEDULE', {config, timeString})
+                this.informer.inform('SCHEDULE', {config, dateString, timeString})
             }
 
             if (config.FUTURE_OUTAGE !== undefined) {
-                this.informer.inform('FUTURE_OUTAGE', {config, timeString})
+                this.informer.inform('FUTURE_OUTAGE', {config, dateString, timeString})
             }
 
-            this.informer.reset(timeString, result.id);
+            this.informer.reset({id: monitor.id, dateString, timeString});
         });
 
         overallResult.forEach(result => {
