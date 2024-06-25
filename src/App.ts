@@ -38,13 +38,12 @@ export class App implements AppInterface {
     multiplyPing() {
         for (let i = 0; i < 4; i++) {
             this.ping();
-            Utilities.sleep(TIME.SECOND * 15); // sleep for 15 seconds
+            Utilities.sleep(TIME.SECOND * 15);
         }
     }
 
     ping() {
         const nowDate = new Date();
-        const dateString = DateHelper.getDateString(nowDate);
         const timeString = DateHelper.getTimeString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
         const monitorsResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
@@ -61,25 +60,26 @@ export class App implements AppInterface {
 
             this.pinger.ping(monitor.status, {config, nowDate, dependencyCheckResult});
 
-            if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
+            if (config.STATISTICS !== undefined) {
                 this.statisticsService.update(monitor.status, {config, nowDate});
-                this.informer.inform('STATISTICS', {config, dateString, timeString})
+            }
+
+            if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
+                this.informer.inform('STATISTICS', {config, nowDate})
             }
 
             if (config.SCHEDULE !== undefined && config.SCHEDULE.INFORM_TIME === timeString) {
-                this.informer.inform('SCHEDULE', {config, dateString, timeString})
+                this.informer.inform('SCHEDULE', {config, nowDate})
             }
 
             if (config.FUTURE_OUTAGE !== undefined) {
-                this.informer.inform('FUTURE_OUTAGE', {config, dateString, timeString})
+                this.informer.inform('FUTURE_OUTAGE', {config, nowDate})
             }
-
-            this.informer.reset({id: monitor.id, dateString, timeString});
         });
 
-        overallResult.forEach(result => {
-            const config = ConfigHelper.getConfig(result.id, this.monitorsConfig);
-            this.pinger.updateLastState(result.status, config);
+        overallResult.forEach(monitor => {
+            const config = ConfigHelper.getConfig(monitor.id, this.monitorsConfig);
+            this.pinger.updateLastState(monitor.status, config);
         });
     }
 
