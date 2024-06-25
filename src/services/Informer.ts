@@ -35,65 +35,57 @@ export class Informer implements InformerInterface {
     inform(type: InfoType, options: InformOptions) {
         // @ts-ignore
         const storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.config.ID;
-        const timeStamp = options.nowDate.valueOf();
 
         if (!options.config[type]) {
             throw new Error('Informer: Undefined config');
         }
 
-        this.informDaily(type, storageKey, options);
-        this.informPerMinute(type, storageKey, options);
+        this.informWithFrequency(type, storageKey, options, TIME.DAY);
+        this.informWithFrequency(type, storageKey, options, TIME.MINUTE);
+    }
 
+    private informWithFrequency(type: InfoType, storageKey: string, options: InformOptions, frequency: number) {
+        const isInformed = this.isInformed({
+            storageKey,
+            nowDate: options.nowDate,
+            minDifference: frequency,
+        });
+
+        if (isInformed) {
+            return;
+        }
+
+        if (frequency === TIME.DAY) {
+            switch (type) {
+                case 'STATISTICS':
+                    this.statisticsInformer.inform(options.config);
+                    break;
+                case 'SCHEDULE':
+                    this.scheduleInformer.inform(options.config);
+                    break;
+            }
+        }
+
+        if (frequency === TIME.MINUTE) {
+            switch (type) {
+                case 'FUTURE_OUTAGE':
+                    this.outageInformer.inform(options.config);
+                    break;
+            }
+        }
+
+        const timeStamp = options.nowDate.valueOf();
         this.userProperties.setProperty(storageKey, timeStamp.toString());
     }
 
-    private informDaily(type: InfoType, storageKey: string, options: InformOptions) {
-        const isInformed = this.isInformed({
-            storageKey,
-            nowDate: options.nowDate,
-            minDifference: TIME.DAY,
-        });
-
-        if (isInformed) {
-            return;
-        }
-
-        switch (type) {
-            case 'STATISTICS':
-                this.statisticsInformer.inform(options.config);
-                break;
-            case 'SCHEDULE':
-                this.scheduleInformer.inform(options.config);
-                break;
-        }
-    }
-
-    private informPerMinute(type: InfoType, storageKey: string, options: InformOptions) {
-        const isInformed = this.isInformed({
-            storageKey,
-            nowDate: options.nowDate,
-            minDifference: TIME.MINUTE,
-        });
-
-        if (isInformed) {
-            return;
-        }
-
-        switch (type) {
-            case 'FUTURE_OUTAGE':
-                this.outageInformer.inform(options.config);
-                break;
-        }
-    }
-
     private isInformed({storageKey, nowDate, minDifference}: isInformedOptions): boolean {
-        const informedDate = this.userProperties.getProperty(storageKey);
+        const previousTimestamp = this.userProperties.getProperty(storageKey);
 
-        if (!informedDate) {
+        if (!previousTimestamp) {
             return false;
         }
 
-        const previousDate = new Date(informedDate);
+        const previousDate = new Date(previousTimestamp);
         const timeDifference = DateHelper.getDifference(nowDate, previousDate);
 
         return timeDifference < minDifference;
