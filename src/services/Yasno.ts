@@ -86,7 +86,7 @@ export class Yasno implements YasnoInterface {
         const nowMinute = now.getMinutes();
         const nowDay = (now.getDay() + 6) % 7;
         const schedule = this.getSchedule({region, group, day: nowDay});
-        const hours = nowHour + 1 > 23 ? 0 : nowHour + 1;
+        const hours = nowHour + 1; // > 23 ? 0 : nowHour + 1; // TODO: handle next day
 
         if (schedule === null) {
             return false;
