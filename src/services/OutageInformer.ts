@@ -1,6 +1,8 @@
 import {TelegramServiceInterface} from './TelegramService';
 import {YasnoInterface} from './Yasno';
 import {BotConfigType} from '../../types/BotConfigType';
+import {StringHelper} from '../utils/StringHelper';
+import {PLURAL_CONFIG} from '../constants/pluralConfig';
 
 export interface OutageInformerInterface {
     inform(config: BotConfigType): void
@@ -27,7 +29,10 @@ export class OutageInformer implements OutageInformerInterface {
             return;
         }
 
-        const message = `🚧 Через ${config.FUTURE_OUTAGE.MINUTES} хвилин можливе відключення`;
+        const minutesLeft = 60 - config.FUTURE_OUTAGE.MINUTES;
+        const minutesText = StringHelper.pluralize(minutesLeft, PLURAL_CONFIG.MINUTES);
+
+        const message = `🚧 Через ${minutesLeft} ${minutesText} можливе відключення`;
 
         this.telegramService.sendMessages(message, config.TELEGRAM_CHATS);
     }
