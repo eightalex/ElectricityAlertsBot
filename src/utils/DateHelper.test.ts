@@ -12,6 +12,16 @@ describe('DateHelper', () => {
 
             expect(difference).toEqual(expectedDifference);
         });
+
+        it('should return the 0 between same dates', () => {
+            const dateFirst = new Date('2022-01-01T00:00:00.000Z');
+            const dateSecond = new Date('2022-01-01T00:00:00.000Z');
+            const expectedDifference = 0;
+
+            const difference = DateHelper.getDifference(dateFirst, dateSecond);
+
+            expect(difference).toEqual(expectedDifference);
+        });
     });
 
     describe('getTimeString', () => {

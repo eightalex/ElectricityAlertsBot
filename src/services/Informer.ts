@@ -6,7 +6,7 @@ import {ScheduleInformerInterface} from './ScheduleInformer';
 import {OutageInformerInterface} from './OutageInformer';
 import {DateHelper} from '../utils/DateHelper';
 
-export type InfoType = 'STATISTICS' | 'SCHEDULE' | 'FUTURE_OUTAGE';
+type InfoType = 'STATISTICS' | 'SCHEDULE' | 'FUTURE_OUTAGE';
 
 type InformOptions = {
     nowDate: Date
@@ -19,6 +19,13 @@ type isInformedOptions = {
     minDifference: number
 }
 
+type informWithFrequencyOptions = {
+    type: InfoType
+    storageKey: string
+    options: InformOptions
+    frequency: number
+}
+
 export interface InformerInterface {
     inform(type: InfoType, options: InformOptions): void
 }
@@ -26,25 +33,48 @@ export interface InformerInterface {
 export class Informer implements InformerInterface {
     private readonly userProperties = PropertiesService.getUserProperties();
 
+    private informers: Record<InfoType, {
+        INSTANCE: StatisticsInformerInterface | ScheduleInformerInterface | OutageInformerInterface
+        STORAGE_KEY: keyof typeof STORAGE_KEY
+        FREQUENCY: number
+    }>;
+
     constructor(
-        private statisticsInformer: StatisticsInformerInterface,
-        private scheduleInformer: ScheduleInformerInterface,
-        private outageInformer: OutageInformerInterface,
-    ) {}
+        statisticsInformer: StatisticsInformerInterface,
+        scheduleInformer: ScheduleInformerInterface,
+        outageInformer: OutageInformerInterface,
+    ) {
+        this.informers = {
+            STATISTICS: {
+                INSTANCE: statisticsInformer,
+                STORAGE_KEY: 'STATISTICS_INFORMED_DATE',
+                FREQUENCY: TIME.DAY,
+            },
+            SCHEDULE: {
+                INSTANCE: scheduleInformer,
+                STORAGE_KEY: 'SCHEDULE_INFORMED_DATE',
+                FREQUENCY: TIME.DAY,
+            },
+            FUTURE_OUTAGE: {
+                INSTANCE: outageInformer,
+                STORAGE_KEY: 'FUTURE_OUTAGE_INFORMED_DATE',
+                FREQUENCY: TIME.MINUTE,
+            },
+        };
+    }
 
     inform(type: InfoType, options: InformOptions) {
-        // @ts-ignore
-        const storageKey = STORAGE_KEY[type + '_INFORMED_DATE'] + options.config.ID;
+        const key = this.informers[type].STORAGE_KEY;
+        const storageKey = STORAGE_KEY[key] + options.config.ID;
 
         if (!options.config[type]) {
             throw new Error('Informer: Undefined config');
         }
 
-        this.informWithFrequency(type, storageKey, options, TIME.DAY);
-        this.informWithFrequency(type, storageKey, options, TIME.MINUTE);
+        this.informWithFrequency({type, storageKey, options, frequency: this.informers[type].FREQUENCY});
     }
 
-    private informWithFrequency(type: InfoType, storageKey: string, options: InformOptions, frequency: number) {
+    private informWithFrequency({type, storageKey, options, frequency}: informWithFrequencyOptions) {
         const isInformed = this.isInformed({
             storageKey,
             nowDate: options.nowDate,
@@ -55,25 +85,7 @@ export class Informer implements InformerInterface {
             return;
         }
 
-        if (frequency === TIME.DAY) {
-            switch (type) {
-                case 'STATISTICS':
-                    this.statisticsInformer.inform(options.config);
-                    break;
-                case 'SCHEDULE':
-                    this.scheduleInformer.inform(options.config);
-                    break;
-            }
-        }
-
-        if (frequency === TIME.MINUTE) {
-            switch (type) {
-                case 'FUTURE_OUTAGE':
-                    this.outageInformer.inform(options.config);
-                    break;
-            }
-        }
-
+        this.informers[type].INSTANCE.inform(options.config);
         const timeStamp = options.nowDate.valueOf();
         this.userProperties.setProperty(storageKey, timeStamp.toString());
     }
@@ -85,7 +97,8 @@ export class Informer implements InformerInterface {
             return false;
         }
 
-        const previousDate = new Date(previousTimestamp);
+        const preparedTimestamp = parseInt(previousTimestamp, 10);
+        const previousDate = new Date(preparedTimestamp);
         const timeDifference = DateHelper.getDifference(nowDate, previousDate);
 
         return timeDifference < minDifference;
