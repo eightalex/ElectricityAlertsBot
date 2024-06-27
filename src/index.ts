@@ -119,13 +119,36 @@ export function doPost(event: GoogleAppsScript.Events.DoPost) {
 }
 
 export function informStatistics() {
-    statisticsInformer.inform(config);
+    informer.inform('STATISTICS', {config, nowDate: new Date()})
 }
 
 export function informSchedule() {
-    scheduleInformer.inform(config);
+    informer.inform('SCHEDULE', {config, nowDate: new Date()})
 }
 
 export function informOutage() {
-    outageInformer.inform(config);
+    informer.inform('FUTURE_OUTAGE', {config, nowDate: new Date()})
+}
+
+export function resetStatistics() {
+    informer.reset('STATISTICS', config.ID);
+}
+
+export function resetSchedule() {
+    informer.reset('SCHEDULE', config.ID);
+}
+
+export function resetOutage() {
+    informer.reset('FUTURE_OUTAGE', config.ID);
+}
+
+export function resetAllInformers() {
+    informer.reset('STATISTICS', config.ID);
+    informer.reset('SCHEDULE', config.ID);
+    informer.reset('FUTURE_OUTAGE', config.ID);
+}
+
+export function getProperties() {
+    const userProperties = PropertiesService.getUserProperties();
+    Logger.log(userProperties.getProperties());
 }

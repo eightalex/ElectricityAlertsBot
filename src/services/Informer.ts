@@ -74,6 +74,13 @@ export class Informer implements InformerInterface {
         this.informWithFrequency({type, storageKey, options, frequency: this.informers[type].FREQUENCY});
     }
 
+    reset(type: InfoType, id: number) {
+        const key = this.informers[type].STORAGE_KEY;
+        const storageKey = STORAGE_KEY[key] + id;
+
+        this.userProperties.deleteProperty(storageKey);
+    }
+
     private informWithFrequency({type, storageKey, options, frequency}: informWithFrequencyOptions) {
         const isInformed = this.isInformed({
             storageKey,
