@@ -76,17 +76,6 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         },
     },
     {
-        ID: IDS.MYKHAILIVSKA,
-        NAME: 'mykhailivska',
-        MONITORS: [MONITORS_MAP.MYKHAILIVSKA],
-        TELEGRAM_CHATS: [
-            {chat_id: '@mykhailivska_alerts'},
-        ],
-        STATISTICS: {
-            INFORM_TIME: '23:58',
-        },
-    },
-    {
         ID: IDS.KOMBINATNA25A_2_SECTION,
         NAME: 'kombinatna25a_2_section',
         MONITORS: [MONITORS_MAP.UNDERNET_25A_2_SECTION],
