@@ -7,9 +7,17 @@ export const MONITORS_MAP = {
     MYKHAILIVSKA: 797113177,
 };
 
+// Do never change id's
+export const IDS = {
+    KOMBINATNA_25A: 1,
+    MYKHAILIVSKA: 2,
+    KOMBINATNA25A_2_SECTION: 3,
+    KOMBINATNA25A_4_SECTION: 4,
+};
+
 export const MONITORS_CONFIG: BotConfigType[] = [
     {
-        ID: 1,
+        ID: IDS.KOMBINATNA_25A,
         NAME: 'kombinatna25a',
         REGION: REGION.KYIV,
         GROUP: 5,
@@ -32,7 +40,7 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         },
     },
     {
-        ID: 2,
+        ID: IDS.MYKHAILIVSKA,
         NAME: 'mykhailivska',
         MONITORS: [MONITORS_MAP.MYKHAILIVSKA],
         TELEGRAM_CHATS: [
@@ -46,7 +54,7 @@ export const MONITORS_CONFIG: BotConfigType[] = [
 
 export const MONITORS_CONFIG_DEV: BotConfigType[] = [
     {
-        ID: 1,
+        ID: IDS.KOMBINATNA_25A,
         NAME: 'kombinatna25a',
         REGION: REGION.KYIV,
         GROUP: 5,
@@ -68,7 +76,7 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         },
     },
     {
-        ID: 2,
+        ID: IDS.MYKHAILIVSKA,
         NAME: 'mykhailivska',
         MONITORS: [MONITORS_MAP.MYKHAILIVSKA],
         TELEGRAM_CHATS: [
@@ -79,7 +87,7 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         },
     },
     {
-        ID: 3,
+        ID: IDS.KOMBINATNA25A_2_SECTION,
         NAME: 'kombinatna25a_2_section',
         MONITORS: [MONITORS_MAP.UNDERNET_25A_2_SECTION],
         TELEGRAM_CHATS: [
@@ -91,7 +99,7 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
         },
     },
     {
-        ID: 4,
+        ID: IDS.KOMBINATNA25A_4_SECTION,
         NAME: 'kombinatna25a_4_section',
         MONITORS: [MONITORS_MAP.BOILER_SOCKET_4_SECTION],
         TELEGRAM_CHATS: [
