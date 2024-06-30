@@ -33,6 +33,22 @@ const templateName = {
 export class Yasno implements YasnoInterface {
     private url = 'https://api.yasno.com.ua/api/v1/pages/home/schedule-turn-off-electricity';
 
+    private getData(): YasnoResponse {
+        const cache = CacheService.getScriptCache();
+        const cachedData = cache.get('yasno');
+
+        if (cachedData) {
+            return JSON.parse(cachedData);
+        }
+
+        const data = this.fetchData();
+        const dayInSeconds = 60 * 60 * 24;
+
+        cache.put('yasno', JSON.stringify(data), dayInSeconds);
+
+        return data;
+    }
+
     private fetchData(): YasnoResponse {
         const result = UrlFetchApp.fetch(this.url, {
             method: 'get',
@@ -52,7 +68,7 @@ export class Yasno implements YasnoInterface {
      * @param day – 0 for Monday, 1 for Tuesday, etc.
      */
     getSchedule({region, group, day}: getScheduleOptions): Outage[] | null {
-        const response = this.fetchData();
+        const response = this.getData();
         const scheduleComponent = response.components.find(this.isScheduleComponent);
 
         if (!scheduleComponent || !scheduleComponent.available_regions.includes(region)) {
