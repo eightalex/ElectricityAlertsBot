@@ -1,5 +1,6 @@
 import {Outage, RegionType, YasnoResponse} from '../../types/YasnoType';
 import {Component, ScheduleComponent} from '../../types/YasnoType';
+import {TIME_IN_SECONDS} from '../constants/time';
 
 type baseOptions = {
     region: RegionType
@@ -42,9 +43,8 @@ export class Yasno implements YasnoInterface {
         }
 
         const data = this.fetchData();
-        const dayInSeconds = 60 * 60 * 24;
 
-        cache.put('yasno', JSON.stringify(data), dayInSeconds);
+        cache.put('yasno', JSON.stringify(data), TIME_IN_SECONDS.DAY);
 
         return data;
     }
