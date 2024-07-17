@@ -5,6 +5,7 @@ export const MONITORS_MAP = {
     UNDERNET_25A_2_SECTION: 793214785,
     BOILER_SOCKET_4_SECTION: 793535128,
     MYKHAILIVSKA: 797113177,
+    YAROSLAVA_MUDROHO: 797254797,
 };
 
 // Do never change id's
@@ -13,6 +14,7 @@ export const IDS = {
     MYKHAILIVSKA: 2,
     KOMBINATNA25A_2_SECTION: 3,
     KOMBINATNA25A_4_SECTION: 4,
+    YAROSLAVA_MUDROHO: 5,
 };
 
 export const MONITORS_CONFIG: BotConfigType[] = [
@@ -45,6 +47,17 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         MONITORS: [MONITORS_MAP.MYKHAILIVSKA],
         TELEGRAM_CHATS: [
             {chat_id: '@mykhailivska_alerts'},
+        ],
+        STATISTICS: {
+            INFORM_TIME: '23:58',
+        },
+    },
+    {
+        ID: IDS.YAROSLAVA_MUDROHO,
+        NAME: 'yaroslava_mudroho',
+        MONITORS: [MONITORS_MAP.YAROSLAVA_MUDROHO],
+        TELEGRAM_CHATS: [
+            {chat_id: '@yaroslava_mudroho_alerts'}
         ],
         STATISTICS: {
             INFORM_TIME: '23:58',
