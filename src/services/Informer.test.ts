@@ -1,10 +1,6 @@
-import {Informer} from './Informer';
-import {StatisticsInformerInterface} from './statistics/StatisticsInformer';
-import {ScheduleInformerInterface} from './ScheduleInformer';
-import {OutageInformerInterface} from './OutageInformer';
+import {ConcreteInformerInterface, Informer} from './Informer';
 import {BotConfigType} from '../../types/BotConfigType';
 import {TIME} from '../constants/time';
-// import {TIME} from '../constants/time';
 
 const mockDate = new Date();
 
@@ -38,22 +34,22 @@ const PropertiesService = {
 
 describe('Informer', () => {
     let informer: Informer;
-    let mockStatisticsInformer: jest.Mocked<StatisticsInformerInterface>;
-    let mockScheduleInformer: jest.Mocked<ScheduleInformerInterface>;
-    let mockOutageInformer: jest.Mocked<OutageInformerInterface>;
+    let mockStatisticsInformer: jest.Mocked<ConcreteInformerInterface>;
+    let mockScheduleInformer: jest.Mocked<ConcreteInformerInterface>;
+    let mockOutageInformer: jest.Mocked<ConcreteInformerInterface>;
 
     beforeEach(() => {
         mockStatisticsInformer = {
             inform: jest.fn(),
-        } as jest.Mocked<StatisticsInformerInterface>;
+        } as jest.Mocked<ConcreteInformerInterface>;
 
         mockScheduleInformer = {
             inform: jest.fn(),
-        } as jest.Mocked<ScheduleInformerInterface>;
+        } as unknown as jest.Mocked<ConcreteInformerInterface>;
 
         mockOutageInformer = {
             inform: jest.fn(),
-        } as jest.Mocked<OutageInformerInterface>;
+        } as jest.Mocked<ConcreteInformerInterface>;
 
         informer = new Informer(
             mockStatisticsInformer,

@@ -1,33 +1,44 @@
 import {APP} from '../constants/app';
-import {TelegramChatType} from '../../types/TelegramChatType';
+import {ChatType, SendMessageOptionsType, SendPhotoOptionsType} from '../../types/TelegramType';
 
-type SendMessageOptionsType = {
-    text: string
-    chat_id: string
-    disable_notification?: boolean
-    message_thread_id?: number
+type SendPhotosOptionsType = {
+    photo: GoogleAppsScript.Base.Blob
+    caption?: string
 }
 
 export interface TelegramServiceInterface {
     sendMessage(options: SendMessageOptionsType): void
-    sendMessages(message: string, config: TelegramChatType[]): void
+    sendMessages(text: string, config: ChatType[]): void
+    sendPhoto(options: SendPhotoOptionsType): void
+    sendPhotos(options: SendPhotosOptionsType, config: ChatType[]): void
 }
 
 export class TelegramService implements TelegramServiceInterface {
-    constructor(
-        private urlFetchApp: GoogleAppsScript.URL_Fetch.UrlFetchApp,
-    ) {}
+    private url = `https://api.telegram.org/bot${APP.TELEGRAM.API_KEY}`;
 
     sendMessage(options: SendMessageOptionsType) {
-        this.urlFetchApp.fetch(`https://api.telegram.org/bot${APP.TELEGRAM.API_KEY}/sendMessage`, {
+        UrlFetchApp.fetch(this.url + '/sendMessage', {
             method: 'post',
             payload: options,
         });
     }
 
-    sendMessages(message: string, config: TelegramChatType[]) {
+    sendMessages(text: string, config: ChatType[]) {
         config.forEach(config => {
-            this.sendMessage({text: message, ...config});
+            this.sendMessage({...config, text});
+        });
+    }
+
+    sendPhoto(options: SendPhotoOptionsType) {
+        UrlFetchApp.fetch(this.url + '/sendPhoto', {
+            method: 'post',
+            payload: options,
+        });
+    }
+
+    sendPhotos(options: SendPhotosOptionsType, config: ChatType[]) {
+        config.forEach(config => {
+            this.sendPhoto({...config, ...options});
         });
     }
 }

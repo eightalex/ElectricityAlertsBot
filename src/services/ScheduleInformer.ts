@@ -2,12 +2,9 @@ import {ScheduleGeneratorInterface} from './message/ScheduleGenerator';
 import {BotConfigType} from '../../types/BotConfigType';
 import {TelegramServiceInterface} from './TelegramService';
 import {YasnoInterface} from './Yasno';
+import {ConcreteInformerInterface} from './Informer';
 
-export interface ScheduleInformerInterface {
-    inform(config: BotConfigType): void
-}
-
-export class ScheduleInformer implements ScheduleInformerInterface {
+export class ScheduleInformer implements ConcreteInformerInterface {
     constructor(
         private scheduleGenerator: ScheduleGeneratorInterface,
         private telegramService: TelegramServiceInterface,
@@ -22,7 +19,7 @@ export class ScheduleInformer implements ScheduleInformerInterface {
         const date = new Date();
         /**
          * We receive 1 for Monday, 2 for Tuesday, etc. And 0 for Sunday
-         * It's correct, because we need to get the schedule for the next da
+         * It's correct, because we need to get the schedule for the next day
          */
         const dayOfWeek = date.getDay();
         const schedule = this.yasno.getSchedule({

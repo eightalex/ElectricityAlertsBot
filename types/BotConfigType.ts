@@ -1,4 +1,4 @@
-import {TelegramChatType} from './TelegramChatType';
+import {ChatType} from './TelegramType';
 import {RegionType} from './YasnoType';
 
 export type BotConfigType = {
@@ -9,7 +9,7 @@ export type BotConfigType = {
     DEPENDENCY_ID?: number
     HEARTBEAT?: boolean
     MONITORS?: number[]
-    TELEGRAM_CHATS: TelegramChatType[]
+    TELEGRAM_CHATS: ChatType[]
     STATISTICS?: {
         INFORM_TIME: string
     }

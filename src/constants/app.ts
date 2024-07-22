@@ -6,4 +6,8 @@ export const APP = {
     TELEGRAM: {
         API_KEY: process.env.TELEGRAM_API_KEY || '',
     },
+    HCTI: {
+        API_KEY: process.env.HCTI_API_KEY || '',
+        USER_ID: process.env.HCTI_USER_ID || '',
+    },
 };

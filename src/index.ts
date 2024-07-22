@@ -1,3 +1,4 @@
+import {REGION} from './constants/region';
 import {MONITORS_MAP} from './constants/monitorsConfig';
 import {MonitorsFetcher} from './services/monitors/MonitorsFetcher';
 import {MonitorsStatusChecker} from './services/monitors/MonitorsStatusChecker';
@@ -10,8 +11,6 @@ import {StatisticsInformer} from './services/statistics/StatisticsInformer';
 import {StatisticsMessageGenerator} from './services/statistics/StatisticsMessageGenerator';
 import {StatisticsService} from './services/statistics/StatisticsService';
 import {App} from './App';
-import {ScheduleInformer} from './services/ScheduleInformer';
-import {ScheduleGenerator} from './services/message/ScheduleGenerator';
 import {MonitorsAdapter} from './services/monitors/MonitorsAdapter';
 import {ForecastGenerator} from './services/message/ForecastGenerator';
 import {Informer} from './services/Informer';
@@ -19,16 +18,21 @@ import {HeartbeatService} from './services/HeartbeatService';
 import {Yasno} from './services/Yasno';
 import {BotConfigType} from '../types/BotConfigType';
 import {OutageInformer} from './services/OutageInformer';
+import {ScheduleImage} from './services/schedule/ScheduleImage';
+import {DateHelper} from './utils/DateHelper';
+import {HctiService} from './services/HctiService';
+import {ScheduleImageInformer} from './services/ScheduleImageInformer';
 
 const yasno = new Yasno();
 const monitorsAdapter = new MonitorsAdapter();
 const monitorsFetcher = new MonitorsFetcher();
-const telegramService = new TelegramService(UrlFetchApp);
+const scheduleImage = new ScheduleImage();
+const hctiService = new HctiService();
+const telegramService = new TelegramService();
 const timeDifferenceGenerator = new TimeDifferenceGenerator();
 const messageGenerator = new MessageGenerator(timeDifferenceGenerator, yasno);
 const statisticsMessageGenerator = new StatisticsMessageGenerator();
 const statisticsBuilder = new StatisticsBuilder();
-const scheduleGenerator = new ScheduleGenerator();
 const forecastGenerator = new ForecastGenerator();
 const heartbeatService = new HeartbeatService(PropertiesService);
 
@@ -48,8 +52,9 @@ const statisticsInformer = new StatisticsInformer(
     telegramService,
 );
 
-const scheduleInformer = new ScheduleInformer(
-    scheduleGenerator,
+const scheduleImageInformer = new ScheduleImageInformer(
+    scheduleImage,
+    hctiService,
     telegramService,
     yasno,
 );
@@ -68,7 +73,7 @@ const pinger = new Pinger(
 
 const informer = new Informer(
     statisticsInformer,
-    scheduleInformer,
+    scheduleImageInformer,
     outageInformer,
 );
 
@@ -85,7 +90,7 @@ const config: BotConfigType = {
     ID: 1,
     NAME: 'kombinatna25a',
     GROUP: 5,
-    REGION: 'kiev',
+    REGION: REGION.KYIV,
     TELEGRAM_CHATS: [
         {
             chat_id: '@kombinatna_test_alerts',
@@ -130,19 +135,7 @@ export function informOutage() {
     informer.inform('FUTURE_OUTAGE', {config, nowDate: new Date()})
 }
 
-export function resetStatistics() {
-    informer.reset('STATISTICS', config.ID);
-}
-
-export function resetSchedule() {
-    informer.reset('SCHEDULE', config.ID);
-}
-
-export function resetOutage() {
-    informer.reset('FUTURE_OUTAGE', config.ID);
-}
-
-export function resetAllInformers() {
+export function resetInformers() {
     informer.reset('STATISTICS', config.ID);
     informer.reset('SCHEDULE', config.ID);
     informer.reset('FUTURE_OUTAGE', config.ID);
@@ -151,4 +144,30 @@ export function resetAllInformers() {
 export function getProperties() {
     const userProperties = PropertiesService.getUserProperties();
     Logger.log(userProperties.getProperties());
+}
+
+export function sendScheduleImage() {
+    const now = new Date();
+    const tomorrow = DateHelper.addDays(now, 1);
+
+    const daySchedule = yasno.getSchedule({
+        region: REGION.KYIV,
+        group: 5,
+        day: tomorrow.getDay(),
+    });
+
+    if (daySchedule === null) {
+        Logger.log('No schedule for today');
+        return;
+    }
+
+    const svg = scheduleImage.createSingleDayScheduleSVG(daySchedule);
+    const photo = hctiService.convertSvgToPng(svg);
+    const date = DateHelper.getDateStringV2(tomorrow);
+
+    telegramService.sendPhoto({
+        photo,
+        caption: `Розклад на завтра (${date})`,
+        chat_id: '@kombinatna_test_alerts',
+    });
 }

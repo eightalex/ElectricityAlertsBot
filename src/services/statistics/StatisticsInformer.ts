@@ -2,12 +2,9 @@ import {STORAGE_KEY} from '../../constants/storageKey';
 import {StatisticsMessageGeneratorInterface} from './StatisticsMessageGenerator';
 import {BotConfigType} from '../../../types/BotConfigType';
 import {TelegramServiceInterface} from '../TelegramService';
+import {ConcreteInformerInterface} from '../Informer';
 
-export interface StatisticsInformerInterface {
-    inform(config: BotConfigType): void
-}
-
-export class StatisticsInformer implements StatisticsInformerInterface {
+export class StatisticsInformer implements ConcreteInformerInterface {
     private readonly userProperties: GoogleAppsScript.Properties.Properties;
 
     constructor(

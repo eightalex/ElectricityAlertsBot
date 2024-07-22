@@ -1,9 +1,6 @@
 import {TIME} from '../constants/time';
 import {STORAGE_KEY} from '../constants/storageKey';
 import {BotConfigType} from '../../types/BotConfigType';
-import {StatisticsInformerInterface} from './statistics/StatisticsInformer';
-import {ScheduleInformerInterface} from './ScheduleInformer';
-import {OutageInformerInterface} from './OutageInformer';
 import {DateHelper} from '../utils/DateHelper';
 
 type InfoType = 'STATISTICS' | 'SCHEDULE' | 'FUTURE_OUTAGE';
@@ -26,6 +23,10 @@ type informWithFrequencyOptions = {
     frequency: number
 }
 
+export interface ConcreteInformerInterface {
+    inform(config: BotConfigType): void
+}
+
 export interface InformerInterface {
     inform(type: InfoType, options: InformOptions): void
 }
@@ -34,15 +35,15 @@ export class Informer implements InformerInterface {
     private readonly userProperties = PropertiesService.getUserProperties();
 
     private informers: Record<InfoType, {
-        INSTANCE: StatisticsInformerInterface | ScheduleInformerInterface | OutageInformerInterface
+        INSTANCE: ConcreteInformerInterface
         STORAGE_KEY: keyof typeof STORAGE_KEY
         FREQUENCY: number
     }>;
 
     constructor(
-        statisticsInformer: StatisticsInformerInterface,
-        scheduleInformer: ScheduleInformerInterface,
-        outageInformer: OutageInformerInterface,
+        statisticsInformer: ConcreteInformerInterface,
+        scheduleInformer: ConcreteInformerInterface,
+        outageInformer: ConcreteInformerInterface,
     ) {
         this.informers = {
             STATISTICS: {

@@ -6,4 +6,5 @@ export const STRING = {
     SLASH: '/',
     COLON: ':',
     COMMA: ',',
+    DOT: '.',
 };

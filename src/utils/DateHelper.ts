@@ -35,6 +35,17 @@ export class DateHelper {
         return date.getDate() + STRING.SLASH + (date.getMonth() + gap) + STRING.SLASH + date.getFullYear();
     }
 
+    /**
+     * Returns string like '31.12.2024'
+     */
+    static getDateStringV2(date: Date): string {
+        return [
+            ('0' + date.getDate()).slice(-2),
+            ('0' + (date.getMonth() + 1)).slice(-2),
+            date.getFullYear(),
+        ].join(STRING.DOT);
+    }
+
     static getTimeFromTimeString(timeString: string): TimeStringNumbers {
         const times = timeString.split(STRING.COLON);
 

@@ -3,12 +3,9 @@ import {YasnoInterface} from './Yasno';
 import {BotConfigType} from '../../types/BotConfigType';
 import {StringHelper} from '../utils/StringHelper';
 import {PLURAL_CONFIG} from '../constants/pluralConfig';
+import {ConcreteInformerInterface} from './Informer';
 
-export interface OutageInformerInterface {
-    inform(config: BotConfigType): void
-}
-
-export class OutageInformer implements OutageInformerInterface {
+export class OutageInformer implements ConcreteInformerInterface {
     constructor(
         private telegramService: TelegramServiceInterface,
         private yasno: YasnoInterface,
