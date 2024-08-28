@@ -69,6 +69,10 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
     {
         ID: IDS.KOMBINATNA_25A,
         NAME: 'kombinatna25a',
+        TITLE: {
+            AVAILABLE: '🟢 Kombinatna Electricity Alerts',
+            UNAVAILABLE: '⚫️ Kombinatna Electricity Alerts',
+        },
         REGION: REGION.KYIV,
         GROUP: 5,
         MONITORS: [

@@ -7,9 +7,14 @@ import {
     ForceReply,
 } from 'typegram';
 
-export type ChatType = {
+type TelegramPhoto = string | Blob | GoogleAppsScript.Base.Blob;
+
+export type ChatIdType = {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string
+}
+
+export type ChatType = ChatIdType & {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number
 }
@@ -38,7 +43,7 @@ export type SendMessageOptionsType = SenderOptionsType & {
 
 export type SendPhotoOptionsType = SenderOptionsType & {
     /** Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. */
-    photo: string | Blob | GoogleAppsScript.Base.Blob
+    photo: TelegramPhoto
     /** Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing */
     caption?: string
     /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
@@ -47,4 +52,19 @@ export type SendPhotoOptionsType = SenderOptionsType & {
     has_spoiler?: boolean
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean
+}
+
+export type SetChatPhotoOptionsType = ChatIdType & {
+    /** New chat photo, uploaded using multipart/form-data */
+    photo: TelegramPhoto
+}
+
+export type SetChatTitleOptionsType = ChatIdType & {
+    /** New chat title, 1-255 characters */
+    title: string;
+}
+
+export type DeleteMessageOptionsType = ChatIdType & {
+    /** Identifier of the message to delete */
+    message_id: number
 }

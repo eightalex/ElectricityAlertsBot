@@ -65,6 +65,11 @@ export class Pinger implements PingerInterface {
         const lastTime = this.userProperties.getProperty(key.lastTime) || '0';
         const message = this.messageGenerator.generate({isAvailable, lastTime, pingOptions: options});
 
+        if (options.config.TITLE !== undefined) {
+            const title = isAvailable ? options.config.TITLE.AVAILABLE : options.config.TITLE.UNAVAILABLE;
+            this.telegramService.setChatsTitle({title}, options.config.TELEGRAM_CHATS);
+        }
+
         this.telegramService.sendMessages(message, options.config.TELEGRAM_CHATS);
 
         this.userProperties.setProperties({

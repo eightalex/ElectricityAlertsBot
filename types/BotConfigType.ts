@@ -4,6 +4,10 @@ import {RegionType} from './YasnoType';
 export type BotConfigType = {
     ID: number
     NAME: string
+    TITLE?: {
+        AVAILABLE: string
+        UNAVAILABLE: string
+    }
     REGION?: RegionType
     GROUP?: number
     DEPENDENCY_ID?: number
