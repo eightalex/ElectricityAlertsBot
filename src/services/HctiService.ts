@@ -19,7 +19,7 @@ export class HctiService implements HctiServiceInterface {
             payload: JSON.stringify({
                 html: svgContent,
                 css: '',
-                google_fonts: '',
+                google_fonts: 'Roboto',
             })
         });
 

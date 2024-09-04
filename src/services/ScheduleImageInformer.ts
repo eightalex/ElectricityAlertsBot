@@ -36,7 +36,7 @@ export class ScheduleImageInformer implements ConcreteInformerInterface {
             return;
         }
 
-        const svg = this.scheduleImage.createSingleDayScheduleSVG(schedule);
+        const svg = this.scheduleImage.createTimelineSVG(schedule);
         const photo = this.hctiService.convertSvgToPng(svg);
         const tomorrowDate = DateHelper.getDateStringV2(tomorrow);
 
