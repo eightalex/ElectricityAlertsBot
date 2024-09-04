@@ -44,7 +44,7 @@ export class Yasno implements YasnoInterface {
 
         const data = this.fetchData();
 
-        cache.put('yasno', JSON.stringify(data), TIME_IN_SECONDS.DAY);
+        cache.put('yasno', JSON.stringify(data), TIME_IN_SECONDS.HOUR);
 
         return data;
     }
