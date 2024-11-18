@@ -123,6 +123,10 @@ export function doPost(event: GoogleAppsScript.Events.DoPost) {
     app.webhookHeartbeat(event.postData.contents);
 }
 
+export function clearCache() {
+    yasno.clearCache();
+}
+
 export function informStatistics() {
     informer.inform('STATISTICS', {config, nowDate: new Date()})
 }

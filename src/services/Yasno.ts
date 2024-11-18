@@ -43,10 +43,11 @@ export class Yasno implements YasnoInterface {
         }
 
         const data = this.fetchData();
+        const dataPrepared = this.prepareData(data);
 
-        cache.put('yasno', JSON.stringify(data), TIME_IN_SECONDS.HOUR);
+        cache.put('yasno', JSON.stringify(dataPrepared), TIME_IN_SECONDS.HOUR);
 
-        return data;
+        return dataPrepared;
     }
 
     private fetchData(): YasnoResponse {
@@ -57,8 +58,24 @@ export class Yasno implements YasnoInterface {
         return JSON.parse(result.getContentText());
     }
 
+    /**
+     * Remove unnecessary data from the response
+     * (CacheService can't store too much data)
+     * @param data
+     * @private
+     */
+    private prepareData(data: YasnoResponse): YasnoResponse {
+        data.components = data.components.filter(this.isScheduleComponent);
+        return data;
+    }
+
     private isScheduleComponent(component: Component): component is ScheduleComponent {
         return component.template_name === templateName.schedule;
+    }
+
+    clearCache() {
+        const cache = CacheService.getScriptCache();
+        cache.remove('yasno');
     }
 
     /**
