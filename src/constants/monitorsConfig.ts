@@ -32,7 +32,7 @@ export const MONITORS_CONFIG: BotConfigType[] = [
             {chat_id: '-1001811166479', message_thread_id: 567},
         ],
         SCHEDULE: {
-            INFORM_TIME: '21:00',
+            INFORM_TIME: '20:00',
         },
         FUTURE_OUTAGE: {
             MINUTES: 30,
@@ -66,10 +66,6 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
     {
         ID: IDS.KOMBINATNA_25A,
         NAME: 'kombinatna25a',
-        TITLE: {
-            AVAILABLE: '🟢 Kombinatna Electricity Alerts',
-            UNAVAILABLE: '⚫️ Kombinatna Electricity Alerts',
-        },
         REGION: REGION.KYIV,
         GROUP: 5,
         MONITORS: [
@@ -83,7 +79,7 @@ export const MONITORS_CONFIG_DEV: BotConfigType[] = [
             INFORM_TIME: '23:58',
         },
         SCHEDULE: {
-            INFORM_TIME: '21:00',
+            INFORM_TIME: '20:00',
         },
         FUTURE_OUTAGE: {
             MINUTES: 30,
