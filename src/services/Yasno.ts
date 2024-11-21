@@ -1,5 +1,5 @@
-import { Outage, RegionType } from '../../types/YasnoType';
-import { TIME_IN_SECONDS } from '../constants/time';
+import {Outage, RegionType} from '../../types/YasnoType';
+import {TIME_IN_SECONDS} from '../constants/time';
 
 type baseOptions = {
     region: RegionType
@@ -72,6 +72,41 @@ export class Yasno implements YasnoInterface {
         return JSON.parse(result.getContentText());
     }
 
+    private mergeConsecutiveOutages(outages: Outage[]): Outage[] {
+        if (outages.length === 0) {
+            return [];
+        }
+
+        const sortedOutages = outages.slice().sort((a, b) => a.start - b.start);
+        const mergedOutages: Outage[] = [];
+
+        let currentOutage = { ...sortedOutages[0] };
+
+        for (let i = 1; i < sortedOutages.length; i++) {
+            const nextOutage = sortedOutages[i];
+
+            if (nextOutage === undefined) {
+                break;
+            }
+
+            if (
+                nextOutage.type === currentOutage.type &&
+                nextOutage.start === currentOutage.end
+            ) {
+                currentOutage.end = nextOutage.end;
+            } else {
+                // @ts-ignore
+                mergedOutages.push(currentOutage);
+                currentOutage = { ...nextOutage };
+            }
+        }
+
+        // @ts-ignore
+        mergedOutages.push(currentOutage);
+
+        return mergedOutages;
+    }
+
     clearCache() {
         const cache = CacheService.getScriptCache();
         cache.remove('yasno');
@@ -90,12 +125,13 @@ export class Yasno implements YasnoInterface {
             return null;
         }
 
-        const scheduleGroup = dayData.groups[group];
+        const groupKey = group.toString();
+        const scheduleGroup = dayData.groups[groupKey];
         if (!scheduleGroup) {
             return null;
         }
 
-        return scheduleGroup;
+        return this.mergeConsecutiveOutages(scheduleGroup);
     }
 
     checkFutureOutage({ region, group, minutes }: checkFutureOutageOptions): boolean {
