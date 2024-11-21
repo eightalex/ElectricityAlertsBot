@@ -168,7 +168,7 @@ export function sendScheduleImage() {
         return;
     }
 
-    const svg = scheduleImage.createSingleDayScheduleSVG(daySchedule);
+    const svg = scheduleImage.createTimelineSVG(daySchedule);
     const photo = hctiService.convertSvgToPng(svg);
     const date = DateHelper.getDateStringV2(tomorrow);
 

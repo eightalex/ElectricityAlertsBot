@@ -29,7 +29,9 @@ export interface YasnoInterface {
 interface DailyScheduleData {
     [region: string]: {
         [day in DayType]?: {
-            [groupKey: string]: Outage[]
+            groups: {
+                [groupKey: string]: Outage[]
+            }
         }
     }
 }
@@ -46,11 +48,16 @@ export class Yasno implements YasnoInterface {
         }
 
         const data = this.fetchData();
-        const dailySchedule = data.components[4]?.dailySchedule; // TODO fix magic number
 
-        if (!dailySchedule) {
+        const scheduleComponent = data.components.find(
+            (component: any) => component.template_name === 'electricity-outages-schedule'
+        );
+
+        if (!scheduleComponent?.dailySchedule) {
             throw new Error('Не вдалося отримати dailySchedule з даних');
         }
+
+        const dailySchedule = scheduleComponent.dailySchedule;
 
         cache.put('yasno', JSON.stringify(dailySchedule), TIME_IN_SECONDS.HOUR);
 
@@ -88,7 +95,6 @@ export class Yasno implements YasnoInterface {
             return null;
         }
 
-        // @ts-ignore
         return scheduleGroup;
     }
 
