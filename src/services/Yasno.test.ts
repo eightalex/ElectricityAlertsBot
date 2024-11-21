@@ -30,7 +30,7 @@ describe('Yasno', () => {
 
     describe('getSchedule', () => {
         it('should return null if region is not available', () => {
-            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 0});
+            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 'tomorrow'});
             expect(result).toBeNull();
         });
 
@@ -39,7 +39,7 @@ describe('Yasno', () => {
                 getContentText: jest.fn().mockReturnValue(JSON.stringify({components: [{template_name: 'electricity-outages-schedule', available_regions: ['kiev'], schedule: {kiev: {}}}]})),
                 ...defaultFetchMethods,
             }));
-            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 0});
+            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 'tomorrow'});
             expect(result).toBeNull();
         });
 
@@ -48,7 +48,7 @@ describe('Yasno', () => {
                 getContentText: jest.fn().mockReturnValue(JSON.stringify({components: [{template_name: 'electricity-outages-schedule', available_regions: ['kiev'], schedule: {kiev: {group_1: {}}}}]})),
                 ...defaultFetchMethods,
             }));
-            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 0});
+            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 'tomorrow'});
             expect(result).toBeNull();
         });
 
@@ -58,7 +58,7 @@ describe('Yasno', () => {
                 getContentText: jest.fn().mockReturnValue(JSON.stringify({components: [{template_name: 'electricity-outages-schedule', available_regions: ['kiev'], schedule: {kiev: {group_1: {0: expectedSchedule}}}}]})),
                 ...defaultFetchMethods,
             }));
-            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 0});
+            const result = yasno.getSchedule({region: 'kiev', group: 1, day: 'tomorrow'});
             expect(result).toEqual(expectedSchedule);
         });
     });

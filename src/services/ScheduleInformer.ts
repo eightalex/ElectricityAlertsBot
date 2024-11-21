@@ -16,16 +16,10 @@ export class ScheduleInformer implements ConcreteInformerInterface {
             throw new Error('ScheduleInformer: Undefined config');
         }
 
-        const date = new Date();
-        /**
-         * We receive 1 for Monday, 2 for Tuesday, etc. And 0 for Sunday
-         * It's correct, because we need to get the schedule for the next day
-         */
-        const dayOfWeek = date.getDay();
         const schedule = this.yasno.getSchedule({
             region: config.REGION,
             group: config.GROUP,
-            day: dayOfWeek,
+            day: 'tomorrow',
         });
 
         if (schedule === null) {

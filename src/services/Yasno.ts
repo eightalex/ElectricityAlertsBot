@@ -1,14 +1,15 @@
-import {Outage, RegionType, YasnoResponse} from '../../types/YasnoType';
-import {Component, ScheduleComponent} from '../../types/YasnoType';
-import {TIME_IN_SECONDS} from '../constants/time';
+import { Outage, RegionType } from '../../types/YasnoType';
+import { TIME_IN_SECONDS } from '../constants/time';
 
 type baseOptions = {
     region: RegionType
     group: number
 }
 
+type DayType = 'today' | 'tomorrow';
+
 type getScheduleOptions = baseOptions & {
-    day: number
+    day: DayType
 }
 
 type checkFutureOutageOptions = baseOptions & {
@@ -21,20 +22,22 @@ type getNextOutageOptions = baseOptions & {
 
 export interface YasnoInterface {
     getSchedule(options: getScheduleOptions): Outage[] | null
-    checkFutureOutage({region, group, minutes}: checkFutureOutageOptions): boolean
-    getNextOutage({region, group, type}: getNextOutageOptions): Outage | null
+    checkFutureOutage(options: checkFutureOutageOptions): boolean
+    getNextOutage(options: getNextOutageOptions): Outage | null
 }
 
-const templateName = {
-    editor: 'editor',
-    schedule: 'electricity-outages-schedule',
-    faq: 'FrequentlyAskedQuestions',
-};
+interface DailyScheduleData {
+    [region: string]: {
+        [day in DayType]?: {
+            [groupKey: string]: Outage[]
+        }
+    }
+}
 
 export class Yasno implements YasnoInterface {
     private url = 'https://api.yasno.com.ua/api/v1/pages/home/schedule-turn-off-electricity';
 
-    private getData(): YasnoResponse {
+    private getData(): DailyScheduleData {
         const cache = CacheService.getScriptCache();
         const cachedData = cache.get('yasno');
 
@@ -43,14 +46,18 @@ export class Yasno implements YasnoInterface {
         }
 
         const data = this.fetchData();
-        const dataPrepared = this.prepareData(data);
+        const dailySchedule = data.components[4]?.dailySchedule; // TODO fix magic number
 
-        cache.put('yasno', JSON.stringify(dataPrepared), TIME_IN_SECONDS.HOUR);
+        if (!dailySchedule) {
+            throw new Error('Не вдалося отримати dailySchedule з даних');
+        }
 
-        return dataPrepared;
+        cache.put('yasno', JSON.stringify(dailySchedule), TIME_IN_SECONDS.HOUR);
+
+        return dailySchedule;
     }
 
-    private fetchData(): YasnoResponse {
+    private fetchData() {
         const result = UrlFetchApp.fetch(this.url, {
             method: 'get',
         });
@@ -58,86 +65,80 @@ export class Yasno implements YasnoInterface {
         return JSON.parse(result.getContentText());
     }
 
-    /**
-     * Remove unnecessary data from the response
-     * (CacheService can't store too much data)
-     * @param data
-     * @private
-     */
-    private prepareData(data: YasnoResponse): YasnoResponse {
-        data.components = data.components.filter(this.isScheduleComponent);
-        return data;
-    }
-
-    private isScheduleComponent(component: Component): component is ScheduleComponent {
-        return component.template_name === templateName.schedule;
-    }
-
     clearCache() {
         const cache = CacheService.getScriptCache();
         cache.remove('yasno');
     }
 
-    /**
-     * Get schedule for the specified region, group and day
-     * @param region
-     * @param group
-     * @param day – 0 for Monday, 1 for Tuesday, etc.
-     */
-    getSchedule({region, group, day}: getScheduleOptions): Outage[] | null {
-        const response = this.getData();
-        const scheduleComponent = response.components.find(this.isScheduleComponent);
+    getSchedule({ region, group, day }: getScheduleOptions): Outage[] | null {
+        const data = this.getData();
 
-        if (!scheduleComponent || !scheduleComponent.available_regions.includes(region)) {
+        const regionData = data[region];
+        if (!regionData) {
             return null;
         }
 
-        const scheduleRegion = scheduleComponent.schedule[region]
-
-        if (scheduleComponent.schedule[region] === undefined) {
+        const dayData = regionData[day];
+        if (!dayData || !dayData.groups) {
             return null;
         }
 
-        const scheduleGroup = scheduleRegion[`group_${group}`];
-
-        if (scheduleGroup === undefined) {
+        const scheduleGroup = dayData.groups[group];
+        if (!scheduleGroup) {
             return null;
         }
 
-        const scheduleDay = scheduleGroup[day];
-
-        if (scheduleDay === undefined) {
-            return null;
-        }
-
-        return scheduleDay;
+        // @ts-ignore
+        return scheduleGroup;
     }
 
-    checkFutureOutage({region, group, minutes}: checkFutureOutageOptions): boolean {
+    checkFutureOutage({ region, group, minutes }: checkFutureOutageOptions): boolean {
         const now = new Date();
-        const nowHour = now.getHours();
+        let nowHour = now.getHours();
         const nowMinute = now.getMinutes();
-        const nowDay = (now.getDay() + 6) % 7;
-        const schedule = this.getSchedule({region, group, day: nowDay});
-        const hours = nowHour + 1; // > 23 ? 0 : nowHour + 1; // TODO: handle next day
 
-        if (schedule === null) {
+        let day: DayType = 'today';
+
+        if (nowHour >= 23) {
+            nowHour = 0;
+            day = 'tomorrow';
+        } else {
+            nowHour += 1;
+        }
+
+        const schedule = this.getSchedule({ region, group, day });
+
+        if (!schedule) {
             return false;
         }
 
-        const outage = schedule.find(outage => {
-            return outage.type === 'DEFINITE_OUTAGE' && outage.start === hours && nowMinute === minutes;
-        });
-
-        return outage !== undefined;
+        return schedule.some(
+            (outage) =>
+                outage.type === 'DEFINITE_OUTAGE' &&
+                outage.start === nowHour &&
+                nowMinute === minutes
+        );
     }
 
-    getNextOutage({region, group, type}: getNextOutageOptions): Outage | null {
+    getNextOutage({ region, group, type }: getNextOutageOptions): Outage | null {
         const now = new Date();
         const nowHour = now.getHours();
-        const nowDay = (now.getDay() + 6) % 7;
-        const schedule = this.getSchedule({region, group, day: nowDay});
 
-        return schedule?.find(outage => outage.type === 'DEFINITE_OUTAGE' && nowHour < outage[type]) || null;
+        let day: DayType = 'today';
+        if (nowHour >= 23) {
+            day = 'tomorrow';
+        }
+
+        const schedule = this.getSchedule({ region, group, day });
+
+        if (!schedule) {
+            return null;
+        }
+
+        return (
+            schedule.find(
+                (outage) => outage.type === 'DEFINITE_OUTAGE' && nowHour < outage[type]
+            ) || null
+        );
     }
 }

@@ -22,6 +22,7 @@ import {ScheduleImage} from './services/schedule/ScheduleImage';
 import {DateHelper} from './utils/DateHelper';
 import {HctiService} from './services/HctiService';
 import {ScheduleImageInformer} from './services/ScheduleImageInformer';
+import {ScheduleGenerator} from './services/message/ScheduleGenerator';
 
 const yasno = new Yasno();
 const monitorsAdapter = new MonitorsAdapter();
@@ -35,6 +36,7 @@ const statisticsMessageGenerator = new StatisticsMessageGenerator();
 const statisticsBuilder = new StatisticsBuilder();
 const forecastGenerator = new ForecastGenerator();
 const heartbeatService = new HeartbeatService(PropertiesService);
+const scheduleGenerator = new ScheduleGenerator();
 
 
 const monitorsStatusChecker = new MonitorsStatusChecker(
@@ -57,6 +59,7 @@ const scheduleImageInformer = new ScheduleImageInformer(
     hctiService,
     telegramService,
     yasno,
+    scheduleGenerator,
 );
 
 const outageInformer = new OutageInformer(
@@ -157,7 +160,7 @@ export function sendScheduleImage() {
     const daySchedule = yasno.getSchedule({
         region: REGION.KYIV,
         group: 5,
-        day: tomorrow.getDay(),
+        day: 'tomorrow',
     });
 
     if (daySchedule === null) {

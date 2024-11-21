@@ -1,10 +1,10 @@
 import {BotConfigType} from '../../types/BotConfigType';
-import {DateHelper} from '../utils/DateHelper';
 import {ConcreteInformerInterface} from './Informer';
 import {TelegramServiceInterface} from './TelegramService';
 import {YasnoInterface} from './Yasno';
 import {HctiServiceInterface} from './HctiService';
 import {ScheduleImageInterface} from './schedule/ScheduleImage';
+import {ScheduleGeneratorInterface} from './message/ScheduleGenerator';
 
 export class ScheduleImageInformer implements ConcreteInformerInterface {
     constructor(
@@ -12,6 +12,7 @@ export class ScheduleImageInformer implements ConcreteInformerInterface {
         private hctiService: HctiServiceInterface,
         private telegramService: TelegramServiceInterface,
         private yasno: YasnoInterface,
+        private scheduleGenerator: ScheduleGeneratorInterface,
     ) {}
 
     inform(config: BotConfigType) {
@@ -19,17 +20,10 @@ export class ScheduleImageInformer implements ConcreteInformerInterface {
             throw new Error('ScheduleInformer: Undefined config');
         }
 
-        /**
-         * We receive 1 for Monday, 2 for Tuesday, etc. And 0 for Sunday
-         * It's correct, because we need to get the schedule for the next day
-         */
-        const date = new Date();
-        const tomorrow = DateHelper.addDays(date, 1);
-
         const schedule = this.yasno.getSchedule({
             region: config.REGION,
             group: config.GROUP,
-            day: date.getDay(),
+            day: 'tomorrow',
         });
 
         if (schedule === null) {
@@ -38,11 +32,11 @@ export class ScheduleImageInformer implements ConcreteInformerInterface {
 
         const svg = this.scheduleImage.createTimelineSVG(schedule);
         const photo = this.hctiService.convertSvgToPng(svg);
-        const tomorrowDate = DateHelper.getDateStringV2(tomorrow);
+        const caption = this.scheduleGenerator.generate(schedule);
 
         this.telegramService.sendPhotos({
             photo,
-            caption: `Розклад на завтра (${tomorrowDate})`,
+            caption,
         }, config.TELEGRAM_CHATS);
     }
 }
