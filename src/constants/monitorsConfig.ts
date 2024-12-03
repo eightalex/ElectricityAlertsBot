@@ -4,6 +4,7 @@ import {REGION} from './region';
 export const MONITORS_MAP = {
     UNDERNET_25A_2_SECTION: 793214785,
     BOILER_SOCKET_4_SECTION: 793535128,
+    ESP_32_25A_4_SECTION: 798135710,
     MYKHAILIVSKA: 797113177,
     YAROSLAVA_MUDROHO: 797254797,
 };
@@ -26,6 +27,7 @@ export const MONITORS_CONFIG: BotConfigType[] = [
         MONITORS: [
             MONITORS_MAP.BOILER_SOCKET_4_SECTION,
             MONITORS_MAP.UNDERNET_25A_2_SECTION,
+            MONITORS_MAP.ESP_32_25A_4_SECTION,
         ],
         TELEGRAM_CHATS: [
             {chat_id: '@kombinatna_alerts'},
