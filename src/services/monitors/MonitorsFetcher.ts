@@ -18,7 +18,7 @@ export class MonitorsFetcher implements MonitorsFetcherInterface {
             },
         });
 
-        const response = JSON.parse(result.getContentText());
+        const response = JSON.parse(result.getContentText()) as UptimeRobot.ResponseType;
         return response.monitors;
     }
 }
