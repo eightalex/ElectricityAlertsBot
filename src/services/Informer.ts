@@ -1,9 +1,9 @@
-import {TIME} from '../constants/time';
 import {STORAGE_KEY} from '../constants/storageKey';
 import {BotConfigType} from '../../types/BotConfigType';
 import {DateHelper} from '../utils/DateHelper';
+import {TIME} from '../constants/time';
 
-type InfoType = 'STATISTICS' | 'SCHEDULE' | 'FUTURE_OUTAGE';
+type InfoType = 'STATISTICS';
 
 type InformOptions = {
     nowDate: Date
@@ -42,24 +42,12 @@ export class Informer implements InformerInterface {
 
     constructor(
         statisticsInformer: ConcreteInformerInterface,
-        scheduleInformer: ConcreteInformerInterface,
-        outageInformer: ConcreteInformerInterface,
     ) {
         this.informers = {
             STATISTICS: {
                 INSTANCE: statisticsInformer,
                 STORAGE_KEY: 'STATISTICS_INFORMED_DATE',
                 FREQUENCY: TIME.DAY,
-            },
-            SCHEDULE: {
-                INSTANCE: scheduleInformer,
-                STORAGE_KEY: 'SCHEDULE_INFORMED_DATE',
-                FREQUENCY: TIME.DAY,
-            },
-            FUTURE_OUTAGE: {
-                INSTANCE: outageInformer,
-                STORAGE_KEY: 'FUTURE_OUTAGE_INFORMED_DATE',
-                FREQUENCY: TIME.MINUTE,
             },
         };
     }

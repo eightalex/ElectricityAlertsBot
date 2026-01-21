@@ -15,12 +15,6 @@ const mockConfig: BotConfigType = {
     STATISTICS: {
         INFORM_TIME: '23:58',
     },
-    SCHEDULE: {
-        INFORM_TIME: '21:00',
-    },
-    FUTURE_OUTAGE: {
-        MINUTES: 30,
-    },
 };
 
 const PropertiesService = {
@@ -35,30 +29,18 @@ const PropertiesService = {
 describe('Informer', () => {
     let informer: Informer;
     let mockStatisticsInformer: jest.Mocked<ConcreteInformerInterface>;
-    let mockScheduleInformer: jest.Mocked<ConcreteInformerInterface>;
-    let mockOutageInformer: jest.Mocked<ConcreteInformerInterface>;
 
     beforeEach(() => {
         mockStatisticsInformer = {
             inform: jest.fn(),
         } as jest.Mocked<ConcreteInformerInterface>;
 
-        mockScheduleInformer = {
-            inform: jest.fn(),
-        } as unknown as jest.Mocked<ConcreteInformerInterface>;
-
-        mockOutageInformer = {
-            inform: jest.fn(),
-        } as jest.Mocked<ConcreteInformerInterface>;
-
         informer = new Informer(
             mockStatisticsInformer,
-            mockScheduleInformer,
-            mockOutageInformer,
         );
     });
 
-    it('should inform statistics and schedule daily', () => {
+    it('should inform statistics daily', () => {
         const options = {
             nowDate: new Date(mockDate.valueOf() + (TIME.DAY * 2)),
             config: {
@@ -66,36 +48,12 @@ describe('Informer', () => {
                 STATISTICS: {
                     INFORM_TIME: '23:58',
                 },
-                SCHEDULE: {
-                    INFORM_TIME: '21:00',
-                },
             },
         };
 
         informer.inform('STATISTICS', options);
-        informer.inform('SCHEDULE', options);
 
         expect(mockStatisticsInformer.inform).toHaveBeenCalledWith(options.config);
-        expect(mockScheduleInformer.inform).toHaveBeenCalledWith(options.config);
-        expect(mockOutageInformer.inform).not.toHaveBeenCalled();
-    });
-
-    it('should inform future outage per minute', () => {
-        const options = {
-            nowDate: new Date(mockDate.valueOf() + (TIME.MINUTE * 2)),
-            config: {
-                ...defaultConfigOptions,
-                FUTURE_OUTAGE: {
-                    MINUTES: 30,
-                },
-            },
-        };
-
-        informer.inform('FUTURE_OUTAGE', options);
-
-        expect(mockStatisticsInformer.inform).not.toHaveBeenCalled();
-        expect(mockScheduleInformer.inform).not.toHaveBeenCalled();
-        expect(mockOutageInformer.inform).toHaveBeenCalledWith(options.config);
     });
 
     it('should not inform if config is not defined', () => {
@@ -107,8 +65,6 @@ describe('Informer', () => {
         };
 
         expect(() => informer.inform('STATISTICS', options)).toThrow('Informer: Undefined config');
-        expect(() => informer.inform('SCHEDULE', options)).toThrow('Informer: Undefined config');
-        expect(() => informer.inform('FUTURE_OUTAGE', options)).toThrow('Informer: Undefined config');
     });
 
     it('should not call informer when frequency is smaller than minDifference (DAY)', () => {
@@ -122,18 +78,5 @@ describe('Informer', () => {
 
         expect(informSpy).toHaveBeenCalledTimes(5);
         expect(mockStatisticsInformer.inform).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not call informer when frequency is smaller than minDifference (MINUTE)', () => {
-        const informSpy = jest.spyOn(informer as any, 'informWithFrequency');
-
-        informer.inform('FUTURE_OUTAGE', { nowDate: mockDate, config: mockConfig });
-        informer.inform('FUTURE_OUTAGE', { nowDate: new Date(mockDate.valueOf() + (TIME.SECOND * 15)), config: mockConfig });
-        informer.inform('FUTURE_OUTAGE', { nowDate: new Date(mockDate.valueOf() + (TIME.SECOND * 30)), config: mockConfig });
-        informer.inform('FUTURE_OUTAGE', { nowDate: new Date(mockDate.valueOf() + (TIME.SECOND * 45)), config: mockConfig });
-        informer.inform('FUTURE_OUTAGE', { nowDate: new Date(mockDate.valueOf() + (TIME.MINUTE * 2)), config: mockConfig });
-
-        expect(informSpy).toHaveBeenCalledTimes(5);
-        expect(mockOutageInformer.inform).toHaveBeenCalledTimes(1);
     });
 });

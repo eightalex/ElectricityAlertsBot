@@ -1,5 +1,4 @@
 import {ChatType} from './TelegramType';
-import {RegionType} from './YasnoType';
 
 export type BotConfigType = {
     ID: number
@@ -8,20 +7,13 @@ export type BotConfigType = {
         AVAILABLE: string
         UNAVAILABLE: string
     }
-    REGION?: RegionType
-    GROUP?: number
+    REGION?: string
+    GROUP?: number | string
     DEPENDENCY_ID?: number
-    HEARTBEAT?: boolean
     MONITORS?: number[]
     TELEGRAM_CHATS: ChatType[]
     STATISTICS?: {
         INFORM_TIME: string
-    }
-    SCHEDULE?: {
-        INFORM_TIME: string
-    }
-    FUTURE_OUTAGE?: {
-        MINUTES: number
     }
     MESSAGE?: {
         AVAILABLE?: string

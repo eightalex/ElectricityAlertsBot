@@ -1,6 +1,4 @@
-import {RegionType} from '../../types/YasnoType';
-
-export const REGION: Record<'KYIV' | 'DNIPRO', RegionType> = {
+export const REGION = {
     KYIV: 'kiev',
     DNIPRO: 'dnipro',
-};
+} as const;

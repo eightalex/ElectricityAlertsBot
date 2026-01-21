@@ -45,9 +45,6 @@ describe('MonitorsAdapter', () => {
                     STATISTICS: {
                         INFORM_TIME: '23:58',
                     },
-                    SCHEDULE: {
-                        INFORM_TIME: '08:00',
-                    },
                 },
                 {
                     ID: 2,
@@ -61,9 +58,6 @@ describe('MonitorsAdapter', () => {
                     ],
                     STATISTICS: {
                         INFORM_TIME: '23:58',
-                    },
-                    SCHEDULE: {
-                        INFORM_TIME: '08:00',
                     },
                 },
             ];

@@ -8,17 +8,13 @@ import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatus
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
 import {BotConfigType} from '../types/BotConfigType';
 import {ConfigHelper} from './utils/ConfigHelper';
-import {WebhookType} from '../types/WebhookType';
 import {MonitorsHelper} from './utils/MonitorsHelper';
 import {PreparedCheckResultType} from '../types/PreparedCheckResultType';
 import {InformerInterface} from './services/Informer';
-import {HeartbeatServiceInterface} from './services/HeartbeatService';
 
 export interface AppInterface {
     multiplyPing(): void
     ping(): void
-    webhookUpdate(contents: string): void
-    webhookHeartbeat(contents: string): void
 }
 
 export class App implements AppInterface {
@@ -30,7 +26,6 @@ export class App implements AppInterface {
         private monitorsAdapter: MonitorsAdapterInterface,
         private statisticsService: StatisticsServiceInterface,
         private informer: InformerInterface,
-        private heartbeatService: HeartbeatServiceInterface,
     ) {
         this.monitorsConfig = APP.MODE === 'production' ? MONITORS_CONFIG : MONITORS_CONFIG_DEV;
     }
@@ -47,8 +42,7 @@ export class App implements AppInterface {
         const timeString = DateHelper.getTimeString(nowDate);
         const checkResult = this.monitorsStatusChecker.check();
         const monitorsResult = this.monitorsAdapter.prepare(checkResult, this.monitorsConfig);
-        const heartbeatResults = this.heartbeatService.checkIsAlive(this.monitorsConfig, nowDate);
-        const overallResult = monitorsResult.concat(heartbeatResults);
+        const overallResult = monitorsResult;
 
         overallResult.forEach(monitor => {
             const config = ConfigHelper.getConfig(monitor.id, this.monitorsConfig);
@@ -67,14 +61,6 @@ export class App implements AppInterface {
             if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
                 this.informer.inform('STATISTICS', {config, nowDate})
             }
-
-            if (config.SCHEDULE !== undefined && config.SCHEDULE.INFORM_TIME === timeString) {
-                this.informer.inform('SCHEDULE', {config, nowDate})
-            }
-
-            if (config.FUTURE_OUTAGE !== undefined) {
-                this.informer.inform('FUTURE_OUTAGE', {config, nowDate})
-            }
         });
 
         overallResult.forEach(monitor => {
@@ -83,17 +69,4 @@ export class App implements AppInterface {
         });
     }
 
-    webhookUpdate(contents: string) {
-        const data: WebhookType = JSON.parse(contents);
-        const config = ConfigHelper.getConfig(data.id, this.monitorsConfig);
-
-        this.pinger.ping(data.status, {config, nowDate: new Date()});
-    }
-
-    webhookHeartbeat(contents: string) {
-        const data: WebhookType = JSON.parse(contents);
-        const config = ConfigHelper.getConfig(data.id, this.monitorsConfig);
-
-        this.heartbeatService.update(config);
-    }
 }

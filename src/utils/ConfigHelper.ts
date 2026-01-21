@@ -10,8 +10,4 @@ export class ConfigHelper {
 
         return botConfig;
     }
-
-    static getHeartbeatConfigs(config: BotConfigType[]): BotConfigType[] {
-        return config.filter(botConfig => botConfig.HEARTBEAT);
-    }
 }
