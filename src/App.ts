@@ -31,9 +31,20 @@ export class App implements AppInterface {
     }
 
     multiplyPing() {
-        for (let i = 0; i < 4; i++) {
-            this.ping();
-            Utilities.sleep(TIME.SECOND * 15);
+        const lock = LockService.getScriptLock();
+        const locked = lock.tryLock(TIME.SECOND * 30);
+
+        if (!locked) {
+            return;
+        }
+
+        try {
+            for (let i = 0; i < 4; i++) {
+                this.ping();
+                Utilities.sleep(TIME.SECOND * 15);
+            }
+        } finally {
+            lock.releaseLock();
         }
     }
 
@@ -61,11 +72,6 @@ export class App implements AppInterface {
             if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
                 this.informer.inform('STATISTICS', {config, nowDate})
             }
-        });
-
-        overallResult.forEach(monitor => {
-            const config = ConfigHelper.getConfig(monitor.id, this.monitorsConfig);
-            this.pinger.updateLastState(monitor.status, config);
         });
     }
 

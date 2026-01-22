@@ -76,6 +76,8 @@ export class Pinger implements PingerInterface {
             [key.lastTime]: String(options.nowDate.getTime()),
             [key.isForecastSent]: STORAGE_STATE.FALSE,
         });
+
+        this.updateLastState(isAvailable, options.config);
     }
 
     updateLastState(isAvailable: boolean, config: BotConfigType): void {
