@@ -1,4 +1,3 @@
-import {StatisticsType} from '../../../types/StatisticsType';
 import {StatisticsBuilder, StatisticsBuilderInterface} from './StatisticsBuilder';
 
 describe('StatisticsBuilder', () => {
@@ -8,21 +7,33 @@ describe('StatisticsBuilder', () => {
         statisticsBuilder = new StatisticsBuilder();
     });
 
-    describe('getDefault', () => {
-        it('should return the default statistics object with the current date string and time object', () => {
-            const expectedStatistics: StatisticsType = {
-                date: '24/12/2022',
+    describe('build', () => {
+        it('should build statistics for a day period', () => {
+            const start = new Date('2024-01-01T00:00:00.000Z');
+            const end = new Date('2024-01-01T23:59:59.999Z');
+            const downtimeMs = 1000 * 60 * 60;
+            const incidents = 2;
+
+            const statistics = statisticsBuilder.build({
+                period: 'day',
+                start,
+                end,
+                downtimeMs,
+                incidents,
+            });
+
+            const windowMs = end.getTime() - start.getTime();
+
+            expect(statistics).toEqual({
+                period: 'day',
+                start: start.getTime(),
+                end: end.getTime(),
+                incidents,
                 time: {
-                    available: 0,
-                    notAvailable: 0,
-                    previous: new Date().getTime(),
+                    available: windowMs - downtimeMs,
+                    notAvailable: downtimeMs,
                 },
-            };
-
-            const date = new Date('12/24/2022');
-            const statistics = statisticsBuilder.getDefault(date);
-
-            expect(statistics).toEqual(expectedStatistics);
+            });
         });
     });
 });

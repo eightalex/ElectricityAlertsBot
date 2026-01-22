@@ -1,8 +1,12 @@
+export type StatisticsPeriod = 'day' | 'month';
+
 export type StatisticsType = {
-    date: string
+    period: StatisticsPeriod
+    start: number
+    end: number
+    incidents: number
     time: {
         available: number
         notAvailable: number
-        previous: number
     }
 }

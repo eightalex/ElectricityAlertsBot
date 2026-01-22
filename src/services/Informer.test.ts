@@ -56,7 +56,7 @@ describe('Informer', () => {
         expect(mockStatisticsInformer.inform).toHaveBeenCalledWith(options.config);
     });
 
-    it('should not inform if config is not defined', () => {
+    it('should inform even if STATISTICS config is not defined', () => {
         const options = {
             nowDate: mockDate,
             config: {
@@ -64,7 +64,9 @@ describe('Informer', () => {
             },
         };
 
-        expect(() => informer.inform('STATISTICS', options)).toThrow('Informer: Undefined config');
+        informer.inform('STATISTICS', options);
+
+        expect(mockStatisticsInformer.inform).toHaveBeenCalledWith(options.config);
     });
 
     it('should not call informer when frequency is smaller than minDifference (DAY)', () => {

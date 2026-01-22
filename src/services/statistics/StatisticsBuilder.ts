@@ -1,18 +1,31 @@
-import {StatisticsType} from '../../../types/StatisticsType';
-import {DateHelper} from '../../utils/DateHelper';
+import {StatisticsPeriod, StatisticsType} from '../../../types/StatisticsType';
 
 export interface StatisticsBuilderInterface {
-    getDefault(date: Date): StatisticsType
+    build(options: BuildStatisticsOptions): StatisticsType
+}
+
+export type BuildStatisticsOptions = {
+    period: StatisticsPeriod
+    start: Date
+    end: Date
+    downtimeMs: number
+    incidents: number
 }
 
 export class StatisticsBuilder implements StatisticsBuilderInterface {
-    getDefault(date: Date): StatisticsType {
+    build({period, start, end, downtimeMs, incidents}: BuildStatisticsOptions): StatisticsType {
+        const windowMs = Math.max(0, end.getTime() - start.getTime());
+        const notAvailable = Math.min(windowMs, Math.max(0, downtimeMs));
+        const available = Math.max(0, windowMs - notAvailable);
+
         return {
-            date: DateHelper.getDateString(date),
+            period,
+            start: start.getTime(),
+            end: end.getTime(),
+            incidents,
             time: {
-                available: 0,
-                notAvailable: 0,
-                previous: new Date().getTime(),
+                available,
+                notAvailable,
             },
         };
     }

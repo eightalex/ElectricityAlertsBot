@@ -2,7 +2,6 @@ import {APP} from './constants/app';
 import {TIME} from './constants/time';
 import {MONITORS_CONFIG, MONITORS_CONFIG_DEV} from './constants/monitorsConfig';
 import {PingerInterface} from './services/Pinger';
-import {StatisticsServiceInterface} from './services/statistics/StatisticsService';
 import {DateHelper} from './utils/DateHelper';
 import {MonitorsStatusCheckerInterface} from './services/monitors/MonitorsStatusChecker';
 import {MonitorsAdapterInterface} from './services/monitors/MonitorsAdapter';
@@ -24,7 +23,6 @@ export class App implements AppInterface {
         private pinger: PingerInterface,
         private monitorsStatusChecker: MonitorsStatusCheckerInterface,
         private monitorsAdapter: MonitorsAdapterInterface,
-        private statisticsService: StatisticsServiceInterface,
         private informer: InformerInterface,
     ) {
         this.monitorsConfig = APP.MODE === 'production' ? MONITORS_CONFIG : MONITORS_CONFIG_DEV;
@@ -65,11 +63,7 @@ export class App implements AppInterface {
 
             this.pinger.ping(monitor.status, {config, nowDate, dependencyCheckResult});
 
-            if (config.STATISTICS !== undefined) {
-                this.statisticsService.update(monitor.status, {config, nowDate});
-            }
-
-            if (config.STATISTICS !== undefined && config.STATISTICS.INFORM_TIME === timeString) {
+            if (timeString === '23:59') {
                 this.informer.inform('STATISTICS', {config, nowDate})
             }
         });

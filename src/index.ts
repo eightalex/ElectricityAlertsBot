@@ -30,14 +30,13 @@ const monitorsStatusChecker = new MonitorsStatusChecker(
 );
 
 const statisticsService = new StatisticsService(
-    PropertiesService,
     statisticsBuilder,
 );
 
 const statisticsInformer = new StatisticsInformer(
-    PropertiesService,
     statisticsMessageGenerator,
     telegramService,
+    statisticsService,
 );
 
 const pinger = new Pinger(
@@ -55,7 +54,6 @@ const app = new App(
     pinger,
     monitorsStatusChecker,
     monitorsAdapter,
-    statisticsService,
     informer,
 );
 

@@ -56,10 +56,6 @@ export class Informer implements InformerInterface {
         const key = this.informers[type].STORAGE_KEY;
         const storageKey = STORAGE_KEY[key] + options.config.ID;
 
-        if (!options.config[type]) {
-            throw new Error('Informer: Undefined config');
-        }
-
         this.informWithFrequency({type, storageKey, options, frequency: this.informers[type].FREQUENCY});
     }
 
